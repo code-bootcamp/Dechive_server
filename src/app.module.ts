@@ -1,6 +1,5 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { CacheModule, Module } from '@nestjs/common';
-// import { CacheModule } from '@nestjs/cache-manager';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RedisClientOptions } from 'redis';
@@ -13,11 +12,11 @@ import { BoardsModule } from './apis/Board/boards.module';
   imports: [
     BoardsModule,
     ConfigModule.forRoot(),
-    // GraphQLModule.forRoot<ApolloDriverConfig>({
-    //   driver: ApolloDriver,
-    //   autoSchemaFile: 'src/commons/graphql/schema.gql',
-    //   context: ({ req, res }) => ({ req, res }),
-    // }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: 'src/commons/graphql/schema.gql',
+      context: ({ req, res }) => ({ req, res }),
+    }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',
       host: process.env.DATABASE_HOST,
@@ -35,6 +34,8 @@ import { BoardsModule } from './apis/Board/boards.module';
       isGlobal: true,
     }),
   ],
-  controllers: [AppController],
+  controllers: [
+    AppController, //
+  ],
 })
 export class AppModule {}
