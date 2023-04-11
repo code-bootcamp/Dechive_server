@@ -34,6 +34,8 @@ import { BoardsModule } from './apis/Board/boards.module';
       isGlobal: true,
     }),
   ],
-  controllers: [AppController],
+  controllers: [
+    AppController, //
+  ],
 })
 export class AppModule {}
