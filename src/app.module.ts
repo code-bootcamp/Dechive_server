@@ -7,10 +7,12 @@ import * as redisStore from 'cache-manager-redis-store';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { BoardsModule } from './apis/Board/boards.module';
+import { YoutubeModule } from './apis/Youtube/youtubes.module';
 
 @Module({
   imports: [
     BoardsModule,
+    YoutubeModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
