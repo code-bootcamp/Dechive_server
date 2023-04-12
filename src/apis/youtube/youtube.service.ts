@@ -3,7 +3,7 @@ import axios from 'axios';
 
 @Injectable()
 export class YoutubeService {
-  async searchVideos(keyword: string) {
+  async searchVideos({ keyword }): Promise<string[]> {
     try {
       const apiClient = axios.create({
         baseURL: 'https://www.googleapis.com/youtube/v3',

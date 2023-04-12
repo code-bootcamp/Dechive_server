@@ -3,13 +3,15 @@ import { YoutubeService } from './youtube.service';
 
 @Resolver()
 export class YoutubeResolver {
-  constructor(private readonly youtubeService: YoutubeService) {}
+  constructor(
+    private readonly youtubeService: YoutubeService, //
+  ) {}
   // @Query(() => [{ videoUrl: String, thumbnailUrl: String }])
   @Query(() => [String])
-  async fetchYoutube(
+  fetchYoutube(
     @Args('keyword') keyword: string, //
-  ) {
-    const result = await this.youtubeService.searchVideos(keyword);
-    return result;
+  ): Promise<string[]> {
+    //리턴 타입지정
+    return this.youtubeService.searchVideos({ keyword });
   }
 }
