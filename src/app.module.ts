@@ -6,11 +6,13 @@ import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
-import { BoardsModule } from './apis/Board/boards.module';
+import { BoardsModule } from './apis/board/boards.module';
+import { YoutubeModule } from './apis/youtube/youtube.module';
 
 @Module({
   imports: [
     BoardsModule,
+    YoutubeModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
