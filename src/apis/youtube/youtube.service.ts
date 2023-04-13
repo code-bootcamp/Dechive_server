@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { Youtube } from './dto/youtube.dto';
+import e from 'express';
 
 @Injectable()
 export class YoutubeService {
-  async searchVideos({ keyword }): Promise<string[]> {
+  async searchVideos(): Promise<Youtube[]> {
     try {
       const apiClient = axios.create({
         baseURL: 'https://www.googleapis.com/youtube/v3',
@@ -12,21 +14,31 @@ export class YoutubeService {
       const response = await apiClient.get('search', {
         params: {
           part: 'snippet',
-          q: keyword,
+          q: 'desk setup', //desk setup 검색
           type: 'video',
-          maxResults: 10,
+          maxResults: 12, //12개
+          fields: 'items(id(videoId),snippet(thumbnails(high(url))))', //비디오 아이디와 썸네일만 조회
         },
       });
-      const result = [];
-      for (const item of response.data.items) {
-        // result.push({
-        //   videoUrl: `www.youtube.com/watch?v=${item.id.videoId}`,
-        //   thumbnailUrl: item.snippet.thumbnails.high.url,
-        // });
-        result.push(`www.youtube.com/watch?v=${item.id.videoId}`);
-        result.push(item.snippet.thumbnails.high.url);
-      }
-      return result;
+      const result: Youtube[] = [];
+      return Promise.all(
+        response.data.items.map(async (e) => {
+          result.push({
+            videoUrl: `www.youtube.com/watch?v=${e.id.videoId}`,
+            thumbnailUrl: e.snippet.thumbnails.high.url,
+            // 비디오 아이디로 조회수 조회
+            views: (
+              await apiClient.get('videos', {
+                params: {
+                  part: 'statistics',
+                  id: e.id.videoId,
+                  fields: 'items(statistics(viewCount))',
+                },
+              })
+            ).data.items[0].statistics.viewCount,
+          });
+        }),
+      ).then(() => result);
     } catch (error) {
       console.log(error);
     }
