@@ -2,7 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Youtube {
+  videoUrl: String!
+  thumbnailUrl: String!
+  views: Float
+}
+
 type Query {
   fetchUsers: String!
-  fetchYoutube(keyword: String!): [String!]!
+  fetchYoutube: [Youtube!]!
 }
