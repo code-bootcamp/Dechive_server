@@ -2,7 +2,24 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: String!
+  email: String!
+  nickName: String!
+  intro: String
+  picture: String
+}
+
 type Query {
   fetchUsers: String!
   fetchYoutube(keyword: String!): [String!]!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+}
+
+input CreateUserInput {
+  email: String
+  password: String
 }
