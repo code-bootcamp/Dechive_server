@@ -8,10 +8,12 @@ import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { BoardsModule } from './apis/board/boards.module';
 import { YoutubeModule } from './apis/youtube/youtube.module';
+import { UserMoulde } from './apis/users/users.module';
 
 @Module({
   imports: [
     BoardsModule,
+    UserMoulde,
     YoutubeModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -30,11 +32,11 @@ import { YoutubeModule } from './apis/youtube/youtube.module';
       synchronize: true,
       logging: true,
     }),
-    CacheModule.register<RedisClientOptions>({
-      store: redisStore,
-      url: process.env.REDIS_HOST,
-      isGlobal: true,
-    }),
+    // CacheModule.register<RedisClientOptions>({
+    //   store: redisStore,
+    //   url: process.env.REDIS_HOST,
+    //   isGlobal: true,
+    // }),
   ],
   controllers: [
     AppController, //
