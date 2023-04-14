@@ -8,12 +8,12 @@ import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { BoardsModule } from './apis/board/boards.module';
 import { YoutubeModule } from './apis/youtube/youtube.module';
-import { UserMoulde } from './apis/users/users.module';
+import { UsersMoulde } from './apis/users/users.module';
 
 @Module({
   imports: [
     BoardsModule,
-    UserMoulde,
+    UsersMoulde,
     YoutubeModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
