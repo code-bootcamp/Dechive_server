@@ -2,32 +2,46 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Youtube {
+  videoUrl: String!
+  thumbnailUrl: String!
+  views: Float!
+}
+
 type User {
   id: String!
   email: String!
   nickName: String!
   intro: String
   picture: String
+  snsAccounts: [SnsAccount!]
+}
 
-type Youtube {
-  videoUrl: String!
-  thumbnailUrl: String!
-  views: Float
+type SnsAccount {
+  id: String!
+  sns: String!
+  user: User!
 }
 
 type Query {
   fetchUsers: String!
-  fetchYoutube(keyword: String!): [String!]!
+  fetchYoutube: [Youtube!]!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 input CreateUserInput {
-  email: String
-  password: String
+  email: String!
+  password: String!
+}
 
-  fetchYoutube: [Youtube!]!
-
+input UpdateUserInput {
+  id: String!
+  nickName: String
+  intro: String
+  picture: String
+  snsAccount: String
 }

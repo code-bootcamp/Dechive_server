@@ -3,9 +3,9 @@ import { User } from '../entities/user.entity';
 
 @InputType()
 export class CreateUserInput {
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   email: User['email'];
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   password: User['password'];
 }
