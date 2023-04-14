@@ -94,7 +94,6 @@ export class UsersService {
       } else {
         temp = await this.snsAccountService.createSnsAccount({
           sns: updateUserInput.snsAccount,
-          user,
         });
       }
     }
