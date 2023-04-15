@@ -13,7 +13,9 @@ export class SnsAccount {
   @Field(() => String)
   sns: string;
 
-  @ManyToOne(() => User, (user) => user.snsAccounts)
+  @ManyToOne(() => User, (user) => user.snsAccounts, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => User)
   user: User;
 }

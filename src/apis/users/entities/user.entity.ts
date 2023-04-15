@@ -35,7 +35,9 @@ export class User {
   picture: string;
 
   @JoinColumn()
-  @OneToMany(() => SnsAccount, (snsAccounts) => snsAccounts.user)
+  @OneToMany(() => SnsAccount, (snsAccounts) => snsAccounts.user, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => [SnsAccount], { nullable: true })
   snsAccounts: SnsAccount[];
 }
