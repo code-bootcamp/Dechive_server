@@ -33,6 +33,7 @@ type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): User!
   authEmail(email: String!): Boolean!
   matchAuthNumber(matchAuthInput: MatchAuthInput!): Boolean!
+  resetUserPassword(resetPasswordInput: ResetPasswordInput!): Boolean!
 }
 
 input CreateUserInput {
@@ -51,4 +52,9 @@ input UpdateUserInput {
 input MatchAuthInput {
   email: String!
   authNumber: String!
+}
+
+input ResetPasswordInput {
+  email: String!
+  password: String!
 }

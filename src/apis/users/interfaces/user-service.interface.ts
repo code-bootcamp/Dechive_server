@@ -1,4 +1,5 @@
 import { MatchAuthInput } from '../dto/matchAuth.Input';
+import { ResetPasswordInput } from '../dto/resetPassword.Input';
 import { CreateUserInput } from '../dto/user-create.input';
 import { UpdateUserInput } from '../dto/user-update.input';
 import { User } from '../entities/user.entity';
@@ -28,4 +29,8 @@ export interface IUsersServiceAuthEamil {
 
 export interface IUsersServiceMathAuth {
   matchAuthInput: MatchAuthInput;
+}
+
+export interface IUsersServiceResetPassword {
+  resetPasswordInput: ResetPasswordInput;
 }
