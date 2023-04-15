@@ -1,10 +1,17 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  ConflictException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { getRandomNickName } from 'src/commons/util/getRandomNickname';
 import {
+  IUsersServiceAuthEamil,
   IUsersServiceCreateUser,
   IUsersServiceFindeOne,
   IUsersServiceFindOneEmail,
@@ -12,6 +19,9 @@ import {
   IUsersServiceUpdateUser,
 } from './interfaces/user-service.interface';
 import { SnsAccountService } from '../snsAccount/snsAccount.service';
+import { MailerService } from '@nestjs-modules/mailer';
+import { dechiveTemplate } from 'src/commons/util/sendTemplate';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UsersService {
@@ -20,6 +30,11 @@ export class UsersService {
     private readonly usersRepository: Repository<User>, //
 
     private readonly snsAccountService: SnsAccountService,
+
+    private readonly mailerService: MailerService,
+
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   async findeOneUser({ id }: IUsersServiceFindeOne): Promise<User> {
@@ -108,5 +123,29 @@ export class UsersService {
       ...updateUserInput,
       snsAccounts: temp ? snsAccount : [...user.snsAccounts],
     });
+  }
+
+  async authEmail({ email }: IUsersServiceAuthEamil): Promise<boolean> {
+    await this.findOneEamil({ email });
+
+    const authNumber = String(Math.floor(Math.random() * 1000000)).padStart(
+      6,
+      '0',
+    );
+
+    return this.mailerService
+      .sendMail({
+        to: email,
+        from: process.env.EMAIL_USER,
+        subject: 'Dechive 인증 번호입니다',
+        html: dechiveTemplate(authNumber),
+      })
+      .then(() => {
+        this.cacheManager.set(email, authNumber, { ttl: 180 });
+        return true;
+      })
+      .catch((e) => {
+        throw new InternalServerErrorException('이메일 인증번호 전송 실패');
+      });
   }
 }
