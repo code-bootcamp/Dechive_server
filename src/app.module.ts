@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { BoardsModule } from './apis/board/boards.module';
 import { YoutubeModule } from './apis/youtube/youtube.module';
 import { UsersMoulde } from './apis/users/users.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -32,11 +33,25 @@ import { UsersMoulde } from './apis/users/users.module';
       synchronize: true,
       logging: true,
     }),
-    // CacheModule.register<RedisClientOptions>({
-    //   store: redisStore,
-    //   url: process.env.REDIS_HOST,
-    //   isGlobal: true,
-    // }),
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore,
+      url: process.env.REDIS_HOST,
+      isGlobal: true,
+    }),
+    MailerModule.forRootAsync({
+      useFactory: () => ({
+        transport: {
+          service: 'Gmail',
+          host: process.env.EMAIL_HOST,
+          port: Number(process.env.EMAIL_PORT),
+          secure: false,
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+        },
+      }),
+    }),
   ],
   controllers: [
     AppController, //

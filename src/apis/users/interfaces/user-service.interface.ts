@@ -20,3 +20,7 @@ export interface IUsersServiceUpdateUser {
 export interface IUsersServiceFindeOne {
   id: User['id'];
 }
+
+export interface IUsersServiceAuthEamil {
+  email: User['email'];
+}

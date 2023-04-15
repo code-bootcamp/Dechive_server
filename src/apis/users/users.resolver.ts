@@ -23,4 +23,11 @@ export class UsersResolver {
   ): Promise<User> {
     return this.usersService.updateUser({ updateUserInput });
   }
+
+  @Mutation(() => Boolean)
+  authEmail(
+    @Args('email') email: string, //
+  ): Promise<boolean> {
+    return this.usersService.authEmail({ email });
+  }
 }
