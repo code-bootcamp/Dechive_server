@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   CACHE_MANAGER,
   ConflictException,
   Inject,
@@ -16,6 +17,7 @@ import {
   IUsersServiceFindeOne,
   IUsersServiceFindOneEmail,
   IUsersServiceHashPassword,
+  IUsersServiceMathAuth,
   IUsersServiceUpdateUser,
 } from './interfaces/user-service.interface';
 import { SnsAccountService } from '../snsAccount/snsAccount.service';
@@ -147,5 +149,18 @@ export class UsersService {
       .catch((e) => {
         throw new InternalServerErrorException('이메일 인증번호 전송 실패');
       });
+  }
+
+  async matchAuthNumber({
+    matchAuthInput,
+  }: IUsersServiceMathAuth): Promise<boolean> {
+    const { email, authNumber } = matchAuthInput;
+    const eamilAuthNumber = await this.cacheManager.get(email);
+
+    if (eamilAuthNumber !== authNumber)
+      throw new BadRequestException('인증번호가 일치 하지 않습니다.');
+
+    this.cacheManager.del(email);
+    return true;
   }
 }
