@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import {
   IAuthServiceGetAccseToken,
+  IAuthServiceGetRefreshToken,
   IAuthServiceLogin,
   IAuthServiceSetRefreshToken,
 } from './interfaces/auth-service.interface';
@@ -51,5 +52,9 @@ export class AuthService {
     //   'Set-Cookie',
     //   `refreshToken=${refreshToken};path=/; domain=.mobomobo.shop; SameSite=None; Secure; httpOnly`,
     // );
+  }
+
+  restoreAccessToken({ user }: IAuthServiceGetRefreshToken): string {
+    return this.getAccseToken({ user });
   }
 }
