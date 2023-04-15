@@ -6,7 +6,7 @@ import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
-import { BoardsModule } from './apis/board/boards.module';
+import { BoardsModule } from './apis/boards/boards.module';
 import { YoutubeModule } from './apis/youtube/youtube.module';
 import { UserMoulde } from './apis/users/users.module';
 

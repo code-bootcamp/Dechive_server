@@ -2,32 +2,89 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Hashtag {
+  id: String!
+  hashtag: String!
+  boards: [Board!]!
+}
+
+type Product {
+  id: String!
+  name: String!
+  url: String!
+  picture: String
+  board: Board!
+}
+
+type Comment {
+  id: String!
+  content: String!
+  board: Board!
+  user: String!
+}
+
+type Board {
+  id: String!
+  title: String!
+  recommend: String
+  description: String!
+  products: [Product!]!
+  comments: Comment
+  writer: String!
+  hashtags: [Hashtag!]
+  pictures: [String!]!
+  viewers: [String!]
+  likers: [String!]
+}
+
+type Youtube {
+  videoUrl: String!
+  thumbnailUrl: String!
+  views: Float!
+}
+
 type User {
   id: String!
   email: String!
   nickName: String!
   intro: String
   picture: String
-
-type Youtube {
-  videoUrl: String!
-  thumbnailUrl: String!
-  views: Float
 }
 
 type Query {
-  fetchUsers: String!
-  fetchYoutube(keyword: String!): [String!]!
+  fetchBoard: String!
+  fetchYoutube: [Youtube!]!
 }
 
 type Mutation {
+  createProducts(product: CreateProductInput!): Product!
+  createHashtag(hashtag: String!): Hashtag!
+  createHashtags(createHashtagInputs: CreateHashtagInput!): [Hashtag!]!
+  createBoard(createBoardInput: CreateBoardInput!): Board!
+  getOg(url: String!): String!
   createUser(createUserInput: CreateUserInput!): User!
+}
+
+input CreateProductInput {
+  name: String!
+  url: String!
+}
+
+input CreateHashtagInput {
+  hashtag: String!
+}
+
+input CreateBoardInput {
+  title: String!
+  recommend: String
+  description: String!
+  writer: String!
+  pictures: [String!]!
+  createHashtagInputs: [CreateHashtagInput!]
+  createProductInputs: [CreateProductInput!]!
 }
 
 input CreateUserInput {
   email: String
   password: String
-
-  fetchYoutube: [Youtube!]!
-
 }
