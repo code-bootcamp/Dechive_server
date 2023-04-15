@@ -53,4 +53,13 @@ export class UsersResolver {
   ): Promise<boolean> {
     return this.usersService.resetUserPassword({ resetPasswordInput });
   }
+
+  @UseGuards(DechiveAuthGuard('access'))
+  @Mutation(() => Boolean)
+  deleteUser(
+    @Context() context: IContext, //
+  ): Promise<boolean> {
+    const { id } = context.req.user;
+    return this.usersService.deleteUser({ id });
+  }
 }

@@ -40,3 +40,7 @@ export interface IUsersServiceMathAuth {
 export interface IUsersServiceResetPassword {
   resetPasswordInput: ResetPasswordInput;
 }
+
+export interface IUsersServiceDeleteUser {
+  id: User['id'];
+}

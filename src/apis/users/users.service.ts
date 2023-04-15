@@ -14,6 +14,7 @@ import { getRandomNickName } from 'src/commons/util/getRandomNickname';
 import {
   IUsersServiceAuthEamil,
   IUsersServiceCreateUser,
+  IUsersServiceDeleteUser,
   IUsersServiceFindeOne,
   IUsersServiceFindOneEmail,
   IUsersServiceHashPassword,
@@ -187,5 +188,12 @@ export class UsersService {
 
     await this.usersRepository.save({ ...user, password: hashPassword });
     return true;
+  }
+
+  async deleteUser({ id }: IUsersServiceDeleteUser): Promise<boolean> {
+    console.log(id);
+    const result = await this.usersRepository.delete({ id });
+
+    return result.affected ? true : false;
   }
 }
