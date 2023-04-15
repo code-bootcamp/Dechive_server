@@ -15,3 +15,7 @@ export interface IAuthServiceLogin {
   loginInput: LoginInput;
   res: IContext['res'];
 }
+
+export interface IAuthServiceGetRefreshToken {
+  user: IAuthUser['user'];
+}
