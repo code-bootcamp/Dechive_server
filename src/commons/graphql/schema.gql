@@ -29,11 +29,17 @@ type Query {
 }
 
 type Mutation {
+  login(loginInput: LoginInput!): String!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   authEmail(email: String!): Boolean!
   matchAuthNumber(matchAuthInput: MatchAuthInput!): Boolean!
   resetUserPassword(resetPasswordInput: ResetPasswordInput!): Boolean!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 input CreateUserInput {
