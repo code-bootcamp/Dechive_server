@@ -1,3 +1,4 @@
+import { IAuthUser, IContext } from 'src/commons/interfaces/context';
 import { MatchAuthInput } from '../dto/matchAuth.Input';
 import { ResetPasswordInput } from '../dto/resetPassword.Input';
 import { CreateUserInput } from '../dto/user-create.input';
@@ -21,6 +22,7 @@ export interface IUsersServiceHashPassword {
 
 export interface IUsersServiceUpdateUser {
   updateUserInput: UpdateUserInput;
+  id: User['id'];
 }
 
 export interface IUsersServiceFindeOne {

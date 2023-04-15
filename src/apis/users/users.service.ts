@@ -99,8 +99,9 @@ export class UsersService {
 
   async updateUser({
     updateUserInput,
+    id,
   }: IUsersServiceUpdateUser): Promise<User> {
-    let user = await this.findeOneUser({ id: updateUserInput.id });
+    let user = await this.findeOneUser({ id: id });
 
     // image 업로드 하면 작성
     // if(updateUserInput.picture !== user.picture)
@@ -127,7 +128,7 @@ export class UsersService {
       }
     }
 
-    if (!temp) user = await this.findeOneUser({ id: updateUserInput.id });
+    if (!temp) user = await this.findeOneUser({ id });
     const snsAccount = [temp, ...user.snsAccounts];
 
     if (user.nickName === updateUserInput.nickName)

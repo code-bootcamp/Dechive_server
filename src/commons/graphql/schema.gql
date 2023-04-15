@@ -48,7 +48,6 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
-  id: String!
   nickName: String
   intro: String
   picture: String
