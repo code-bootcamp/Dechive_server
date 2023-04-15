@@ -3,9 +3,6 @@ import { User } from '../entities/user.entity';
 
 @InputType()
 export class UpdateUserInput {
-  @Field(() => String)
-  id: User['id'];
-
   @Field(() => String, { nullable: true })
   nickName: User['nickName'];
 

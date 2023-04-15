@@ -1,4 +1,7 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { IContext } from 'src/commons/interfaces/context';
+import { DechiveAuthGuard } from '../auth/guards/auth.guards';
 import { MatchAuthInput } from './dto/matchAuth.Input';
 import { ResetPasswordInput } from './dto/resetPassword.Input';
 import { CreateUserInput } from './dto/user-create.input';
@@ -19,11 +22,15 @@ export class UsersResolver {
     return this.usersService.createUser({ createUserInput });
   }
 
+  @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => User)
   updateUser(
     @Args('updateUserInput') updateUserInput: UpdateUserInput, //
+    @Context() context: IContext, //
   ): Promise<User> {
-    return this.usersService.updateUser({ updateUserInput });
+    const { id } = context.req.user;
+    console.log(context.req.user);
+    return this.usersService.updateUser({ updateUserInput, id });
   }
 
   @Mutation(() => Boolean)
