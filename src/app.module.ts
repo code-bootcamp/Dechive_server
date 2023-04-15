@@ -10,9 +10,11 @@ import { BoardsModule } from './apis/board/boards.module';
 import { YoutubeModule } from './apis/youtube/youtube.module';
 import { UsersMoulde } from './apis/users/users.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { AuthModule } from './apis/auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     BoardsModule,
     UsersMoulde,
     YoutubeModule,

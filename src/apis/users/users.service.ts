@@ -17,6 +17,7 @@ import {
   IUsersServiceFindeOne,
   IUsersServiceFindOneEmail,
   IUsersServiceHashPassword,
+  IUsersServiceIsEmail,
   IUsersServiceMathAuth,
   IUsersServiceResetPassword,
   IUsersServiceUpdateUser,
@@ -55,6 +56,16 @@ export class UsersService {
     if (!email || !email.includes('@'))
       throw new ConflictException('올바르지 않은 이메일 형식입니다.');
 
+    const user = await this.usersRepository.findOne({ where: { email } });
+
+    if (!user) throw new ConflictException('없는 회원 입니다.');
+    return user;
+  }
+
+  async isEamil({ email }: IUsersServiceIsEmail): Promise<User> {
+    if (!email || !email.includes('@'))
+      throw new ConflictException('올바르지 않은 이메일 형식입니다.');
+
     const isEmail = await this.usersRepository.findOne({ where: { email } });
 
     if (isEmail) throw new ConflictException('이미 사용중인 이메일 입니다.');
@@ -73,7 +84,7 @@ export class UsersService {
   }: IUsersServiceCreateUser): Promise<User> {
     const { email } = createUserInput;
 
-    await this.findOneEamil({ email });
+    await this.isEamil({ email });
 
     const password = await this.hashPassword({
       password: createUserInput.password,
@@ -115,6 +126,7 @@ export class UsersService {
         });
       }
     }
+
     if (!temp) user = await this.findeOneUser({ id: updateUserInput.id });
     const snsAccount = [temp, ...user.snsAccounts];
 
@@ -129,7 +141,7 @@ export class UsersService {
   }
 
   async authEmail({ email }: IUsersServiceAuthEamil): Promise<boolean> {
-    await this.findOneEamil({ email });
+    await this.isEamil({ email });
 
     const authNumber = String(Math.floor(Math.random() * 1000000)).padStart(
       6,
@@ -169,8 +181,7 @@ export class UsersService {
     resetPasswordInput,
   }: IUsersServiceResetPassword): Promise<boolean> {
     const { email, password } = resetPasswordInput;
-    // 서비로 로직으로 뺼지는 프론트랑 이야기후(어차피 인증 되어서 하기떄문에 따로 검증 로직 생략)
-    const user = await this.usersRepository.findOne({ where: { email } });
+    const user = await this.findOneEamil({ email });
     const hashPassword = await this.hashPassword({ password });
 
     await this.usersRepository.save({ ...user, password: hashPassword });

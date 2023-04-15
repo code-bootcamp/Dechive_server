@@ -11,6 +11,10 @@ export interface IUsersServiceFindOneEmail {
   email: User['email'];
 }
 
+export interface IUsersServiceIsEmail {
+  email: User['email'];
+}
+
 export interface IUsersServiceHashPassword {
   password: User['password'];
 }
