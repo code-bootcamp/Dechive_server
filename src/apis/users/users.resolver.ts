@@ -1,5 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { MatchAuthInput } from './dto/matchAuth.Input';
+import { ResetPasswordInput } from './dto/resetPassword.Input';
 import { CreateUserInput } from './dto/user-create.input';
 import { UpdateUserInput } from './dto/user-update.input';
 import { User } from './entities/user.entity';
@@ -37,5 +38,12 @@ export class UsersResolver {
     @Args('matchAuthInput') matchAuthInput: MatchAuthInput, //
   ): Promise<boolean> {
     return this.usersService.matchAuthNumber({ matchAuthInput });
+  }
+
+  @Mutation(() => Boolean)
+  resetUserPassword(
+    @Args('resetPasswordInput') resetPasswordInput: ResetPasswordInput, //
+  ): Promise<boolean> {
+    return this.usersService.resetUserPassword({ resetPasswordInput });
   }
 }

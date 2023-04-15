@@ -18,6 +18,7 @@ import {
   IUsersServiceFindOneEmail,
   IUsersServiceHashPassword,
   IUsersServiceMathAuth,
+  IUsersServiceResetPassword,
   IUsersServiceUpdateUser,
 } from './interfaces/user-service.interface';
 import { SnsAccountService } from '../snsAccount/snsAccount.service';
@@ -63,7 +64,7 @@ export class UsersService {
   hashPassword({
     password,
   }: IUsersServiceHashPassword): Promise<User['password']> {
-    if (!password) throw new ConflictException('비밀번호 입력해 주세요');
+    if (!password) throw new BadRequestException('비밀번호 입력해 주세요');
     return bcrypt.hash(password, 10);
   }
 
@@ -161,6 +162,18 @@ export class UsersService {
       throw new BadRequestException('인증번호가 일치 하지 않습니다.');
 
     this.cacheManager.del(email);
+    return true;
+  }
+
+  async resetUserPassword({
+    resetPasswordInput,
+  }: IUsersServiceResetPassword): Promise<boolean> {
+    const { email, password } = resetPasswordInput;
+    // 서비로 로직으로 뺼지는 프론트랑 이야기후(어차피 인증 되어서 하기떄문에 따로 검증 로직 생략)
+    const user = await this.usersRepository.findOne({ where: { email } });
+    const hashPassword = await this.hashPassword({ password });
+
+    await this.usersRepository.save({ ...user, password: hashPassword });
     return true;
   }
 }
