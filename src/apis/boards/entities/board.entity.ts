@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -29,15 +30,21 @@ export class Board {
   @Field(() => String, { nullable: true })
   recommend: string;
 
-  @Column({ type: 'varchar', length: 500 })
+  @Column({ type: 'text' })
   @Field(() => String)
   description: string;
 
-  @OneToMany(() => Product, (product) => product.board)
+  @JoinColumn()
+  @OneToMany(() => Product, (product) => product.board, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => [Product])
   products: Product[];
 
-  @OneToMany(() => Comment, (comments) => comments.board, { nullable: true })
+  @OneToMany(() => Comment, (comments) => comments.board, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   @Field(() => Comment, { nullable: true })
   comments: Comment;
 
@@ -46,7 +53,10 @@ export class Board {
   writer: string;
 
   @JoinTable()
-  @ManyToMany(() => Hashtag, (hashtags) => hashtags.boards, { nullable: true })
+  @ManyToMany(() => Hashtag, (hashtags) => hashtags.boards, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   @Field(() => [Hashtag], { nullable: true })
   hashtags: Hashtag[];
 
@@ -68,7 +78,7 @@ export class Board {
   // @Field(() => User)
   // writer: User;
 
-  @Column({ type: 'text' })
+  @Column(() => String)
   @Field(() => [String])
   pictures: string[];
 
@@ -83,9 +93,9 @@ export class Board {
   @CreateDateColumn()
   createAt: Date;
 
-  @ManyToOne(() => User, (user) => user.boards, {
-    onDelete: 'CASCADE',
-  })
-  @Field(() => User)
-  user: User;
+  // @ManyToOne(() => User, (user) => user.boards, {
+  //   onDelete: 'CASCADE',
+  // })
+  // @Field(() => User)
+  // user: User;
 }

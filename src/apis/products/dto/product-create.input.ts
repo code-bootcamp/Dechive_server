@@ -8,9 +8,3 @@ export class CreateProductInput {
   @Field(() => String)
   url: string;
 }
-
-// @InputType()
-// export class CreateProductInputs {
-//   @Field(() => [CreateProductInput])
-//   createProductInput: CreateProductInput[];
-// }
