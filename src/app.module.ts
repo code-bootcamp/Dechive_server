@@ -8,12 +8,15 @@ import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { BoardsModule } from './apis/boards/boards.module';
 import { YoutubeModule } from './apis/youtube/youtube.module';
-import { UserMoulde } from './apis/users/users.module';
+import { UsersMoulde } from './apis/users/users.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { AuthModule } from './apis/auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     BoardsModule,
-    UserMoulde,
+    UsersMoulde,
     YoutubeModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -32,11 +35,25 @@ import { UserMoulde } from './apis/users/users.module';
       synchronize: true,
       logging: true,
     }),
-    // CacheModule.register<RedisClientOptions>({
-    //   store: redisStore,
-    //   url: process.env.REDIS_HOST,
-    //   isGlobal: true,
-    // }),
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore,
+      url: process.env.REDIS_HOST,
+      isGlobal: true,
+    }),
+    MailerModule.forRootAsync({
+      useFactory: () => ({
+        transport: {
+          service: 'Gmail',
+          host: process.env.EMAIL_HOST,
+          port: Number(process.env.EMAIL_PORT),
+          secure: false,
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+        },
+      }),
+    }),
   ],
   controllers: [
     AppController, //

@@ -1,5 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Board } from 'src/apis/board/entities/boardds.entity';
+import { SnsAccount } from 'src/apis/snsAccount/entities/snsAccount.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -26,4 +34,18 @@ export class User {
   @Column({ type: 'text', nullable: true })
   @Field(() => String, { nullable: true })
   picture: string;
+
+  @JoinColumn()
+  @OneToMany(() => SnsAccount, (snsAccounts) => snsAccounts.user, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => [SnsAccount], { nullable: true })
+  snsAccounts: SnsAccount[];
+
+  @JoinColumn()
+  @OneToMany(() => Board, (boards) => boards.user, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => [Board], { nullable: true })
+  boards: Board[];
 }

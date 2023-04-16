@@ -1,8 +1,8 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { User } from '../entities/user.entity';
+import { User } from 'src/apis/users/entities/user.entity';
 
 @InputType()
-export class CreateUserInput {
+export class LoginInput {
   @Field(() => String)
   email: User['email'];
 
