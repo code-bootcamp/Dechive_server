@@ -37,6 +37,7 @@
     "cache-manager-redis-store": "2.0.0",
     "graphql": "^16.6.0",
     "mysql2": "^3.2.0",
+    "open-graph-scraper": "^5.2.3",
     "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
