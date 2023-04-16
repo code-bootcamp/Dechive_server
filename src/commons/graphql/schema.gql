@@ -1,0 +1,128 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Hashtag {
+  id: String!
+  hashtag: String!
+  boards: [Board!]!
+}
+
+type Product {
+  id: String!
+  name: String!
+  url: String!
+  picture: String
+  board: Board!
+}
+
+type Comment {
+  id: String!
+  content: String!
+  board: Board!
+  user: String!
+}
+
+type SnsAccount {
+  id: String!
+  sns: String!
+  user: User!
+}
+
+type User {
+  id: String!
+  email: String!
+  nickName: String!
+  intro: String
+  picture: String
+  snsAccounts: [SnsAccount!]
+  boards: [Board!]
+}
+
+type Board {
+  id: String!
+  title: String!
+  recommend: String
+  description: String!
+  products: [Product!]!
+  comments: Comment
+  writer: String!
+  hashtags: [Hashtag!]
+  pictures: [String!]!
+  viewers: [String!]
+  likers: [String!]
+  user: User!
+}
+
+type Youtube {
+  videoUrl: String!
+  thumbnailUrl: String!
+  views: Float!
+}
+
+type Query {
+  fetchBoard: String!
+  fetchYoutube: [Youtube!]!
+}
+
+type Mutation {
+  login(loginInput: LoginInput!): String!
+  restoreAccessToken: String!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  authEmail(email: String!): Boolean!
+  matchAuthNumber(matchAuthInput: MatchAuthInput!): Boolean!
+  resetUserPassword(resetPasswordInput: ResetPasswordInput!): Boolean!
+  deleteUser: Boolean!
+  createProducts(product: CreateProductInput!): Product!
+  createHashtag(hashtag: String!): Hashtag!
+  createHashtags(createHashtagInputs: CreateHashtagInput!): [Hashtag!]!
+  createBoard(createBoardInput: CreateBoardInput!): Board!
+  getOg(url: String!): String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  nickName: String
+  intro: String
+  picture: String
+  snsAccount: String
+}
+
+input MatchAuthInput {
+  email: String!
+  authNumber: String!
+}
+
+input ResetPasswordInput {
+  email: String!
+  password: String!
+}
+
+input CreateProductInput {
+  name: String!
+  url: String!
+}
+
+input CreateHashtagInput {
+  hashtag: String!
+}
+
+input CreateBoardInput {
+  title: String!
+  recommend: String
+  description: String!
+  writer: String!
+  pictures: [String!]!
+  createHashtagInputs: [CreateHashtagInput!]
+  createProductInputs: [CreateProductInput!]!
+}

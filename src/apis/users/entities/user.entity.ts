@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Board } from 'src/apis/board/entities/boardds.entity';
+import { Board } from 'src/apis/boards/entities/board.entity';
 import { SnsAccount } from 'src/apis/snsAccount/entities/snsAccount.entity';
 import {
   Column,

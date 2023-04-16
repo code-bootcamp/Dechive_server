@@ -29,7 +29,6 @@ export class UsersResolver {
     @Context() context: IContext, //
   ): Promise<User> {
     const { id } = context.req.user;
-    console.log(context.req.user);
     return this.usersService.updateUser({ updateUserInput, id });
   }
 
