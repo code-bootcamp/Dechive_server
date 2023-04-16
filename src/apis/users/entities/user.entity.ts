@@ -42,10 +42,10 @@ export class User {
   @Field(() => [SnsAccount], { nullable: true })
   snsAccounts: SnsAccount[];
 
-  @JoinColumn()
-  @OneToMany(() => Board, (boards) => boards.user, {
-    onDelete: 'CASCADE',
-  })
-  @Field(() => [Board], { nullable: true })
-  boards: Board[];
+  // @JoinColumn()
+  // @OneToMany(() => Board, (boards) => boards.user, {
+  //   onDelete: 'CASCADE',
+  // })
+  // @Field(() => [Board], { nullable: true })
+  // boards: Board[];
 }
