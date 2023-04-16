@@ -191,7 +191,6 @@ export class UsersService {
   }
 
   async deleteUser({ id }: IUsersServiceDeleteUser): Promise<boolean> {
-    console.log(id);
     const result = await this.usersRepository.delete({ id });
 
     return result.affected ? true : false;

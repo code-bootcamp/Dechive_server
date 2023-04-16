@@ -18,7 +18,7 @@ export class SnsAccountService {
     sns,
     user,
   }: ISnsAccountServiceDelete): Promise<DeleteResult> {
-    return this.snsAccountRepository.delete({ sns, user });
+    return this.snsAccountRepository.delete({ sns, user: { id: user.id } });
   }
 
   createSnsAccount({ sns }: ISnsAccountServiceCreate): Promise<SnsAccount> {

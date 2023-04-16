@@ -12,6 +12,7 @@ import {
 import { Hashtag } from '../../hashtags/entities/hashtag.entity';
 import { Product } from '../../products/entities/product.entity';
 import { Comment } from '../../comments/entities/comment.entity';
+import { User } from 'src/apis/users/entities/user.entity';
 
 @Entity()
 @ObjectType()
@@ -81,4 +82,10 @@ export class Board {
 
   @CreateDateColumn()
   createAt: Date;
+
+  @ManyToOne(() => User, (user) => user.boards, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => User)
+  user: User;
 }

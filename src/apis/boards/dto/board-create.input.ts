@@ -6,7 +6,16 @@ import { CreateHashtagInput } from 'src/apis/hashtags/dto/hashtag-create.input';
 @InputType()
 export class CreateBoardInput extends OmitType(
   Board, //
-  ['id', 'comments', 'viewers', 'likers', 'createAt', 'hashtags', 'products'],
+  [
+    'id',
+    'comments',
+    'viewers',
+    'likers',
+    'createAt',
+    'hashtags',
+    'products',
+    'user',
+  ],
   InputType,
 ) {
   @Field(() => [CreateHashtagInput], { nullable: true })
