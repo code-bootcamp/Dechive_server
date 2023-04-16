@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Board } from 'src/apis/board/entities/boardds.entity';
 import { SnsAccount } from 'src/apis/snsAccount/entities/snsAccount.entity';
 import {
   Column,
@@ -40,4 +41,11 @@ export class User {
   })
   @Field(() => [SnsAccount], { nullable: true })
   snsAccounts: SnsAccount[];
+
+  @JoinColumn()
+  @OneToMany(() => Board, (boards) => boards.user, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => [Board], { nullable: true })
+  boards: Board[];
 }
