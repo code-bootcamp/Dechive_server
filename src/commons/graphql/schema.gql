@@ -68,6 +68,7 @@ type Query {
 type Mutation {
   login(loginInput: LoginInput!): String!
   restoreAccessToken: String!
+  logOut: String!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   authEmail(email: String!): Boolean!

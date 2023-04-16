@@ -19,3 +19,14 @@ export interface IAuthServiceLogin {
 export interface IAuthServiceGetRefreshToken {
   user: IAuthUser['user'];
 }
+
+export interface IAuthServiceLogout {
+  req: IContext['req'];
+}
+
+export interface IAuthServcieIsToken {
+  token: {
+    accessToken?: string;
+    refreshToken?: string;
+  };
+}
