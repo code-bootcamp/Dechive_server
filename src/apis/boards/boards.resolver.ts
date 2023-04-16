@@ -10,53 +10,45 @@ import { CreateHashtagInput } from '../hashtags/dto/hashtag-create.input';
 import { UseGuards } from '@nestjs/common';
 import { DechiveAuthGuard } from '../auth/guards/auth.guards';
 import { IContext } from 'src/commons/interfaces/context';
+import { HashtagsService } from '../hashtags/hashtags.service';
+import { ProductsService } from '../products/products.service';
 
 @Resolver()
 export class BoardsResolver {
   constructor(
-    private readonly BoardsService: BoardsService, //
+    private readonly boardsService: BoardsService, //
+
+    private readonly hashtagsService: HashtagsService,
+
+    private readonly productsService: ProductsService, //
   ) {}
 
   @Query(() => String)
   fetchBoard() {
-    return 'a';
+    return 'Test';
   }
 
   @Mutation(() => Product)
   createProducts(
     @Args('product') createProductInputs: CreateProductInput, //
   ): Promise<Product> {
-    return this.BoardsService.createProducts({ createProductInputs });
-  }
-
-  @Mutation(() => Hashtag)
-  createHashtag(
-    @Args('hashtag') hashtag: string, //
-  ): Promise<Hashtag> {
-    return this.BoardsService.createHashtag({ hashtag });
+    return this.productsService.createProducts({ createProductInputs });
   }
 
   @Mutation(() => [Hashtag])
   createHashtags(
     @Args('createHashtagInputs') createHashtagInputs: CreateHashtagInput, //
   ): Promise<[Hashtag]> {
-    return this.BoardsService.createHashtags({ createHashtagInputs });
+    return this.hashtagsService.createHashtags({ createHashtagInputs });
   }
 
-  @UseGuards(DechiveAuthGuard('access'))
+  // @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Board)
   createBoard(
     @Args('createBoardInput') createBoardInput: CreateBoardInput, //
-    @Context() context: IContext,
+    // @Context() context: IContext,
   ): Promise<Board> {
-    console.log(context.req.user);
-    return this.BoardsService.createBoard({ createBoardInput });
-  }
-
-  @Mutation(() => String)
-  async getOg(
-    @Args('url') url: string, //
-  ): Promise<string> {
-    return await getOgImageUrl({ url });
+    // console.log(context.req.user);
+    return this.boardsService.createBoard({ createBoardInput });
   }
 }

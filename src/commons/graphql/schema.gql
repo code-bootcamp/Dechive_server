@@ -23,6 +23,20 @@ type Comment {
   user: String!
 }
 
+type Board {
+  id: String!
+  title: String!
+  recommend: String
+  description: String!
+  products: [Product!]!
+  comments: Comment
+  writer: String!
+  hashtags: [Hashtag!]
+  pictures: [String!]!
+  viewers: [String!]
+  likers: [String!]
+}
+
 type SnsAccount {
   id: String!
   sns: String!
@@ -36,22 +50,6 @@ type User {
   intro: String
   picture: String
   snsAccounts: [SnsAccount!]
-  boards: [Board!]
-}
-
-type Board {
-  id: String!
-  title: String!
-  recommend: String
-  description: String!
-  products: [Product!]!
-  comments: Comment
-  writer: String!
-  hashtags: [Hashtag!]
-  pictures: [String!]!
-  viewers: [String!]
-  likers: [String!]
-  user: User!
 }
 
 type Youtube {
@@ -124,6 +122,6 @@ input CreateBoardInput {
   description: String!
   writer: String!
   pictures: [String!]!
-  createHashtagInputs: [CreateHashtagInput!]
+  createHashtagInputs: [CreateHashtagInput!]!
   createProductInputs: [CreateProductInput!]!
 }

@@ -14,11 +14,11 @@ export class CreateBoardInput extends OmitType(
     'createAt',
     'hashtags',
     'products',
-    'user',
+    // 'user',
   ],
   InputType,
 ) {
-  @Field(() => [CreateHashtagInput], { nullable: true })
+  @Field(() => [CreateHashtagInput])
   createHashtagInputs: CreateHashtagInput[];
 
   @Field(() => [CreateProductInput])
