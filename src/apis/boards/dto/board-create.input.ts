@@ -14,7 +14,7 @@ export class CreateBoardInput extends OmitType(
     'createAt',
     'hashtags',
     'products',
-    // 'user',
+    'writer',
   ],
   InputType,
 ) {

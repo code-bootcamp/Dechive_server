@@ -12,7 +12,6 @@ export class HashtagsService {
   ) {}
 
   async createHashtags({ createHashtagInputs }): Promise<[Hashtag]> {
-    const { hashtags } = createHashtagInputs;
     return createHashtagInputs.map(
       async (createHashtagInput: CreateHashtagInput) => {
         const { hashtag } = createHashtagInput;
@@ -27,35 +26,22 @@ export class HashtagsService {
       },
     );
   }
+  // Bulk insert 예시 코드
+  // const a = await this.boardsRepository
+  //   .createQueryBuilder('board')
+  //   .insert()
+  //   .into(Board)
+  //   .values([
+  //     { firstName: 'Timber', lastName: 'Saw' },
+  //     { firstName: 'Phantom', lastName: 'Lancer' },
+  //   ])
+  //   .execute();
 
-  async createHashtag({ hashtag }): Promise<Hashtag> {
-    const prevHashtag = await this.hashtagsRepository.findOne({
-      where: { hashtag },
-    });
-
-    // Bulk insert 예시 코드
-    // const a = await this.boardsRepository
-    //   .createQueryBuilder('board')
-    //   .insert()
-    //   .into(Board)
-    //   .values([
-    //     { firstName: 'Timber', lastName: 'Saw' },
-    //     { firstName: 'Phantom', lastName: 'Lancer' },
-    //   ])
-    //   .execute();
-
-    // Qurey Builder update
-    // await this.boardsRepository
-    //   .createQueryBuilder()
-    //   .update(User)
-    //   .set({ firstName: 'Timber', lastName: 'Saw' })
-    //   .where('id = :id', { id: 1 })
-    //   .execute();
-
-    if (prevHashtag) {
-      return prevHashtag;
-    } else {
-      return this.hashtagsRepository.save({ hashtag });
-    }
-  }
+  // Qurey Builder update
+  // await this.boardsRepository
+  //   .createQueryBuilder()
+  //   .update(User)
+  //   .set({ firstName: 'Timber', lastName: 'Saw' })
+  //   .where('id = :id', { id: 1 })
+  //   .execute();
 }

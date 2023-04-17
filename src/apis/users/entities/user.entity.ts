@@ -45,15 +45,28 @@ export class User {
   @Field(() => [SnsAccount], { nullable: true })
   snsAccounts: SnsAccount[];
 
-  // @JoinColumn()
-  // @OneToMany(() => Board, (boards) => boards.user, {
-  //   onDelete: 'CASCADE',
-  // })
-  // @Field(() => [Board], { nullable: true })
-  // boards: Board[];
-
   @JoinTable()
   @ManyToMany(() => Following, (followings) => followings.users)
   @Field(() => [Following])
   followings: Following[];
+  
+  @OneToMany(() => Board, (boards) => boards.writer, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => [Board], { nullable: true })
+  boards: Board[];
+
+  @ManyToMany(() => Board, (view) => view.viewers, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  @Field(() => [Board], { nullable: true })
+  view: Board[];
+
+  @ManyToMany(() => Board, (like) => like.likers, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  @Field(() => [Board], { nullable: true })
+  like: Board[];
 }
