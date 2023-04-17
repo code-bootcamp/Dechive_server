@@ -48,10 +48,6 @@ export class Board {
   @Field(() => Comment, { nullable: true })
   comments: Comment;
 
-  @Column({ type: 'varchar', length: 100 })
-  @Field(() => String)
-  writer: string;
-
   @JoinTable()
   @ManyToMany(() => Hashtag, (hashtags) => hashtags.boards, {
     nullable: true,
@@ -60,42 +56,36 @@ export class Board {
   @Field(() => [Hashtag], { nullable: true })
   hashtags: Hashtag[];
 
-  // @OneToMany(() => Picture, (pictures) => pictures.board)
-  // @Field(() => Picture)
-  // pictures: Picture;
-
-  // @JoinTable()
-  // @ManyToMany(() => User, (viewers) => viewers.boards)
-  // @Field(() => [User], { nullable: true })
-  // viewers: User[];
-
-  // @JoinTable()
-  // @ManyToMany(() => User, (likers) => likers.boards)
-  // @Field(() => [User], { nullable: true })
-  // likers: User[];
-
-  // @ManyToOne(() => User, (writer) => writer.boards)
-  // @Field(() => User)
-  // writer: User;
-
   @Column(() => String)
   @Field(() => [String])
   pictures: string[];
 
-  @Column({ type: 'text', nullable: true })
-  @Field(() => [String], { nullable: true })
-  viewers: string[];
+  // @OneToMany(() => Picture, (pictures) => pictures.board)
+  // @Field(() => Picture)
+  // pictures: Picture;
 
-  @Column({ type: 'text', nullable: true })
-  @Field(() => [String], { nullable: true })
-  likers: string[];
+  @JoinTable()
+  @ManyToMany(() => User, (viewers) => viewers.view, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  @Field(() => [User], { nullable: true })
+  viewers: User[];
+
+  @JoinTable()
+  @ManyToMany(() => User, (likers) => likers.like, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  @Field(() => [User], { nullable: true })
+  likers: User[];
+
+  @ManyToOne(() => User, (writer) => writer.boards, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => User)
+  writer: User;
 
   @CreateDateColumn()
   createAt: Date;
-
-  // @ManyToOne(() => User, (user) => user.boards, {
-  //   onDelete: 'CASCADE',
-  // })
-  // @Field(() => User)
-  // user: User;
 }
