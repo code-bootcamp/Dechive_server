@@ -16,31 +16,31 @@ export class YoutubeService {
           part: 'snippet',
           q: 'desk setup', //desk setup 검색
           type: 'video',
-          maxResults: 24, //12개
+          maxResults: 12, //12개
           fields: 'items(id(videoId),snippet(thumbnails(high(url))))', //비디오 아이디와 썸네일만 조회
         },
       });
-      // return Promise.all(
-      return response.data.items.map(async (e) => {
-        return {
-          videoUrl: `www.youtube.com/watch?v=${e.id.videoId}`,
-          thumbnailUrl: e.snippet.thumbnails.high.url,
-        };
-      });
-      //       // 비디오 아이디로 조회수 조회
-      //       views: (
-      //         await apiClient.get('videos', {
-      //           params: {
-      //             part: 'statistics',
-      //             id: e.id.videoId,
-      //             fields: 'items(statistics(viewCount))',
-      //           },
-      // })
-      // ).data.items[0].statistics.viewCount,
-      //   }),
-      // ).then(() => result);
+      const result: Youtube[] = [];
+      return Promise.all(
+        response.data.items.map(async (e) => {
+          return {
+            videoUrl: `www.youtube.com/watch?v=${e.id.videoId}`,
+            thumbnailUrl: e.snippet.thumbnails.high.url,
+            // 비디오 아이디로 조회수 조회
+            views: (
+              await apiClient.get('videos', {
+                params: {
+                  part: 'statistics',
+                  id: e.id.videoId,
+                  fields: 'items(statistics(viewCount))',
+                },
+              })
+            ).data.items[0].statistics.viewCount,
+          };
+        }),
+      );
     } catch (error) {
-      return error;
+      console.log(error);
     }
   }
 }
