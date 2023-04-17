@@ -49,7 +49,7 @@ export class User {
   @ManyToMany(() => Following, (followings) => followings.users)
   @Field(() => [Following])
   followings: Following[];
-  
+
   @OneToMany(() => Board, (boards) => boards.writer, {
     onDelete: 'CASCADE',
   })

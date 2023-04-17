@@ -56,17 +56,12 @@ export class AuthService {
       { secret: process.env.REFRESH_TOKEN, expiresIn: '2w' },
     );
 
+    res.setHeader('Access-Control-Allow-Origin', process.env.ORIGIN);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader(
       'Set-Cookie',
-      `refreshToken=${refreshToken};path=/; httpOnly`,
+      `refreshToken=${refreshToken};path=/; domain=.mobomobo.shop; SameSite=None; Secure; httpOnly`,
     );
-
-    // res.setHeader('Access-Control-Allow-Origin', process.env.ORIGIN);
-    // res.setHeader('Access-Control-Allow-Credentials', 'true');
-    // res.setHeader(
-    //   'Set-Cookie',
-    //   `refreshToken=${refreshToken};path=/; domain=.mobomobo.shop; SameSite=None; Secure; httpOnly`,
-    // );
   }
 
   restoreAccessToken({ user }: IAuthServiceGetRefreshToken): string {

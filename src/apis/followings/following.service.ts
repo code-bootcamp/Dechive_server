@@ -18,6 +18,7 @@ export class FollowingsService {
     id,
     followingid,
   }: IFollowingsServiceUpdate): Promise<boolean> {
+    console.log(id);
     const users = await this.usersService.findeOneUser({ id });
 
     const isFollowing = users.followings.filter(
