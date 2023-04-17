@@ -19,10 +19,16 @@ import { AuthModule } from './apis/auth/auth.module';
     UsersMoulde,
     YoutubeModule,
     ConfigModule.forRoot(),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: 'src/commons/graphql/schema.gql',
-      context: ({ req, res }) => ({ req, res }),
+      useFactory: () => ({
+        autoSchemaFile: 'src/commons/graphql/schema.gql',
+        context: ({ req, res }) => ({ req, res }),
+        cors: {
+          origin: process.env.ORIGIN,
+          credentials: true,
+        },
+      }),
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',
