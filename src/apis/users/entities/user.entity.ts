@@ -1,10 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Board } from 'src/apis/boards/entities/board.entity';
+import { Following } from 'src/apis/followings/entities/followings.entity';
 import { SnsAccount } from 'src/apis/snsAccount/entities/snsAccount.entity';
 import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -48,4 +51,9 @@ export class User {
   // })
   // @Field(() => [Board], { nullable: true })
   // boards: Board[];
+
+  @JoinTable()
+  @ManyToMany(() => Following, (followings) => followings.users)
+  @Field(() => [Following])
+  followings: Following[];
 }

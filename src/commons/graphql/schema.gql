@@ -37,6 +37,12 @@ type Board {
   likers: [String!]
 }
 
+type Following {
+  id: String!
+  followingid: String!
+  users: [User!]!
+}
+
 type SnsAccount {
   id: String!
   sns: String!
@@ -50,6 +56,7 @@ type User {
   intro: String
   picture: String
   snsAccounts: [SnsAccount!]
+  followings: [Following!]!
 }
 
 type Youtube {
@@ -74,10 +81,9 @@ type Mutation {
   resetUserPassword(resetPasswordInput: ResetPasswordInput!): Boolean!
   deleteUser: Boolean!
   createProducts(product: CreateProductInput!): Product!
-  createHashtag(hashtag: String!): Hashtag!
   createHashtags(createHashtagInputs: CreateHashtagInput!): [Hashtag!]!
   createBoard(createBoardInput: CreateBoardInput!): Board!
-  getOg(url: String!): String!
+  updateFollowing(followingid: String!): Boolean!
 }
 
 input LoginInput {

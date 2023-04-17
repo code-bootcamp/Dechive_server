@@ -11,11 +11,13 @@ import { YoutubeModule } from './apis/youtube/youtube.module';
 import { UsersMoulde } from './apis/users/users.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './apis/auth/auth.module';
+import { FollowingsModule } from './apis/followings/following.module';
 
 @Module({
   imports: [
     AuthModule,
     BoardsModule,
+    FollowingsModule,
     UsersMoulde,
     YoutubeModule,
     ConfigModule.forRoot(),
