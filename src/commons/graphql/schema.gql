@@ -23,20 +23,6 @@ type Comment {
   user: String!
 }
 
-type Board {
-  id: String!
-  title: String!
-  recommend: String
-  description: String!
-  products: [Product!]!
-  comments: Comment
-  writer: String!
-  hashtags: [Hashtag!]
-  pictures: [String!]!
-  viewers: [String!]
-  likers: [String!]
-}
-
 type SnsAccount {
   id: String!
   sns: String!
@@ -50,6 +36,23 @@ type User {
   intro: String
   picture: String
   snsAccounts: [SnsAccount!]
+  boards: [Board!]
+  view: [Board!]
+  like: [Board!]
+}
+
+type Board {
+  id: String!
+  title: String!
+  recommend: String
+  description: String!
+  products: [Product!]!
+  comments: Comment
+  hashtags: [Hashtag!]
+  pictures: [String!]!
+  viewers: [User!]
+  likers: [User!]
+  writer: User!
 }
 
 type Youtube {
@@ -73,11 +76,7 @@ type Mutation {
   matchAuthNumber(matchAuthInput: MatchAuthInput!): Boolean!
   resetUserPassword(resetPasswordInput: ResetPasswordInput!): Boolean!
   deleteUser: Boolean!
-  createProducts(product: CreateProductInput!): Product!
-  createHashtag(hashtag: String!): Hashtag!
-  createHashtags(createHashtagInputs: CreateHashtagInput!): [Hashtag!]!
   createBoard(createBoardInput: CreateBoardInput!): Board!
-  getOg(url: String!): String!
 }
 
 input LoginInput {
@@ -107,21 +106,20 @@ input ResetPasswordInput {
   password: String!
 }
 
-input CreateProductInput {
-  name: String!
-  url: String!
+input CreateBoardInput {
+  title: String!
+  recommend: String
+  description: String!
+  pictures: [String!]!
+  createHashtagInputs: [CreateHashtagInput!]!
+  createProductInputs: [CreateProductInput!]!
 }
 
 input CreateHashtagInput {
   hashtag: String!
 }
 
-input CreateBoardInput {
-  title: String!
-  recommend: String
-  description: String!
-  writer: String!
-  pictures: [String!]!
-  createHashtagInputs: [CreateHashtagInput!]!
-  createProductInputs: [CreateProductInput!]!
+input CreateProductInput {
+  name: String!
+  url: String!
 }
