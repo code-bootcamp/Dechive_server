@@ -8,6 +8,6 @@ export class Youtube {
   @Field(() => String)
   thumbnailUrl: string;
 
-  @Field(() => Number)
-  views: number;
+  //   @Field(() => Number)
+  //   views: number;
 }
