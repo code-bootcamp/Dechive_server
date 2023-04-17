@@ -1,10 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Board } from 'src/apis/boards/entities/board.entity';
+import { Following } from 'src/apis/followings/entities/followings.entity';
 import { SnsAccount } from 'src/apis/snsAccount/entities/snsAccount.entity';
 import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -43,6 +45,11 @@ export class User {
   @Field(() => [SnsAccount], { nullable: true })
   snsAccounts: SnsAccount[];
 
+  @JoinTable()
+  @ManyToMany(() => Following, (followings) => followings.users)
+  @Field(() => [Following])
+  followings: Following[];
+  
   @OneToMany(() => Board, (boards) => boards.writer, {
     onDelete: 'CASCADE',
   })

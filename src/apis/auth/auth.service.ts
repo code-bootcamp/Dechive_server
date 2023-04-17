@@ -55,10 +55,12 @@ export class AuthService {
       { sub: user.id },
       { secret: process.env.REFRESH_TOKEN, expiresIn: '2w' },
     );
+
     res.setHeader(
       'Set-Cookie',
       `refreshToken=${refreshToken};path=/; httpOnly`,
     );
+
     // res.setHeader('Access-Control-Allow-Origin', process.env.ORIGIN);
     // res.setHeader('Access-Control-Allow-Credentials', 'true');
     // res.setHeader(
