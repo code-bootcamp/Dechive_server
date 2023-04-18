@@ -7,7 +7,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { getRandomNickName } from 'src/commons/util/getRandomNickname';
@@ -16,6 +16,7 @@ import {
   IUsersServiceAuthEamil,
   IUsersServiceCreateUser,
   IUsersServiceDeleteUser,
+  IUsersServiceFindByUsers,
   IUsersServiceFindeOne,
   IUsersServiceFindOneEmail,
   IUsersServiceHashPassword,
@@ -51,6 +52,12 @@ export class UsersService {
 
     if (!user) throw new ConflictException('등록 되지 않은 유저 입니다');
     return user;
+  }
+
+  async findByUsers({ users }: IUsersServiceFindByUsers): Promise<User[]> {
+    return this.usersRepository.find({
+      where: { id: In(users) },
+    });
   }
 
   async findOneEamil({ email }: IUsersServiceFindOneEmail): Promise<User> {

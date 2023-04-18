@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { Following } from './entities/followings.entity';
-import { IFollowingsServiceUpdate } from './interfaces/followings-service.interface';
+import {
+  IFollowingsServiceFetchFollwings,
+  IFollowingsServiceUpdate,
+} from './interfaces/followings-service.interface';
 
 @Injectable()
 export class FollowingsService {
@@ -46,5 +50,20 @@ export class FollowingsService {
     }
     await this.usersService.unfollowing({ id, followingid });
     return false;
+  }
+
+  async fetchFollowings({
+    id,
+  }: IFollowingsServiceFetchFollwings): Promise<User[]> {
+    const result = await this.followingRepository.find({
+      where: { users: { id } },
+      relations: ['users'],
+    });
+
+    const users = [];
+    result.forEach((el) => {
+      if (el.followingid) users.push(el.followingid);
+    });
+    return this.usersService.findByUsers({ users });
   }
 }

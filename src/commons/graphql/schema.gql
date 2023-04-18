@@ -64,10 +64,12 @@ type Board {
 type Youtube {
   videoUrl: String!
   thumbnailUrl: String!
+  views: Float!
 }
 
 type Query {
   fetchBoard: String!
+  fetchFollowings(userid: String!): [User!]!
   fetchYoutube: [Youtube!]!
 }
 

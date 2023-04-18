@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/commons/interfaces/context';
 import { DechiveAuthGuard } from '../auth/guards/auth.guards';
 import { User } from '../users/entities/user.entity';
@@ -20,5 +20,12 @@ export class FollowingsResolver {
   ): Promise<boolean> {
     const { id } = context.req.user;
     return this.followingsService.updateFollowing({ id, followingid });
+  }
+
+  @Query(() => [User])
+  fetchFollowings(
+    @Args('userid') userid: string, //
+  ): Promise<User[]> {
+    return this.followingsService.fetchFollowings({ id: userid });
   }
 }
