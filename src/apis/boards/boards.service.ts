@@ -20,19 +20,17 @@ export class BoardsService {
     // image 업로드 후 링크 받아오기
 
     // bulk insert 활용한 최적화 필요
-
-    const { createProductInputs, createHashtagInputs } = createBoardInput;
     const hashtags = await this.hashtagsService.createHashtags({
-      createHashtagInputs,
+      ...createBoardInput,
     });
     const products = await this.productsService.createProducts({
-      createProductInputs,
+      ...createBoardInput,
     });
     return this.boardsRepository.save({
       ...createBoardInput,
       writer: { id },
-      products,
       hashtags,
+      products,
     });
   }
 }
