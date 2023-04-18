@@ -23,6 +23,12 @@ type Comment {
   user: String!
 }
 
+type Following {
+  id: String!
+  followingid: String!
+  users: [User!]!
+}
+
 type SnsAccount {
   id: String!
   sns: String!
@@ -36,6 +42,7 @@ type User {
   intro: String
   picture: String
   snsAccounts: [SnsAccount!]
+  followings: [Following!]!
   boards: [Board!]
   view: [Board!]
   like: [Board!]
@@ -58,7 +65,6 @@ type Board {
 type Youtube {
   videoUrl: String!
   thumbnailUrl: String!
-  views: Float!
 }
 
 type Query {
@@ -69,6 +75,7 @@ type Query {
 type Mutation {
   login(loginInput: LoginInput!): String!
   restoreAccessToken: String!
+  logOut: String!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   authEmail(email: String!): Boolean!
@@ -76,6 +83,7 @@ type Mutation {
   resetUserPassword(resetPasswordInput: ResetPasswordInput!): Boolean!
   deleteUser: Boolean!
   createBoard(createBoardInput: CreateBoardInput!): Board!
+  updateFollowing(followingid: String!): Boolean!
 }
 
 input LoginInput {

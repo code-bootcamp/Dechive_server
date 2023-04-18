@@ -12,6 +12,7 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { getRandomNickName } from 'src/commons/util/getRandomNickname';
 import {
+  IUserServiceUnfollowing,
   IUsersServiceAuthEamil,
   IUsersServiceCreateUser,
   IUsersServiceDeleteUser,
@@ -45,11 +46,10 @@ export class UsersService {
   async findeOneUser({ id }: IUsersServiceFindeOne): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id },
-      relations: ['snsAccounts'],
+      relations: ['snsAccounts', 'followings'],
     });
 
     if (!user) throw new ConflictException('등록 되지 않은 유저 입니다');
-
     return user;
   }
 
@@ -194,5 +194,18 @@ export class UsersService {
     const result = await this.usersRepository.delete({ id });
 
     return result.affected ? true : false;
+  }
+
+  async unfollowing({
+    followingid,
+    id,
+  }: IUserServiceUnfollowing): Promise<User> {
+    const user = await this.findeOneUser({ id });
+
+    user.followings = user.followings.filter(
+      (el) => el.followingid !== followingid,
+    );
+
+    return this.usersRepository.save(user);
   }
 }

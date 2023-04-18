@@ -11,18 +11,26 @@ import { YoutubeModule } from './apis/youtube/youtube.module';
 import { UsersMoulde } from './apis/users/users.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './apis/auth/auth.module';
+import { FollowingsModule } from './apis/followings/following.module';
 
 @Module({
   imports: [
     AuthModule,
     BoardsModule,
+    FollowingsModule,
     UsersMoulde,
     YoutubeModule,
     ConfigModule.forRoot(),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: 'src/commons/graphql/schema.gql',
-      context: ({ req, res }) => ({ req, res }),
+      useFactory: () => ({
+        autoSchemaFile: 'src/commons/graphql/schema.gql',
+        context: ({ req, res }) => ({ req, res }),
+        cors: {
+          origin: process.env.ORIGIN,
+          credentials: true,
+        },
+      }),
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',

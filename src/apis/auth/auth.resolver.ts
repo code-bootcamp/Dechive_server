@@ -27,4 +27,12 @@ export class AuthResolver {
     const { user } = context.req;
     return this.authService.restoreAccessToken({ user });
   }
+
+  @UseGuards(DechiveAuthGuard('access'))
+  @Mutation(() => String)
+  logOut(
+    @Context() context: IContext, //
+  ): Promise<string> {
+    return this.authService.logOut({ req: context.req });
+  }
 }

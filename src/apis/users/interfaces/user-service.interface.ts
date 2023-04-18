@@ -1,3 +1,4 @@
+import { Following } from 'src/apis/followings/entities/followings.entity';
 import { IAuthUser, IContext } from 'src/commons/interfaces/context';
 import { MatchAuthInput } from '../dto/matchAuth.Input';
 import { ResetPasswordInput } from '../dto/resetPassword.Input';
@@ -43,4 +44,9 @@ export interface IUsersServiceResetPassword {
 
 export interface IUsersServiceDeleteUser {
   id: User['id'];
+}
+
+export interface IUserServiceUnfollowing {
+  id: User['id'];
+  followingid: Following['id'];
 }
