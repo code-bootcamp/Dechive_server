@@ -70,6 +70,7 @@ type Youtube {
 
 type Query {
   fetchBoard: String!
+  fetchFollowings(userid: String!): [User!]!
   fetchYoutube: [Youtube!]!
 }
 

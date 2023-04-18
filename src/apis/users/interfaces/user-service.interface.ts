@@ -50,3 +50,9 @@ export interface IUserServiceUnfollowing {
   id: User['id'];
   followingid: Following['id'];
 }
+
+export interface IUsersServiceFindByUsers {
+  users: {
+    id: string;
+  }[];
+}
