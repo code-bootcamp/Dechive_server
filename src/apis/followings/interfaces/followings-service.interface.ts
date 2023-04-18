@@ -5,3 +5,7 @@ export interface IFollowingsServiceUpdate {
   id: User['id'];
   followingid: User['id'];
 }
+
+export interface IFollowingsServiceFetchFollwings {
+  id: User['id'];
+}
