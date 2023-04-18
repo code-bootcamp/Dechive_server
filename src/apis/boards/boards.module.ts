@@ -11,9 +11,10 @@ import { HashtagsService } from '../hashtags/hashtags.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      Board, //
+      Board, //레포 imports 최소화 필요
       Hashtag,
       Product,
+      // Picture,
     ]),
   ],
   providers: [
@@ -21,6 +22,7 @@ import { HashtagsService } from '../hashtags/hashtags.service';
     BoardsService,
     HashtagsService,
     ProductsService,
+    // PicturesService,
   ],
   exports: [
     BoardsService, //

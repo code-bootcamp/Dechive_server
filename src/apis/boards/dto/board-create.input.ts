@@ -17,7 +17,6 @@ export class CreateBoardInput extends OmitType(
   ],
   InputType,
 ) {
-
   @Field(() => [String])
   hashtags: string[];
 

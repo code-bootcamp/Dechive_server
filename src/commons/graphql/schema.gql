@@ -56,7 +56,6 @@ type Board {
   products: [Product!]!
   comments: Comment
   hashtags: [Hashtag!]
-  pictures: [String!]!
   viewers: [User!]
   likers: [User!]
   writer: User!
@@ -85,6 +84,7 @@ type Mutation {
   resetUserPassword(resetPasswordInput: ResetPasswordInput!): Boolean!
   deleteUser: Boolean!
   createBoard(createBoardInput: CreateBoardInput!): Board!
+  updateBoard(updateBoardInput: UpdateBoardInput!, boardId: String!): Board!
   updateFollowing(followingid: String!): Boolean!
 }
 
@@ -119,16 +119,19 @@ input CreateBoardInput {
   title: String!
   recommend: String
   description: String!
-  pictures: [String!]!
-  createHashtagInputs: [CreateHashtagInput!]!
+  hashtags: [String!]!
   createProductInputs: [CreateProductInput!]!
-}
-
-input CreateHashtagInput {
-  hashtag: String!
 }
 
 input CreateProductInput {
   name: String!
   url: String!
+}
+
+input UpdateBoardInput {
+  title: String!
+  recommend: String
+  description: String!
+  hashtags: [String!]!
+  updateProductInputs: [CreateProductInput!]!
 }
