@@ -2,7 +2,6 @@ import { Repository } from 'typeorm';
 import { Hashtag } from './entities/hashtag.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { CreateHashtagInput } from './dto/hashtag-create.input';
 
 @Injectable()
 export class HashtagsService {
@@ -11,20 +10,19 @@ export class HashtagsService {
     private readonly hashtagsRepository: Repository<Hashtag>, //
   ) {}
 
-  async createHashtags({ createHashtagInputs }): Promise<[Hashtag]> {
-    return createHashtagInputs.map(
-      async (createHashtagInput: CreateHashtagInput) => {
-        const { hashtag } = createHashtagInput;
-        const prevHashtag = await this.hashtagsRepository.findOne({
-          where: { hashtag },
-        });
-        if (prevHashtag) {
-          return prevHashtag;
-        } else {
-          return this.hashtagsRepository.save({ hashtag });
-        }
-      },
-    );
+  async createHashtags({ hashtags }): Promise<[Hashtag]> {
+    return hashtags.map(async (hashtagWithOutSharp: string) => {
+      const hashtag = `#${hashtagWithOutSharp}`;
+      console.log(hashtag);
+      const prevHashtag = await this.hashtagsRepository.findOne({
+        where: { hashtag },
+      });
+      if (prevHashtag) {
+        return prevHashtag;
+      } else {
+        return this.hashtagsRepository.save({ hashtag });
+      }
+    });
   }
   // Bulk insert 예시 코드
   // const a = await this.boardsRepository
