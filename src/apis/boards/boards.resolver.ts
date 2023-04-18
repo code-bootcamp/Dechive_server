@@ -5,6 +5,8 @@ import { CreateBoardInput } from './dto/board-create.input';
 import { UseGuards } from '@nestjs/common';
 import { DechiveAuthGuard } from '../auth/guards/auth.guards';
 import { IContext } from 'src/commons/interfaces/context';
+import { UpdateBoardInput } from './dto/board-update.input';
+// import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @Resolver()
 export class BoardsResolver {
@@ -17,13 +19,57 @@ export class BoardsResolver {
     return 'test';
   }
 
+  // @Mutation(() => Board)
+  // async test(
+  //   @Args('id') id: string, //
+  //   @Args('updateBoardInput') updateBoardInput: UpdateBoardInput, //
+  // ) {
+  //   const test = await this.boardsService.findOneBoard({
+  //     id,
+  //     updateBoardInput,
+  //   });
+  //   // console.log(test);
+  //   // test.products.map((e) => {
+  //   //   console.log(e.id);
+  //   // });
+  //   // const prevProducts = test.products;
+  //   // const prevHashtags = test.hashtags;
+  //   // console.log(prevProducts);
+  //   // console.log(prevHashtags);
+  //   // console.log(test);
+
+  //   return test;
+  // }
+
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Board)
   createBoard(
-    @Args('createBoardInput') createBoardInput: CreateBoardInput, //
+    @Args('createBoardInput') createBoardInput: CreateBoardInput,
+    // @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
     @Context() context: IContext,
   ): Promise<Board> {
     const { id } = context.req.user;
-    return this.boardsService.createBoard({ createBoardInput, id });
+    return this.boardsService.createBoard({
+      createBoardInput,
+      // files,
+      id,
+    });
+  }
+
+  @UseGuards(DechiveAuthGuard('access'))
+  @Mutation(() => Board)
+  async updateBoard(
+    @Args('updateBoardInput') updateBoardInput: UpdateBoardInput,
+    @Args('boardId') boardId: string,
+    // @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
+    @Context() context: IContext,
+  ): Promise<Board> {
+    const { id } = context.req.user;
+    return this.boardsService.updateBoard({
+      updateBoardInput,
+      boardId,
+      id,
+      // files,
+    });
   }
 }

@@ -14,6 +14,7 @@ import { Hashtag } from '../../hashtags/entities/hashtag.entity';
 import { Product } from '../../products/entities/product.entity';
 import { Comment } from '../../comments/entities/comment.entity';
 import { User } from 'src/apis/users/entities/user.entity';
+import { Picture } from 'src/apis/pictures/entities/picture';
 
 @Entity()
 @ObjectType()
@@ -56,13 +57,9 @@ export class Board {
   @Field(() => [Hashtag], { nullable: true })
   hashtags: Hashtag[];
 
-  @Column(() => String)
-  @Field(() => [String])
-  pictures: string[];
-
   // @OneToMany(() => Picture, (pictures) => pictures.board)
-  // @Field(() => Picture)
-  // pictures: Picture;
+  // @Field(() => [Picture])
+  // pictures: Picture[];
 
   @JoinTable()
   @ManyToMany(() => User, (viewers) => viewers.view, {
