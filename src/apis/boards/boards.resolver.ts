@@ -6,6 +6,7 @@ import { UseGuards } from '@nestjs/common';
 import { DechiveAuthGuard } from '../auth/guards/auth.guards';
 import { IContext } from 'src/commons/interfaces/context';
 import { UpdateBoardInput } from './dto/board-update.input';
+import { DeleteResult } from 'typeorm';
 // import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @Resolver()
@@ -19,17 +20,20 @@ export class BoardsResolver {
     return 'test';
   }
 
-  // @Mutation(() => Board)
-  // async test(
-  //   @Args('id') id: string, //
-  //   @Args('updateBoardInput') updateBoardInput: UpdateBoardInput, //
-  // ) {
-  //   const test = await this.boardsService.findOneBoard({
-  //     id,
-  //     updateBoardInput,
-  //   });
-  //   return test;
-  // }
+
+  @UseGuards(DechiveAuthGuard('access'))
+  @Mutation(() => Boolean)
+  async deleteBoard(
+    @Args('boardId') boardId: string, //
+    @Context() context: IContext,
+  ) {
+    const { id } = context.req.user;
+    await this.boardsService.deleteBoard({
+      id,
+      boardId,
+    });
+    return true;
+  }
 
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Board)

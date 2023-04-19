@@ -83,6 +83,7 @@ type Mutation {
   matchAuthNumber(matchAuthInput: MatchAuthInput!): Boolean!
   resetUserPassword(resetPasswordInput: ResetPasswordInput!): Boolean!
   deleteUser: Boolean!
+  deleteBoard(boardId: String!): Boolean!
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdateBoardInput!, boardId: String!): Board!
   updateFollowing(followingid: String!): Boolean!
