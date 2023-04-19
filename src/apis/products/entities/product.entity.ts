@@ -21,7 +21,9 @@ export class Product {
   @Field(() => String, { nullable: true })
   picture: string;
 
-  @ManyToOne(() => Board, (board) => board.products)
+  @ManyToOne(() => Board, (board) => board.products, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Board)
   board: Board;
 }

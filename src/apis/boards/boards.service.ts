@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { Board } from './entities/board.entity';
 import { HashtagsService } from '../hashtags/hashtags.service';
 import { ProductsService } from '../products/products.service';
@@ -41,9 +41,9 @@ export class BoardsService {
     });
   }
 
-  // async findOneBoard({ id, updateBoardInput }) {
-  //   // return this.hashtagsService.findAllBoardId({ id });
-  // }
+  deleteBoard({ id }): Promise<DeleteResult> {
+    return this.boardsRepository.delete({ id });
+  }
 
   async updateBoard({ updateBoardInput, id, boardId }) {
     const toUpdate = await this.boardsRepository.findOne({
