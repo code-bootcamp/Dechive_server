@@ -20,13 +20,16 @@ export class BoardsResolver {
     return 'test';
   }
 
+  @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Boolean)
   async deleteBoard(
-    @Args('id') id: string, //
-    // @Args('updateBoardInput') updateBoardInput: UpdateBoardInput, //
+    @Args('boardId') boardId: string, //
+    @Context() context: IContext,
   ) {
+    const { id } = context.req.user;
     await this.boardsService.deleteBoard({
       id,
+      boardId,
     });
     return true;
   }
