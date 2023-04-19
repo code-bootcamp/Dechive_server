@@ -19,6 +19,7 @@ import {
   IUsersServiceFindByUsers,
   IUsersServiceFindeOne,
   IUsersServiceFindOneEmail,
+  IUsersServiceFollowing,
   IUsersServiceHashPassword,
   IUsersServiceIsEmail,
   IUsersServiceMathAuth,
@@ -47,7 +48,7 @@ export class UsersService {
   async findeOneUser({ id }: IUsersServiceFindeOne): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id },
-      relations: ['snsAccounts', 'followings'],
+      relations: ['snsAccounts', 'followings', 'followees'],
     });
 
     if (!user) throw new ConflictException('등록 되지 않은 유저 입니다');
@@ -203,16 +204,32 @@ export class UsersService {
     return result.affected ? true : false;
   }
 
+  async following({ id, following }: IUsersServiceFollowing): Promise<boolean> {
+    const user = await this.findeOneUser({ id });
+    const followings = [...user.followings, following];
+
+    const reuslt = await this.usersRepository.save({
+      ...user,
+      followings,
+    });
+
+    return reuslt ? true : false;
+  }
+
   async unfollowing({
     followingid,
     id,
   }: IUserServiceUnfollowing): Promise<User> {
     const user = await this.findeOneUser({ id });
+    const _user = await this.findeOneUser({ id: followingid });
+    await Promise.all([
+      (user.followings = user.followings.filter(
+        (el) => el.followingid !== followingid,
+      )),
+      (_user.followees = _user.followees.filter((el) => el.followeeid === id)),
+    ]);
 
-    user.followings = user.followings.filter(
-      (el) => el.followingid !== followingid,
-    );
-
+    await this.usersRepository.save(_user);
     return this.usersRepository.save(user);
   }
 }

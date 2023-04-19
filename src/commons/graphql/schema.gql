@@ -23,6 +23,12 @@ type Comment {
   user: String!
 }
 
+type Followee {
+  id: String!
+  followeeid: String!
+  users: [User!]!
+}
+
 type Following {
   id: String!
   followingid: String!
@@ -43,6 +49,7 @@ type User {
   picture: String
   snsAccounts: [SnsAccount!]
   followings: [Following!]!
+  followees: [Followee!]!
   boards: [Board!]
   view: [Board!]
   like: [Board!]
@@ -120,12 +127,8 @@ input CreateBoardInput {
   recommend: String
   description: String!
   pictures: [String!]!
-  createHashtagInputs: [CreateHashtagInput!]!
+  hashtags: [String!]!
   createProductInputs: [CreateProductInput!]!
-}
-
-input CreateHashtagInput {
-  hashtag: String!
 }
 
 input CreateProductInput {
