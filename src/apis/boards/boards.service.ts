@@ -1,8 +1,5 @@
-import {
-  HttpException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { Board } from './entities/board.entity';
@@ -57,12 +54,14 @@ export class BoardsService {
   }
 
   async updateBoard({ updateBoardInput, id, boardId }) {
-    const toUpdate = await this.boardsRepository.findOne({
+    const prevBoard = await this.boardsRepository.findOne({
       where: { id: boardId },
-      relations: ['products'],
+      relations: ['products', 'writer'],
     });
-    const { createAt } = toUpdate;
-    const prevProducts = toUpdate.products;
+    if (prevBoard.writer.id !== id)
+      throw new UnauthorizedException('수정 권한이 없습니다.');
+    // const { createAt } = prevBoard;
+    const prevProducts = prevBoard.products;
     const { updateProductInputs } = updateBoardInput;
     const products = await this.productsService.updateProducts({
       updateProductInputs: updateProductInputs.map((e) => {

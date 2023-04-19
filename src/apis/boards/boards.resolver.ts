@@ -20,6 +20,7 @@ export class BoardsResolver {
     return 'test';
   }
 
+
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Boolean)
   async deleteBoard(
