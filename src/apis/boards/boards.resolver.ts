@@ -28,16 +28,6 @@ export class BoardsResolver {
   //     id,
   //     updateBoardInput,
   //   });
-  //   // console.log(test);
-  //   // test.products.map((e) => {
-  //   //   console.log(e.id);
-  //   // });
-  //   // const prevProducts = test.products;
-  //   // const prevHashtags = test.hashtags;
-  //   // console.log(prevProducts);
-  //   // console.log(prevHashtags);
-  //   // console.log(test);
-
   //   return test;
   // }
 
