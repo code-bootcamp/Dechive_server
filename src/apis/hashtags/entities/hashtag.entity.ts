@@ -13,7 +13,9 @@ export class Hashtag {
   @Field(() => String)
   hashtag: string;
 
-  @ManyToMany(() => Board, (boards) => boards.hashtags)
+  @ManyToMany(() => Board, (boards) => boards.hashtags, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => [Board])
   boards: Board[];
 }
