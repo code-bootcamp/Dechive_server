@@ -46,8 +46,8 @@ export class Board {
     nullable: true,
     onDelete: 'CASCADE',
   })
-  @Field(() => Comment, { nullable: true })
-  comments: Comment;
+  @Field(() => [Comment], { nullable: true })
+  comments: Comment[];
 
   @JoinTable()
   @ManyToMany(() => Hashtag, (hashtags) => hashtags.boards, {
@@ -84,5 +84,6 @@ export class Board {
   writer: User;
 
   @CreateDateColumn()
+  @Field()
   createAt: Date;
 }

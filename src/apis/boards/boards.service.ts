@@ -1,5 +1,8 @@
-
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { Board } from './entities/board.entity';
@@ -19,6 +22,38 @@ export class BoardsService {
     private readonly productsService: ProductsService, // private readonly picturesService: PicturesService,
   ) {}
 
+  async findOneBoard({ id }): Promise<Board> {
+    const board = await this.boardsRepository.findOne({
+      where: { id },
+      relations: [
+        'writer',
+        'products',
+        'comments',
+        'hashtags',
+        'likers',
+        'viewers',
+        // 'picture',
+      ],
+    });
+    if (!board) throw new ConflictException('존재 하지 않는 게시물 입니다');
+    return board;
+  }
+
+  async findAllBoards(): Promise<Board[]> {
+    const board = await this.boardsRepository.find({
+      relations: [
+        'writer',
+        'products',
+        'comments',
+        'hashtags',
+        'likers',
+        'viewers',
+        // 'picture',
+      ],
+    });
+    return board;
+  }
+
   async createBoard({
     createBoardInput,
     // files
@@ -27,9 +62,12 @@ export class BoardsService {
     // image 업로드 후 링크 받아오기
 
     // bulk insert 활용한 최적화 필요
-    const hashtags = await this.hashtagsService.createHashtags({
-      ...createBoardInput,
-    });
+    let hashtags = null;
+    if (createBoardInput?.hashtags) {
+      hashtags = await this.hashtagsService.createHashtags({
+        ...createBoardInput,
+      });
+    }
     const products = await this.productsService.createProducts({
       ...createBoardInput,
     });

@@ -17,7 +17,7 @@ export class CreateBoardInput extends OmitType(
   ],
   InputType,
 ) {
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   hashtags: string[];
 
   @Field(() => [CreateProductInput])
