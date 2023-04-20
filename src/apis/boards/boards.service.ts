@@ -137,13 +137,24 @@ export class BoardsService {
     const { likers } = prevBoard;
     const index = likers.findIndex((el) => el.id === id);
     if (index > -1) {
-      likers.splice(index);
+      likers.splice(index, 1);
     } else {
       likers.push(await this.usersService.findeOneUser({ id }));
     }
     return this.boardsRepository.save({
       ...prevBoard,
       likers,
+    });
+  }
+
+  async updateBoardViewer({ id, boardId }) {
+    const prevBoard = await this.findOneBoard({ id: boardId });
+    const { viewers } = prevBoard;
+    viewers.push(await this.usersService.findeOneUser({ id }));
+    console.log(viewers);
+    return this.boardsRepository.save({
+      ...prevBoard,
+      viewers,
     });
   }
 }
