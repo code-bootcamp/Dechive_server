@@ -15,11 +15,17 @@ export class BoardsResolver {
     private readonly boardsService: BoardsService, //
   ) {}
 
-  @Query(() => String)
-  fetchBoard() {
-    return 'test';
+  @Query(() => Board)
+  fetchBoard(
+    @Args('id') id: string, //
+  ) {
+    return this.boardsService.findOneBoard({ id });
   }
 
+  @Query(() => [Board])
+  fetchBoards() {
+    return this.boardsService.findAllBoards();
+  }
 
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Boolean)
