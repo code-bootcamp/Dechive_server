@@ -36,34 +36,38 @@ export class FollowingsService {
         where: { followingid },
         relations: ['users'],
       });
-
       if (following) {
-        const result = await this.usersService.following({
-          id,
-          following,
-        });
-        await this.followeesService.createFollowee({
-          userid: following.users[0].id,
-          followeeid: null,
-          user,
-        });
-        return result ? true : false;
+        const result = await Promise.all([
+          this.usersService.following({
+            id,
+            following,
+          }),
+          this.followeesService.createFollowee({
+            userid: user.id,
+            user: await this.usersService.findeOneUser({
+              id: following.followingid,
+            }),
+          }),
+        ]);
+
+        return result.length ? true : false;
       }
 
-      await Promise.all([
+      const result = await Promise.all([
         this.followingRepository.save({
           followingid,
           users: [{ id }],
         }),
         this.followeesService.createFollowee({
           userid: followingid,
-          user,
           followeeid: id,
+          user,
         }),
       ]);
-      return true;
+      return result ? true : false;
     }
     await this.usersService.unfollowing({ id, followingid });
+    await this.followeesService.unFollowee({ id: user.id, followeeid: id });
     return false;
   }
 

@@ -204,16 +204,14 @@ export class UsersService {
     return result.affected ? true : false;
   }
 
-  async following({ id, following }: IUsersServiceFollowing): Promise<boolean> {
+  async following({ id, following }: IUsersServiceFollowing): Promise<User> {
     const user = await this.findeOneUser({ id });
     const followings = [...user.followings, following];
 
-    const reuslt = await this.usersRepository.save({
+    return this.usersRepository.save({
       ...user,
       followings,
     });
-
-    return reuslt ? true : false;
   }
 
   async unfollowing({
@@ -221,15 +219,14 @@ export class UsersService {
     id,
   }: IUserServiceUnfollowing): Promise<User> {
     const user = await this.findeOneUser({ id });
-    const _user = await this.findeOneUser({ id: followingid });
-    await Promise.all([
-      (user.followings = user.followings.filter(
-        (el) => el.followingid !== followingid,
-      )),
-      (_user.followees = _user.followees.filter((el) => el.followeeid === id)),
-    ]);
+    // const _user = await this.findeOneUser({ id: followingid });
 
-    await this.usersRepository.save(_user);
+    user.followings = user.followings.filter(
+      (el) => el.followingid !== followingid,
+    );
+    // (_user.followees = _user.followees.filter((el) => el.followeeid !== id)),
+
+    // await this.usersRepository.save(_user);
     return this.usersRepository.save(user);
   }
 }
