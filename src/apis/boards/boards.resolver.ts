@@ -57,6 +57,21 @@ export class BoardsResolver {
   }
 
   @UseGuards(DechiveAuthGuard('access'))
+  @Mutation(() => Boolean)
+  async updateBoardLiker(
+    @Args('boardId') boardId: string, //
+    @Context() context: IContext,
+  ) {
+    const { id } = context.req.user;
+    const qqq = await this.boardsService.updateBoardLiker({
+      id,
+      boardId,
+    });
+    // console.log(qqq);
+    return true;
+  }
+
+  @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Board)
   async updateBoard(
     @Args('updateBoardInput') updateBoardInput: UpdateBoardInput,

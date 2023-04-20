@@ -7,14 +7,15 @@ import { Hashtag } from '../hashtags/entities/hashtag.entity';
 import { Product } from '../products/entities/product.entity';
 import { ProductsService } from '../products/products.service';
 import { HashtagsService } from '../hashtags/hashtags.service';
+import { UsersMoulde } from '../users/users.module';
 
 @Module({
   imports: [
+    UsersMoulde,
     TypeOrmModule.forFeature([
       Board, //레포 imports 최소화 필요
       Hashtag,
       Product,
-      // Picture,
     ]),
   ],
   providers: [
@@ -22,7 +23,6 @@ import { HashtagsService } from '../hashtags/hashtags.service';
     BoardsService,
     HashtagsService,
     ProductsService,
-    // PicturesService,
   ],
   exports: [
     BoardsService, //

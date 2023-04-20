@@ -92,6 +92,7 @@ type Mutation {
   deleteUser: Boolean!
   deleteBoard(boardId: String!): Boolean!
   createBoard(createBoardInput: CreateBoardInput!): Board!
+  updateBoardLiker(boardId: String!): Boolean!
   updateBoard(updateBoardInput: UpdateBoardInput!, boardId: String!): Board!
   updateFollowing(followingid: String!): Boolean!
 }
