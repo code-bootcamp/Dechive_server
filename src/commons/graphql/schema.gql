@@ -59,7 +59,9 @@ type Board {
   viewers: [User!]
   likers: [User!]
   writer: User!
-  createAt: DateTime!
+  createdAt: DateTime!
+  views: Int!
+  likes: Int!
 }
 
 """
@@ -76,6 +78,7 @@ type Youtube {
 type Query {
   fetchBoard(id: String!): Board!
   fetchBoards: [Board!]!
+  fetchBestBoards: [Board!]!
   fetchFollowings(userid: String!): [User!]!
   fetchYoutube: [Youtube!]!
 }
@@ -93,8 +96,8 @@ type Mutation {
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdateBoardInput!, boardId: String!): Board!
   deleteBoard(boardId: String!): Boolean!
-  updateBoardLiker(boardId: String!): Board!
-  updateBoardViewer(boardId: String!): Board!
+  updateBoardLiker(boardId: String!): Boolean!
+  updateBoardViewer(boardId: String!): Boolean!
   updateFollowing(followingid: String!): Boolean!
 }
 
@@ -129,6 +132,8 @@ input CreateBoardInput {
   title: String!
   recommend: String
   description: String!
+  views: Int! = 0
+  likes: Int! = 0
   hashtags: [String!]
   createProductInputs: [CreateProductInput!]!
 }
@@ -142,6 +147,8 @@ input UpdateBoardInput {
   title: String!
   recommend: String
   description: String!
+  views: Int! = 0
+  likes: Int! = 0
   hashtags: [String!]
   updateProductInputs: [CreateProductInput!]!
 }

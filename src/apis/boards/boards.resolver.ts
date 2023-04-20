@@ -27,6 +27,11 @@ export class BoardsResolver {
     return this.boardsService.findAllBoards();
   }
 
+  @Query(() => [Board])
+  fetchBestBoards() {
+    return this.boardsService.findAllBoards();
+  }
+
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Board)
   createBoard(
@@ -74,25 +79,26 @@ export class BoardsResolver {
   }
 
   @UseGuards(DechiveAuthGuard('access'))
-  @Mutation(() => Board)
-  async updateBoardLiker(
+  @Mutation(() => Boolean)
+  updateBoardLiker(
     @Args('boardId') boardId: string, //
     @Context() context: IContext,
   ) {
     const { id } = context.req.user;
-    return await this.boardsService.updateBoardLiker({
+    return this.boardsService.updateBoardLiker({
       id,
       boardId,
     });
   }
+
   @UseGuards(DechiveAuthGuard('access'))
-  @Mutation(() => Board)
-  async updateBoardViewer(
+  @Mutation(() => Boolean)
+  updateBoardViewer(
     @Args('boardId') boardId: string, //
     @Context() context: IContext,
   ) {
     const { id } = context.req.user;
-    return await this.boardsService.updateBoardViewer({
+    return this.boardsService.updateBoardViewer({
       id,
       boardId,
     });

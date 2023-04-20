@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -85,5 +85,13 @@ export class Board {
 
   @CreateDateColumn()
   @Field()
-  createAt: Date;
+  createdAt: Date;
+
+  @Column({ type: Number, default: 0 })
+  @Field(() => Int, { defaultValue: 0 })
+  views: number;
+
+  @Column({ default: 0 })
+  @Field(() => Int, { defaultValue: 0 })
+  likes: number;
 }

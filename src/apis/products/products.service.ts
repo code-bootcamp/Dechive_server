@@ -19,6 +19,7 @@ export class ProductsService {
         async (createProductInput: CreateProductInput) => {
           return this.productsRepository.save({
             ...createProductInput,
+            picture: await getOgImageUrl({ ...createProductInput }),
           });
         },
       ),

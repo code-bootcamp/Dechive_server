@@ -10,6 +10,7 @@ import { HashtagsService } from '../hashtags/hashtags.service';
 import { ProductsService } from '../products/products.service';
 import { Product } from '../products/entities/product.entity';
 import { UsersService } from '../users/users.service';
+import { Hashtag } from '../hashtags/entities/hashtag.entity';
 // import { PicturesService } from '../pictures/pictures.service';
 
 @Injectable()
@@ -53,19 +54,41 @@ export class BoardsService {
         'viewers',
         // 'picture',
       ],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    return boards;
+  }
+
+  async findBestBoards(): Promise<Board[]> {
+    const boards = await this.boardsRepository.find({
+      relations: [
+        'writer',
+        'products',
+        'comments',
+        'hashtags',
+        'likers',
+        'viewers',
+        // 'picture',
+      ],
+      order: {
+        likes: 'DESC',
+        views: 'DESC',
+      },
     });
     return boards;
   }
 
   async createBoard({
     createBoardInput,
-    // files
     id,
+    // files
   }): Promise<Board> {
     // image 업로드 후 링크 받아오기
 
     // bulk insert 활용한 최적화 필요
-    let hashtags = null;
+    let hashtags: Hashtag[];
     if (createBoardInput?.hashtags) {
       hashtags = await this.hashtagsService.createHashtags({
         ...createBoardInput,
@@ -78,7 +101,7 @@ export class BoardsService {
     return this.boardsRepository.save({
       ...createBoardInput,
       writer: { id },
-      hashtags,
+      hashtags: hashtags ? hashtags : null,
       products,
     });
   }
@@ -88,13 +111,9 @@ export class BoardsService {
     boardId,
     id,
   }): Promise<Board> {
-    const prevBoard = await this.boardsRepository.findOne({
-      where: { id: boardId },
-      relations: ['products', 'writer'],
-    });
+    const prevBoard = await this.findOneBoard({ id });
     if (prevBoard.writer.id !== id)
       throw new UnauthorizedException('수정 권한이 없습니다.');
-    // const { createAt } = prevBoard;
     const prevProducts = prevBoard.products;
     const { updateProductInputs } = updateBoardInput;
     const products = await this.productsService.updateProducts({
@@ -102,7 +121,7 @@ export class BoardsService {
         const found = prevProducts.find((el) => el.url === e.url);
         if (found) {
           e.picture = found.picture;
-        }
+        } // In(Array) 사용해보기
         return e;
       }),
     });
@@ -117,7 +136,6 @@ export class BoardsService {
       ...updateBoardInput,
       products,
       hashtags,
-      // createAt,
     });
   }
 
@@ -134,27 +152,41 @@ export class BoardsService {
 
   async updateBoardLiker({ id, boardId }) {
     const prevBoard = await this.findOneBoard({ id: boardId });
-    const { likers } = prevBoard;
-    const index = likers.findIndex((el) => el.id === id);
-    if (index > -1) {
-      likers.splice(index, 1);
+    const index = prevBoard.likers.findIndex((el) => el.id === id);
+    const Added = index === -1;
+    let likes = prevBoard.likers.length;
+    if (Added) {
+      prevBoard.likers.push(await this.usersService.findeOneUser({ id }));
+      likes += 1;
     } else {
-      likers.push(await this.usersService.findeOneUser({ id }));
+      prevBoard.likers[index] = null;
+      likes -= 1;
     }
-    return this.boardsRepository.save({
+    await this.boardsRepository.save({
       ...prevBoard,
-      likers,
+      likes,
     });
+    return Added;
   }
 
   async updateBoardViewer({ id, boardId }) {
     const prevBoard = await this.findOneBoard({ id: boardId });
-    const { viewers } = prevBoard;
-    viewers.push(await this.usersService.findeOneUser({ id }));
-    console.log(viewers);
-    return this.boardsRepository.save({
+    const index = prevBoard.viewers.findIndex((el) => el.id === id);
+    const Added = index === -1;
+    let views = prevBoard.viewers.length;
+    if (Added) {
+      prevBoard.viewers.push(await this.usersService.findeOneUser({ id }));
+      views += 1;
+    }
+    await this.boardsRepository.save({
       ...prevBoard,
-      viewers,
+      views,
     });
+    return this.boardsRepository
+      .save({
+        ...prevBoard,
+        views,
+      })
+      .then(() => true);
   }
 }
