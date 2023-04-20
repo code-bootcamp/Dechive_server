@@ -10,7 +10,7 @@ export class CreateBoardInput extends OmitType(
     'comments',
     'viewers',
     'likers',
-    'createAt',
+    'createdAt',
     'hashtags',
     'products',
     'writer',
