@@ -43,10 +43,11 @@ export class FollowingsService {
             following,
           }),
           this.followeesService.createFollowee({
-            userid: user.id,
+            userid: id,
             user: await this.usersService.findeOneUser({
               id: following.followingid,
             }),
+            followeeid: followingid,
           }),
         ]);
 
@@ -61,13 +62,11 @@ export class FollowingsService {
         this.followeesService.createFollowee({
           userid: followingid,
           followeeid: id,
-          user,
         }),
       ]);
       return result ? true : false;
     }
     await this.usersService.unfollowing({ id, followingid });
-    await this.followeesService.unFollowee({ id: user.id, followeeid: id });
     return false;
   }
 

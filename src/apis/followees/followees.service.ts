@@ -5,7 +5,6 @@ import { Followee } from './entities/followees.entity';
 import {
   IFolloweesServiceCreateFollowee,
   IFolloweesServiceFindOne,
-  IFolloweesServiceUnFollowee,
 } from './interfaces/followees-service.interface';
 
 @Injectable()
@@ -27,8 +26,8 @@ export class FolloweesService {
     user,
     followeeid,
   }: IFolloweesServiceCreateFollowee): Promise<Followee> {
-    if (followeeid) {
-      const followee = await this.findOneFollowee({ followeeid });
+    if (user) {
+      const followee = await this.findOneFollowee({ followeeid: id });
 
       if (followee) {
         const users = [...followee.users, user];
@@ -39,20 +38,10 @@ export class FolloweesService {
         });
       }
     }
+
     return this.followeeRepository.save({
       followeeid,
       users: [{ id }],
     });
-  }
-
-  async unFollowee({
-    followeeid,
-    id,
-  }: IFolloweesServiceUnFollowee): Promise<Followee> {
-    const followee = await this.findOneFollowee({ followeeid });
-
-    followee.users = followee.users.filter((el) => el.id !== id);
-
-    return this.followeeRepository.save(followee);
   }
 }

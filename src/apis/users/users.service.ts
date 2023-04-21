@@ -219,14 +219,15 @@ export class UsersService {
     id,
   }: IUserServiceUnfollowing): Promise<User> {
     const user = await this.findeOneUser({ id });
-    // const _user = await this.findeOneUser({ id: followingid });
+    const _user = await this.findeOneUser({ id: followingid });
 
-    user.followings = user.followings.filter(
-      (el) => el.followingid !== followingid,
-    );
-    // (_user.followees = _user.followees.filter((el) => el.followeeid !== id)),
-
-    // await this.usersRepository.save(_user);
+    await Promise.all([
+      (user.followings = user.followings.filter(
+        (el) => el.followingid !== followingid,
+      )),
+      (_user.followees = _user.followees.filter((el) => el.followeeid !== id)),
+    ]);
+    await this.usersRepository.save(_user);
     return this.usersRepository.save(user);
   }
 }
