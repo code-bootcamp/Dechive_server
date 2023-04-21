@@ -1,4 +1,3 @@
-import { Followee } from 'src/apis/followees/entities/followees.entity';
 import { Following } from 'src/apis/followings/entities/followings.entity';
 import { MatchAuthInput } from '../dto/matchAuth.Input';
 import { ResetPasswordInput } from '../dto/resetPassword.Input';
@@ -60,4 +59,8 @@ export interface IUsersServiceFindByUsers {
   users: {
     id: string;
   }[];
+}
+
+export interface IUsersServiceFetchUser {
+  id: User['id'];
 }

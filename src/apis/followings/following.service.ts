@@ -25,7 +25,7 @@ export class FollowingsService {
     id,
     followingid,
   }: IFollowingsServiceUpdate): Promise<boolean> {
-    const user = await this.usersService.findeOneUser({ id });
+    const user = await this.usersService.findOneUser({ id });
 
     const isFollowing = user.followings.filter(
       (el) => el.followingid === followingid,
@@ -44,7 +44,7 @@ export class FollowingsService {
           }),
           this.followeesService.createFollowee({
             userid: id,
-            user: await this.usersService.findeOneUser({
+            user: await this.usersService.findOneUser({
               id: following.followingid,
             }),
             followeeid: followingid,
