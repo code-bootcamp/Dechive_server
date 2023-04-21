@@ -1,0 +1,160 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Hashtag {
+  id: String!
+  hashtag: String!
+  boards: [Board!]!
+}
+
+type Product {
+  id: String!
+  name: String!
+  url: String!
+  picture: String
+  board: Board!
+}
+
+type Comment {
+  id: String!
+  content: String!
+  board: Board!
+  user: String!
+}
+
+type Followee {
+  id: String!
+  followeeid: String!
+  users: [User!]!
+}
+
+type Following {
+  id: String!
+  followingid: String!
+  users: [User!]!
+}
+
+type SnsAccount {
+  id: String!
+  sns: String!
+  user: User!
+}
+
+type User {
+  id: String!
+  email: String!
+  nickName: String!
+  intro: String
+  picture: String
+  snsAccounts: [SnsAccount!]
+  followings: [Following!]!
+  followees: [Followee!]!
+  boards: [Board!]
+  like: [Board!]
+}
+
+type Board {
+  id: String!
+  title: String!
+  recommend: String
+  description: String!
+  products: [Product!]!
+  comments: [Comment!]
+  hashtags: [Hashtag!]
+  likers: [User!]
+  writer: User!
+  createdAt: DateTime!
+  views: Int!
+  likes: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Youtube {
+  videoUrl: String!
+  thumbnailUrl: String!
+  views: Float!
+}
+
+type Query {
+  fetchBoard(boardid: String!): Board!
+  fetchBoards: [Board!]!
+  fetchBestBoards: [Board!]!
+  viewBoard(boardid: String!): Board!
+  fetchFollowees(userid: String!): [User!]!
+  fetchFollowings(userid: String!): [User!]!
+  fetchYoutube: [Youtube!]!
+}
+
+type Mutation {
+  login(loginInput: LoginInput!): String!
+  restoreAccessToken: String!
+  logOut: String!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  authEmail(email: String!): Boolean!
+  matchAuthNumber(matchAuthInput: MatchAuthInput!): Boolean!
+  resetUserPassword(resetPasswordInput: ResetPasswordInput!): Boolean!
+  deleteUser: Boolean!
+  createBoard(createBoardInput: CreateBoardInput!): Board!
+  updateBoard(updateBoardInput: UpdateBoardInput!, boardid: String!): Board!
+  deleteBoard(boardid: String!): Boolean!
+  updateBoardLiker(boardid: String!): Boolean!
+  updateFollowing(followingid: String!): Boolean!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  nickName: String
+  intro: String
+  picture: String
+  snsAccount: String
+}
+
+input MatchAuthInput {
+  email: String!
+  authNumber: String!
+}
+
+input ResetPasswordInput {
+  email: String!
+  password: String!
+}
+
+input CreateBoardInput {
+  title: String!
+  recommend: String
+  description: String!
+  views: Int! = 0
+  likes: Int! = 0
+  hashtags: [String!]
+  createProductInputs: [CreateProductInput!]!
+}
+
+input CreateProductInput {
+  name: String!
+  url: String!
+}
+
+input UpdateBoardInput {
+  title: String!
+  recommend: String
+  description: String!
+  views: Int! = 0
+  likes: Int! = 0
+  hashtags: [String!]
+  updateProductInputs: [CreateProductInput!]!
+}
