@@ -10,3 +10,7 @@ export interface IFolloweesServiceCreateFollowee {
 export interface IFolloweesServiceFindOne {
   followeeid: Followee['followeeid'];
 }
+
+export interface IFollowingsServiceFetchFollowees {
+  id: User['id'];
+}
