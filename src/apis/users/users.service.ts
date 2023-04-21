@@ -16,6 +16,7 @@ import {
   IUsersServiceAuthEamil,
   IUsersServiceCreateUser,
   IUsersServiceDeleteUser,
+  IUsersServiceFetchUser,
   IUsersServiceFindByUsers,
   IUsersServiceFindeOne,
   IUsersServiceFindOneEmail,
@@ -30,6 +31,7 @@ import { SnsAccountService } from '../snsAccount/snsAccount.service';
 import { MailerService } from '@nestjs-modules/mailer';
 import { dechiveTemplate } from 'src/commons/util/sendTemplate';
 import { Cache } from 'cache-manager';
+import { FetchUser } from './dto/user-fetch.return-type';
 
 @Injectable()
 export class UsersService {
@@ -45,14 +47,33 @@ export class UsersService {
     private readonly cacheManager: Cache,
   ) {}
 
-  async findeOneUser({ id }: IUsersServiceFindeOne): Promise<User> {
+  async findOneUser({ id }: IUsersServiceFindeOne): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id },
-      relations: ['snsAccounts', 'followings', 'followees'],
+      relations: [
+        'snsAccounts',
+        'followings',
+        'followees',
+        'boards',
+        'boards.hashtags',
+        'boards.likers',
+        'boards.products',
+      ],
     });
 
     if (!user) throw new ConflictException('등록 되지 않은 유저 입니다');
     return user;
+  }
+
+  async fetchUser({ id }: IUsersServiceFetchUser): Promise<FetchUser> {
+    const user = await this.findOneUser({ id });
+    console.log(user);
+    return {
+      user,
+      boardCount: user.boards.length,
+      followingCount: user.followings.length,
+      folloeweeCount: user.followees.length,
+    };
   }
 
   async findByUsers({ users }: IUsersServiceFindByUsers): Promise<User[]> {
@@ -110,7 +131,7 @@ export class UsersService {
     updateUserInput,
     id,
   }: IUsersServiceUpdateUser): Promise<User> {
-    let user = await this.findeOneUser({ id: id });
+    let user = await this.findOneUser({ id: id });
 
     // image 업로드 하면 작성
     // if(updateUserInput.picture !== user.picture)
@@ -137,7 +158,7 @@ export class UsersService {
       }
     }
 
-    if (!temp) user = await this.findeOneUser({ id });
+    if (!temp) user = await this.findOneUser({ id });
     const snsAccount = [temp, ...user.snsAccounts];
 
     if (user.nickName === updateUserInput.nickName)
@@ -205,7 +226,7 @@ export class UsersService {
   }
 
   async following({ id, following }: IUsersServiceFollowing): Promise<User> {
-    const user = await this.findeOneUser({ id });
+    const user = await this.findOneUser({ id });
     const followings = [...user.followings, following];
 
     return this.usersRepository.save({
@@ -218,8 +239,8 @@ export class UsersService {
     followingid,
     id,
   }: IUserServiceUnfollowing): Promise<User> {
-    const user = await this.findeOneUser({ id });
-    const _user = await this.findeOneUser({ id: followingid });
+    const user = await this.findOneUser({ id });
+    const _user = await this.findOneUser({ id: followingid });
 
     await Promise.all([
       (user.followings = user.followings.filter(

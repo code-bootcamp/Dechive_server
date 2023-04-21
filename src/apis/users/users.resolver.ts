@@ -1,10 +1,11 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/commons/interfaces/context';
 import { DechiveAuthGuard } from '../auth/guards/auth.guards';
 import { MatchAuthInput } from './dto/matchAuth.Input';
 import { ResetPasswordInput } from './dto/resetPassword.Input';
 import { CreateUserInput } from './dto/user-create.input';
+import { FetchUser } from './dto/user-fetch.return-type';
 import { UpdateUserInput } from './dto/user-update.input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -14,6 +15,13 @@ export class UsersResolver {
   constructor(
     private readonly usersService: UsersService, //
   ) {}
+
+  @Query(() => FetchUser)
+  fetchUser(
+    @Args('userid') userid: string, //
+  ): Promise<FetchUser> {
+    return this.usersService.fetchUser({ id: userid });
+  }
 
   @Mutation(() => User)
   createUser(
