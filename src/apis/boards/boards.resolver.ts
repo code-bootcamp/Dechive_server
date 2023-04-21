@@ -17,9 +17,9 @@ export class BoardsResolver {
 
   @Query(() => Board)
   fetchBoard(
-    @Args('boardId') boardId: string, //
+    @Args('boardid') boardid: string, //
   ) {
-    return this.boardsService.findOneBoard({ boardId });
+    return this.boardsService.findOneBoard({ boardid });
   }
 
   @Query(() => [Board])
@@ -34,10 +34,10 @@ export class BoardsResolver {
 
   @Query(() => Board)
   viewBoard(
-    @Args('boardId') boardId: string, //
+    @Args('boardid') boardid: string, //
   ) {
     return this.boardsService.fetchOneViewCount({
-      boardId,
+      boardid,
     });
   }
 
@@ -48,11 +48,11 @@ export class BoardsResolver {
     // @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
     @Context() context: IContext,
   ): Promise<Board> {
-    const userId = context.req.user.id;
+    const userid = context.req.user.id;
     return this.boardsService.createBoard({
       createBoardInput,
       // files,
-      userId,
+      userid,
     });
   }
 
@@ -60,15 +60,15 @@ export class BoardsResolver {
   @Mutation(() => Board)
   async updateBoard(
     @Args('updateBoardInput') updateBoardInput: UpdateBoardInput,
-    @Args('boardId') boardId: string,
+    @Args('boardid') boardid: string,
     // @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
     @Context() context: IContext,
   ): Promise<Board> {
-    const userId = context.req.user.id;
+    const userid = context.req.user.id;
     return this.boardsService.updateBoard({
       updateBoardInput,
-      boardId,
-      userId,
+      boardid,
+      userid,
       // files,
     });
   }
@@ -76,13 +76,13 @@ export class BoardsResolver {
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Boolean)
   async deleteBoard(
-    @Args('boardId') boardId: string, //
+    @Args('boardid') boardid: string, //
     @Context() context: IContext,
   ) {
-    const userId = context.req.user.id;
+    const userid = context.req.user.id;
     await this.boardsService.deleteBoard({
-      userId,
-      boardId,
+      userid,
+      boardid,
     });
     return true;
   }
@@ -90,13 +90,13 @@ export class BoardsResolver {
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Boolean)
   updateBoardLiker(
-    @Args('boardId') boardId: string, //
+    @Args('boardid') boardid: string, //
     @Context() context: IContext,
   ) {
-    const userId = context.req.user.id;
+    const userid = context.req.user.id;
     return this.boardsService.updateBoardLiker({
-      userId,
-      boardId,
+      userid,
+      boardid,
     });
   }
 }
