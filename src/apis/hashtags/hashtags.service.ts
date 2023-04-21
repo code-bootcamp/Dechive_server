@@ -30,7 +30,7 @@ export class HashtagsService {
     );
   }
 
-  findAllBoardId({ id }) {
+  findAllboardid({ id }) {
     return this.hashtagsRepository.find({
       where: { boards: { id } },
     });

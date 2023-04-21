@@ -25,9 +25,9 @@ export class BoardsService {
     private readonly usersService: UsersService, // private readonly picturesService: PicturesService,
   ) {}
 
-  async findOneBoard({ boardId }): Promise<Board> {
+  async findOneBoard({ boardid }): Promise<Board> {
     const board = await this.boardsRepository.findOne({
-      where: { id: boardId },
+      where: { id: boardid },
       relations: [
         'writer',
         'products',
@@ -41,8 +41,8 @@ export class BoardsService {
     return board;
   }
 
-  async fetchOneViewCount({ boardId }): Promise<Board> {
-    const board = await this.findOneBoard({ boardId });
+  async fetchOneViewCount({ boardid }): Promise<Board> {
+    const board = await this.findOneBoard({ boardid });
     board.views += 1;
     return this.boardsRepository.save({ ...board });
   }
@@ -84,7 +84,7 @@ export class BoardsService {
 
   async createBoard({
     createBoardInput,
-    userId,
+    userid,
     // files
   }): Promise<Board> {
     // image 업로드 후 링크 받아오기
@@ -102,7 +102,7 @@ export class BoardsService {
     // const pictures = await this.picturesService.createPictures({ files });
     return this.boardsRepository.save({
       ...createBoardInput,
-      writer: { id: userId },
+      writer: { id: userid },
       hashtags: hashtags ? hashtags : null,
       products,
     });
@@ -110,11 +110,11 @@ export class BoardsService {
 
   async updateBoard({
     updateBoardInput, //
-    boardId,
-    userId,
+    boardid,
+    userid,
   }): Promise<Board> {
-    const prevBoard = await this.findOneBoard({ boardId });
-    if (prevBoard.writer.id !== userId)
+    const prevBoard = await this.findOneBoard({ boardid });
+    if (prevBoard.writer.id !== userid)
       throw new UnauthorizedException('수정 권한이 없습니다.');
     const prevProducts = prevBoard.products;
     const { updateProductInputs } = updateBoardInput;
@@ -130,36 +130,36 @@ export class BoardsService {
     const hashtags = await this.hashtagsService.createHashtags({
       ...updateBoardInput,
     });
-    await this.productsService.deleteProducts({ boardId });
-    // await this.boardsRepository.delete({ id: boardId });
+    await this.productsService.deleteProducts({ boardid });
+    // await this.boardsRepository.delete({ id: boardid });
 
     return this.boardsRepository.save({
-      id: boardId,
+      id: boardid,
       ...updateBoardInput,
       products,
       hashtags,
     });
   }
 
-  async deleteBoard({ userId, boardId }): Promise<DeleteResult> {
+  async deleteBoard({ userid, boardid }): Promise<DeleteResult> {
     const prevBoard = await this.boardsRepository.findOne({
-      where: { id: boardId },
+      where: { id: boardid },
       relations: ['writer'],
     });
-    if (prevBoard.writer.id !== userId)
+    if (prevBoard.writer.id !== userid)
       throw new UnauthorizedException('삭제 권한이 없습니다.');
 
-    return this.boardsRepository.delete({ id: boardId });
+    return this.boardsRepository.delete({ id: boardid });
   }
 
-  async updateBoardLiker({ userId, boardId }) {
-    const prevBoard = await this.findOneBoard({ boardId });
-    const index = prevBoard.likers.findIndex((el) => el.id === userId);
+  async updateBoardLiker({ userid, boardid }) {
+    const prevBoard = await this.findOneBoard({ boardid });
+    const index = prevBoard.likers.findIndex((el) => el.id === userid);
     const Added = index === -1;
     let likes = prevBoard.likers.length;
     if (Added) {
       prevBoard.likers.push(
-        await this.usersService.findeOneUser({ id: userId }),
+        await this.usersService.findeOneUser({ id: userid }),
       );
       likes += 1;
     } else {
