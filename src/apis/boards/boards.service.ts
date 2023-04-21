@@ -8,7 +8,6 @@ import { DeleteResult, Repository } from 'typeorm';
 import { Board } from './entities/board.entity';
 import { HashtagsService } from '../hashtags/hashtags.service';
 import { ProductsService } from '../products/products.service';
-import { Product } from '../products/entities/product.entity';
 import { UsersService } from '../users/users.service';
 import { Hashtag } from '../hashtags/entities/hashtag.entity';
 // import { PicturesService } from '../pictures/pictures.service';
@@ -26,21 +25,26 @@ export class BoardsService {
     private readonly usersService: UsersService, // private readonly picturesService: PicturesService,
   ) {}
 
-  async findOneBoard({ id }): Promise<Board> {
+  async findOneBoard({ boardId }): Promise<Board> {
     const board = await this.boardsRepository.findOne({
-      where: { id },
+      where: { id: boardId },
       relations: [
         'writer',
         'products',
         'comments',
         'hashtags',
         'likers',
-        'viewers',
         // 'picture',
       ],
     });
     if (!board) throw new ConflictException('존재 하지 않는 게시물 입니다');
     return board;
+  }
+
+  async fetchOneViewCount({ boardId }): Promise<Board> {
+    const board = await this.findOneBoard({ boardId });
+    board.views += 1;
+    return this.boardsRepository.save({ ...board });
   }
 
   async findAllBoards(): Promise<Board[]> {
@@ -51,7 +55,6 @@ export class BoardsService {
         'comments',
         'hashtags',
         'likers',
-        'viewers',
         // 'picture',
       ],
       order: {
@@ -69,7 +72,6 @@ export class BoardsService {
         'comments',
         'hashtags',
         'likers',
-        'viewers',
         // 'picture',
       ],
       order: {
@@ -82,7 +84,7 @@ export class BoardsService {
 
   async createBoard({
     createBoardInput,
-    id,
+    userId,
     // files
   }): Promise<Board> {
     // image 업로드 후 링크 받아오기
@@ -100,7 +102,7 @@ export class BoardsService {
     // const pictures = await this.picturesService.createPictures({ files });
     return this.boardsRepository.save({
       ...createBoardInput,
-      writer: { id },
+      writer: { id: userId },
       hashtags: hashtags ? hashtags : null,
       products,
     });
@@ -109,10 +111,10 @@ export class BoardsService {
   async updateBoard({
     updateBoardInput, //
     boardId,
-    id,
+    userId,
   }): Promise<Board> {
-    const prevBoard = await this.findOneBoard({ id });
-    if (prevBoard.writer.id !== id)
+    const prevBoard = await this.findOneBoard({ boardId });
+    if (prevBoard.writer.id !== userId)
       throw new UnauthorizedException('수정 권한이 없습니다.');
     const prevProducts = prevBoard.products;
     const { updateProductInputs } = updateBoardInput;
@@ -128,7 +130,7 @@ export class BoardsService {
     const hashtags = await this.hashtagsService.createHashtags({
       ...updateBoardInput,
     });
-    await this.productsService.deleteProducts({ id: boardId });
+    await this.productsService.deleteProducts({ boardId });
     // await this.boardsRepository.delete({ id: boardId });
 
     return this.boardsRepository.save({
@@ -139,24 +141,26 @@ export class BoardsService {
     });
   }
 
-  async deleteBoard({ id, boardId }): Promise<DeleteResult> {
+  async deleteBoard({ userId, boardId }): Promise<DeleteResult> {
     const prevBoard = await this.boardsRepository.findOne({
       where: { id: boardId },
       relations: ['writer'],
     });
-    if (prevBoard.writer.id !== id)
+    if (prevBoard.writer.id !== userId)
       throw new UnauthorizedException('삭제 권한이 없습니다.');
 
     return this.boardsRepository.delete({ id: boardId });
   }
 
-  async updateBoardLiker({ id, boardId }) {
-    const prevBoard = await this.findOneBoard({ id: boardId });
-    const index = prevBoard.likers.findIndex((el) => el.id === id);
+  async updateBoardLiker({ userId, boardId }) {
+    const prevBoard = await this.findOneBoard({ boardId });
+    const index = prevBoard.likers.findIndex((el) => el.id === userId);
     const Added = index === -1;
     let likes = prevBoard.likers.length;
     if (Added) {
-      prevBoard.likers.push(await this.usersService.findeOneUser({ id }));
+      prevBoard.likers.push(
+        await this.usersService.findeOneUser({ id: userId }),
+      );
       likes += 1;
     } else {
       prevBoard.likers[index] = null;
@@ -167,26 +171,5 @@ export class BoardsService {
       likes,
     });
     return Added;
-  }
-
-  async updateBoardViewer({ id, boardId }) {
-    const prevBoard = await this.findOneBoard({ id: boardId });
-    const index = prevBoard.viewers.findIndex((el) => el.id === id);
-    const Added = index === -1;
-    let views = prevBoard.viewers.length;
-    if (Added) {
-      prevBoard.viewers.push(await this.usersService.findeOneUser({ id }));
-      views += 1;
-    }
-    await this.boardsRepository.save({
-      ...prevBoard,
-      views,
-    });
-    return this.boardsRepository
-      .save({
-        ...prevBoard,
-        views,
-      })
-      .then(() => true);
   }
 }

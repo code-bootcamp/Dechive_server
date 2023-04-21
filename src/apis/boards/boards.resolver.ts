@@ -17,9 +17,9 @@ export class BoardsResolver {
 
   @Query(() => Board)
   fetchBoard(
-    @Args('id') id: string, //
+    @Args('boardId') boardId: string, //
   ) {
-    return this.boardsService.findOneBoard({ id });
+    return this.boardsService.findOneBoard({ boardId });
   }
 
   @Query(() => [Board])
@@ -32,6 +32,15 @@ export class BoardsResolver {
     return this.boardsService.findAllBoards();
   }
 
+  @Query(() => Board)
+  viewBoard(
+    @Args('boardId') boardId: string, //
+  ) {
+    return this.boardsService.fetchOneViewCount({
+      boardId,
+    });
+  }
+
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Board)
   createBoard(
@@ -39,11 +48,11 @@ export class BoardsResolver {
     // @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
     @Context() context: IContext,
   ): Promise<Board> {
-    const { id } = context.req.user;
+    const userId = context.req.user.id;
     return this.boardsService.createBoard({
       createBoardInput,
       // files,
-      id,
+      userId,
     });
   }
 
@@ -55,11 +64,11 @@ export class BoardsResolver {
     // @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
     @Context() context: IContext,
   ): Promise<Board> {
-    const { id } = context.req.user;
+    const userId = context.req.user.id;
     return this.boardsService.updateBoard({
       updateBoardInput,
       boardId,
-      id,
+      userId,
       // files,
     });
   }
@@ -70,9 +79,9 @@ export class BoardsResolver {
     @Args('boardId') boardId: string, //
     @Context() context: IContext,
   ) {
-    const { id } = context.req.user;
+    const userId = context.req.user.id;
     await this.boardsService.deleteBoard({
-      id,
+      userId,
       boardId,
     });
     return true;
@@ -84,22 +93,9 @@ export class BoardsResolver {
     @Args('boardId') boardId: string, //
     @Context() context: IContext,
   ) {
-    const { id } = context.req.user;
+    const userId = context.req.user.id;
     return this.boardsService.updateBoardLiker({
-      id,
-      boardId,
-    });
-  }
-
-  @UseGuards(DechiveAuthGuard('access'))
-  @Mutation(() => Boolean)
-  updateBoardViewer(
-    @Args('boardId') boardId: string, //
-    @Context() context: IContext,
-  ) {
-    const { id } = context.req.user;
-    return this.boardsService.updateBoardViewer({
-      id,
+      userId,
       boardId,
     });
   }
