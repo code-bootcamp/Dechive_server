@@ -61,13 +61,13 @@ export class Board {
   // @Field(() => [Picture])
   // pictures: Picture[];
 
-  @JoinTable()
-  @ManyToMany(() => User, (viewers) => viewers.view, {
-    nullable: true,
-    onDelete: 'CASCADE',
-  })
-  @Field(() => [User], { nullable: true })
-  viewers: User[];
+  // @JoinTable()
+  // @ManyToMany(() => User, (viewers) => viewers.view, {
+  //   nullable: true,
+  //   onDelete: 'CASCADE',
+  // })
+  // @Field(() => [User], { nullable: true })
+  // viewers: User[];
 
   @JoinTable()
   @ManyToMany(() => User, (likers) => likers.like, {

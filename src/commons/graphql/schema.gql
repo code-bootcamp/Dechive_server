@@ -44,7 +44,6 @@ type User {
   snsAccounts: [SnsAccount!]
   followings: [Following!]!
   boards: [Board!]
-  view: [Board!]
   like: [Board!]
 }
 
@@ -56,7 +55,6 @@ type Board {
   products: [Product!]!
   comments: [Comment!]
   hashtags: [Hashtag!]
-  viewers: [User!]
   likers: [User!]
   writer: User!
   createdAt: DateTime!
@@ -76,9 +74,10 @@ type Youtube {
 }
 
 type Query {
-  fetchBoard(id: String!): Board!
+  fetchBoard(boardId: String!): Board!
   fetchBoards: [Board!]!
   fetchBestBoards: [Board!]!
+  viewBoard(boardId: String!): Board!
   fetchFollowings(userid: String!): [User!]!
   fetchYoutube: [Youtube!]!
 }
@@ -97,7 +96,6 @@ type Mutation {
   updateBoard(updateBoardInput: UpdateBoardInput!, boardId: String!): Board!
   deleteBoard(boardId: String!): Boolean!
   updateBoardLiker(boardId: String!): Boolean!
-  updateBoardViewer(boardId: String!): Boolean!
   updateFollowing(followingid: String!): Boolean!
 }
 

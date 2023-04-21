@@ -43,9 +43,9 @@ export class ProductsService {
     ).then();
   }
 
-  async deleteProducts({ id }) {
+  async deleteProducts({ boardId }) {
     return this.productsRepository.delete({
-      board: id,
+      board: { id: boardId },
     });
   }
 }
