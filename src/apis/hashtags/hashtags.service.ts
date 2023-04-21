@@ -10,20 +10,32 @@ export class HashtagsService {
     private readonly hashtagsRepository: Repository<Hashtag>, //
   ) {}
 
-  async createHashtags({ hashtags }): Promise<[Hashtag]> {
-    return hashtags.map(async (hashtagWithOutSharp: string) => {
-      const hashtag = `#${hashtagWithOutSharp}`;
-      console.log(hashtag);
-      const prevHashtag = await this.hashtagsRepository.findOne({
-        where: { hashtag },
-      });
-      if (prevHashtag) {
-        return prevHashtag;
-      } else {
-        return this.hashtagsRepository.save({ hashtag });
-      }
+  createHashtags({ hashtags }): Promise<Hashtag[]> {
+    return Promise.all(
+      hashtags.map(async (hashtagWithOutSharp: string) => {
+        let hashtag = hashtagWithOutSharp;
+        if (hashtagWithOutSharp[0] !== '#') {
+          hashtag = `#${hashtagWithOutSharp}`;
+        }
+        // console.log(hashtag);
+        const prevHashtag = await this.hashtagsRepository.findOne({
+          where: { hashtag },
+        });
+        if (prevHashtag) {
+          return prevHashtag;
+        } else {
+          return this.hashtagsRepository.save({ hashtag });
+        }
+      }),
+    );
+  }
+
+  findAllboardid({ id }) {
+    return this.hashtagsRepository.find({
+      where: { boards: { id } },
     });
   }
+
   // Bulk insert 예시 코드
   // const a = await this.boardsRepository
   //   .createQueryBuilder('board')

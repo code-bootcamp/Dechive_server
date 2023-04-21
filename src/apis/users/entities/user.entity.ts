@@ -62,12 +62,12 @@ export class User {
   @Field(() => [Board], { nullable: true })
   boards: Board[];
 
-  @ManyToMany(() => Board, (view) => view.viewers, {
-    nullable: true,
-    onDelete: 'CASCADE',
-  })
-  @Field(() => [Board], { nullable: true })
-  view: Board[];
+  // @ManyToMany(() => Board, (view) => view.viewers, {
+  //   nullable: true,
+  //   onDelete: 'CASCADE',
+  // })
+  // @Field(() => [Board], { nullable: true })
+  // view: Board[];
 
   @ManyToMany(() => Board, (like) => like.likers, {
     nullable: true,

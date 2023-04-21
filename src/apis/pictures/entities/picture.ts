@@ -4,26 +4,16 @@ import { Board } from '../../boards/entities/board.entity';
 
 @Entity()
 @ObjectType()
-export class Product {
+export class Picture {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
 
   @Column({ type: 'varchar', length: 100 })
   @Field(() => String)
-  name: string;
-
-  @Column({ type: 'varchar', length: 100 })
-  @Field(() => String)
   url: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  @Field(() => String, { nullable: true })
-  picture: string;
-
-  @ManyToOne(() => Board, (board) => board.products, {
-    onDelete: 'CASCADE',
-  })
-  @Field(() => Board)
-  board: Board;
+  // @ManyToOne(() => Board, (board) => board.pictures)
+  // @Field(() => Board)
+  // board: Board;
 }

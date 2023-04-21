@@ -6,19 +6,17 @@ import { CreateProductInput } from 'src/apis/products/dto/product-create.input';
 export class CreateBoardInput extends OmitType(
   Board, //
   [
-    'id',
+    'id', //
     'comments',
-    'viewers',
     'likers',
-    'createAt',
+    'createdAt',
     'hashtags',
     'products',
     'writer',
   ],
   InputType,
 ) {
-
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   hashtags: string[];
 
   @Field(() => [CreateProductInput])

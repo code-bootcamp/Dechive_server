@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -14,6 +14,7 @@ import { Hashtag } from '../../hashtags/entities/hashtag.entity';
 import { Product } from '../../products/entities/product.entity';
 import { Comment } from '../../comments/entities/comment.entity';
 import { User } from 'src/apis/users/entities/user.entity';
+import { Picture } from 'src/apis/pictures/entities/picture';
 
 @Entity()
 @ObjectType()
@@ -45,8 +46,8 @@ export class Board {
     nullable: true,
     onDelete: 'CASCADE',
   })
-  @Field(() => Comment, { nullable: true })
-  comments: Comment;
+  @Field(() => [Comment], { nullable: true })
+  comments: Comment[];
 
   @JoinTable()
   @ManyToMany(() => Hashtag, (hashtags) => hashtags.boards, {
@@ -56,21 +57,17 @@ export class Board {
   @Field(() => [Hashtag], { nullable: true })
   hashtags: Hashtag[];
 
-  @Column(() => String)
-  @Field(() => [String])
-  pictures: string[];
-
   // @OneToMany(() => Picture, (pictures) => pictures.board)
-  // @Field(() => Picture)
-  // pictures: Picture;
+  // @Field(() => [Picture])
+  // pictures: Picture[];
 
-  @JoinTable()
-  @ManyToMany(() => User, (viewers) => viewers.view, {
-    nullable: true,
-    onDelete: 'CASCADE',
-  })
-  @Field(() => [User], { nullable: true })
-  viewers: User[];
+  // @JoinTable()
+  // @ManyToMany(() => User, (viewers) => viewers.view, {
+  //   nullable: true,
+  //   onDelete: 'CASCADE',
+  // })
+  // @Field(() => [User], { nullable: true })
+  // viewers: User[];
 
   @JoinTable()
   @ManyToMany(() => User, (likers) => likers.like, {
@@ -87,5 +84,14 @@ export class Board {
   writer: User;
 
   @CreateDateColumn()
-  createAt: Date;
+  @Field()
+  createdAt: Date;
+
+  @Column({ type: Number, default: 0 })
+  @Field(() => Int, { defaultValue: 0 })
+  views: number;
+
+  @Column({ default: 0 })
+  @Field(() => Int, { defaultValue: 0 })
+  likes: number;
 }

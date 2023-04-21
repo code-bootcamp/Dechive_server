@@ -24,7 +24,7 @@ export class YoutubeService {
       return Promise.all(
         response.data.items.map(async (e) => {
           return {
-            videoUrl: `www.youtube.com/watch?v=${e.id.videoId}`,
+            videoUrl: `https://www.youtube.com/watch?v=${e.id.videoId}`,
             thumbnailUrl: e.snippet.thumbnails.high.url,
             // 비디오 아이디로 조회수 조회
             views: (
