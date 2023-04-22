@@ -10,7 +10,6 @@ import { CreateCommentInput } from '../comments/dto/comment-create.input';
 import { Comments } from '../comments/entities/comment.entity';
 import { Reply } from '../Replies/entities/reply.entity';
 import { CreateReplyInput } from '../Replies/dto/comment-create.input';
-// import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @Resolver()
 export class BoardsResolver {
@@ -48,13 +47,11 @@ export class BoardsResolver {
   @Mutation(() => Board)
   createBoard(
     @Args('createBoardInput') createBoardInput: CreateBoardInput,
-    // @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
     @Context() context: IContext,
   ): Promise<Board> {
     const userid = context.req.user.id;
     return this.boardsService.createBoard({
       createBoardInput,
-      // files,
       userid,
     });
   }
@@ -64,7 +61,6 @@ export class BoardsResolver {
   async updateBoard(
     @Args('updateBoardInput') updateBoardInput: UpdateBoardInput,
     @Args('boardid') boardid: string,
-    // @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
     @Context() context: IContext,
   ): Promise<Board> {
     const userid = context.req.user.id;
@@ -72,7 +68,6 @@ export class BoardsResolver {
       updateBoardInput,
       boardid,
       userid,
-      // files,
     });
   }
 

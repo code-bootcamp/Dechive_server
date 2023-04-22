@@ -170,6 +170,7 @@ input CreateBoardInput {
   likes: Int! = 0
   hashtags: [String!]
   createProductInputs: [CreateProductInput!]!
+  uploadFile: [String!]!
 }
 
 input CreateProductInput {
@@ -184,6 +185,7 @@ input UpdateBoardInput {
   views: Int! = 0
   likes: Int! = 0
   hashtags: [String!]
+  uploadFile: [String!]!
   updateProductInputs: [CreateProductInput!]!
 }
 

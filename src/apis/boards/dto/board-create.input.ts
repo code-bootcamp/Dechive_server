@@ -22,4 +22,7 @@ export class CreateBoardInput extends OmitType(
 
   @Field(() => [CreateProductInput])
   createProductInputs: CreateProductInput[];
+
+  @Field(() => [String])
+  uploadFile: string[];
 }
