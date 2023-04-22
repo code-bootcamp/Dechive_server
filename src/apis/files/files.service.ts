@@ -20,7 +20,11 @@ export class FilesService {
           new Promise<string>((resolve, reject) => {
             el.createReadStream()
               .pipe(storage.file(`origin/${el.filename}`).createWriteStream())
-              .on('finish', () => resolve(`${bucket}/${el.filename}`))
+              .on('finish', () =>
+                resolve(
+                  `https://storage.googleapis.com/${bucket}/origin/${el.filename}`,
+                ),
+              )
               .on('error', () => reject('false'));
           }),
       ),
