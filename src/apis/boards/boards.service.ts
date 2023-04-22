@@ -14,7 +14,7 @@ import { CommentsService } from '../comments/comment.service';
 import { Comments } from '../comments/entities/comment.entity';
 import { Reply } from '../Replies/entities/reply.entity';
 import { RepliesService } from '../Replies/reply.service';
-// import { PicturesService } from '../pictures/pictures.service';
+import { PicturesService } from '../pictures/pictures.service';
 
 @Injectable()
 export class BoardsService {
@@ -24,7 +24,9 @@ export class BoardsService {
 
     private readonly hashtagsService: HashtagsService,
 
-    private readonly productsService: ProductsService, // private readonly picturesService: PicturesService,
+    private readonly productsService: ProductsService,
+
+    private readonly picturesService: PicturesService,
 
     private readonly usersService: UsersService,
 
@@ -42,7 +44,7 @@ export class BoardsService {
         'comments',
         'hashtags',
         'likers',
-        // 'picture',
+        'pictures',
       ],
     });
     if (!board) throw new ConflictException('존재 하지 않는 게시물입니다');
@@ -63,7 +65,7 @@ export class BoardsService {
         'comments',
         'hashtags',
         'likers',
-        // 'picture',
+        'pictures',
       ],
       order: {
         createdAt: 'DESC',
@@ -80,7 +82,7 @@ export class BoardsService {
         'comments',
         'hashtags',
         'likers',
-        // 'picture',
+        'pictures',
       ],
       order: {
         likes: 'DESC',
@@ -107,12 +109,15 @@ export class BoardsService {
     const products = await this.productsService.createProducts({
       ...createBoardInput,
     });
-    // const pictures = await this.picturesService.createPictures({ files });
+    const pictures = await this.picturesService.createPictures({
+      ...createBoardInput,
+    });
     return this.boardsRepository.save({
       ...createBoardInput,
       writer: { id: userid },
       hashtags: hashtags ? hashtags : null,
       products,
+      pictures,
     });
   }
 

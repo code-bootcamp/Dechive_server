@@ -15,15 +15,23 @@ export class PicturesService {
     private readonly picturesRepository: Repository<Picture>, //
   ) {}
 
-  createPictures({ files }): Promise<Picture[]> {
-    return;
+  createPictures({ uploadFile }): Promise<Picture[]> {
+    let i = 0;
+    return Promise.all(
+      uploadFile.map((url: string) => {
+        return this.picturesRepository.save({
+          url,
+          isMain: !i++,
+        });
+      }),
+    );
   }
 
-  //   imageUpdate 1번 로직
-  //   async delete({ productId }: IImageServiceDelete) : Promise<DeleteResult> {
+  // imageUpdate 1번 로직
+  // async delete({ productId }: IImageServiceDelete) : Promise<DeleteResult> {
 
-  //     return this.imagesRepository.remove(product);
-  //   }
+  //   return this.imagesRepository.remove(product);
+  // }
 
   // imageUpdate 2번 로직
   delete({ id }: IPicturesServiceDelete): Promise<DeleteResult> {

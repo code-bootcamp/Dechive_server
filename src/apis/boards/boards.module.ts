@@ -12,6 +12,8 @@ import { CommentsService } from '../comments/comment.service';
 import { Comments } from '../comments/entities/comment.entity';
 import { Reply } from '../Replies/entities/reply.entity';
 import { RepliesService } from '../Replies/reply.service';
+import { Picture } from '../pictures/entities/picture.entity';
+import { PicturesService } from '../pictures/pictures.service';
 
 @Module({
   imports: [
@@ -20,6 +22,7 @@ import { RepliesService } from '../Replies/reply.service';
       Board, //레포 imports 최소화 필요
       Comments,
       Hashtag,
+      Picture,
       Product,
       Reply,
     ]),
@@ -29,6 +32,7 @@ import { RepliesService } from '../Replies/reply.service';
     BoardsService,
     CommentsService,
     HashtagsService,
+    PicturesService,
     ProductsService,
     RepliesService,
   ],
