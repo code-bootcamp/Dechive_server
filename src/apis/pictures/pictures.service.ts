@@ -1,12 +1,12 @@
 import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Picture } from './entities/picture';
 import { Storage } from '@google-cloud/storage';
 import {
   IPicturesServiceDelete,
   IPicturesServiceStorageDelet,
 } from './interfaces/pictures-service.interface';
+import { Picture } from './entities/picture.entity';
 
 @Injectable()
 export class PicturesService {

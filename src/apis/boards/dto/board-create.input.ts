@@ -13,6 +13,7 @@ export class CreateBoardInput extends OmitType(
     'hashtags',
     'products',
     'writer',
+    'pictures',
   ],
   InputType,
 ) {
