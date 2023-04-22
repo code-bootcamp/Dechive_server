@@ -13,7 +13,11 @@ export class Picture {
   @Field(() => String)
   url: string;
 
-  // @ManyToOne(() => Board, (board) => board.pictures)
-  // @Field(() => Board)
-  // board: Board;
+  @Column({ default: false })
+  @Field(() => Boolean)
+  isMain: boolean;
+
+  @ManyToOne(() => Board, (board) => board.pictures)
+  @Field(() => Board)
+  board: Board;
 }
