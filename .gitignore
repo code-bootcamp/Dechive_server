@@ -3,6 +3,7 @@
 /node_modules
 .env*
 /src/commons/graphql
+gcp-file-storage.json
 
 # Logs
 logs
