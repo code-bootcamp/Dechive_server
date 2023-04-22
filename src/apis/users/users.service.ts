@@ -67,7 +67,7 @@ export class UsersService {
 
   async fetchUser({ id }: IUsersServiceFetchUser): Promise<FetchUser> {
     const user = await this.findOneUser({ id });
-    console.log(user);
+
     return {
       user,
       boardCount: user.boards.length,
@@ -76,7 +76,7 @@ export class UsersService {
     };
   }
 
-  async findByUsers({ users }: IUsersServiceFindByUsers): Promise<User[]> {
+  findByUsers({ users }: IUsersServiceFindByUsers): Promise<User[]> {
     return this.usersRepository.find({
       where: { id: In(users) },
     });

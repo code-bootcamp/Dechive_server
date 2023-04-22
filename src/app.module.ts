@@ -13,11 +13,13 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './apis/auth/auth.module';
 import { FollowingsModule } from './apis/followings/following.module';
 import { FolloweesModule } from './apis/followees/followees.module';
+import { FilesModule } from './apis/files/files.module';
 
 @Module({
   imports: [
     AuthModule,
     BoardsModule,
+    FilesModule,
     FolloweesModule,
     FollowingsModule,
     UsersMoulde,
