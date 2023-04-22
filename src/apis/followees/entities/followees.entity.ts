@@ -4,16 +4,16 @@ import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
-export class Following {
+export class Followee {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
 
   @Column({ type: 'varchar', length: 50, unique: true })
   @Field(() => String)
-  followingid: string;
+  followeeid: string;
 
-  @ManyToMany(() => User, (users) => users.followings, {
+  @ManyToMany(() => User, (users) => users.followees, {
     onDelete: 'CASCADE',
   })
   @Field(() => [User])

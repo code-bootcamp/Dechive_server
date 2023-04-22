@@ -16,6 +16,20 @@ type Product {
   board: Board!
 }
 
+
+type Comment {
+  id: String!
+  content: String!
+  board: Board!
+  user: String!
+}
+
+type Followee {
+  id: String!
+  followeeid: String!
+  users: [User!]!
+}
+
 type Following {
   id: String!
   followingid: String!
@@ -36,6 +50,7 @@ type User {
   picture: String
   snsAccounts: [SnsAccount!]
   followings: [Following!]!
+  followees: [Followee!]!
   boards: [Board!]
   like: [Board!]
 }
@@ -67,6 +82,13 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type FetchUser {
+  user: User!
+  boardCount: Int!
+  followingCount: Int!
+  folloeweeCount: Int!
+}
+
 type Youtube {
   videoUrl: String!
   thumbnailUrl: String!
@@ -74,10 +96,13 @@ type Youtube {
 }
 
 type Query {
+
+  fetchUser(userid: String!): FetchUser!
   fetchBoard(boardid: String!): Board!
   fetchBoards: [Board!]!
   fetchBestBoards: [Board!]!
   viewBoard(boardid: String!): Board!
+  fetchFollowees(userid: String!): [User!]!
   fetchFollowings(userid: String!): [User!]!
   fetchYoutube: [Youtube!]!
 }

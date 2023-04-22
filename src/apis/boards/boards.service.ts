@@ -160,7 +160,7 @@ export class BoardsService {
     let likes = prevBoard.likers.length;
     if (Added) {
       prevBoard.likers.push(
-        await this.usersService.findeOneUser({ id: userid }),
+        await this.usersService.findOneUser({ id: userid }),
       );
       likes += 1;
     } else {

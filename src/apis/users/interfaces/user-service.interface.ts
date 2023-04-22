@@ -1,5 +1,4 @@
 import { Following } from 'src/apis/followings/entities/followings.entity';
-import { IAuthUser, IContext } from 'src/commons/interfaces/context';
 import { MatchAuthInput } from '../dto/matchAuth.Input';
 import { ResetPasswordInput } from '../dto/resetPassword.Input';
 import { CreateUserInput } from '../dto/user-create.input';
@@ -51,8 +50,17 @@ export interface IUserServiceUnfollowing {
   followingid: Following['id'];
 }
 
+export interface IUsersServiceFollowing {
+  id: User['id'];
+  following: Following;
+}
+
 export interface IUsersServiceFindByUsers {
   users: {
     id: string;
   }[];
+}
+
+export interface IUsersServiceFetchUser {
+  id: User['id'];
 }

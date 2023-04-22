@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { FolloweesService } from '../followees/followees.service';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { Following } from './entities/followings.entity';
@@ -12,41 +13,58 @@ import {
 @Injectable()
 export class FollowingsService {
   constructor(
+    @InjectRepository(Following)
+    private readonly followingRepository: Repository<Following>, //
+
     private readonly usersService: UsersService, //
 
-    @InjectRepository(Following)
-    private readonly followingRepository: Repository<Following>,
+    private readonly followeesService: FolloweesService, //
   ) {}
 
   async updateFollowing({
     id,
     followingid,
   }: IFollowingsServiceUpdate): Promise<boolean> {
-    console.log(id);
-    const users = await this.usersService.findeOneUser({ id });
+    const user = await this.usersService.findOneUser({ id });
 
-    const isFollowing = users.followings.filter(
+    const isFollowing = user.followings.filter(
       (el) => el.followingid === followingid,
     );
 
     if (!isFollowing.length) {
-      const result = await this.followingRepository.findOne({
+      const following = await this.followingRepository.findOne({
         where: { followingid },
+        relations: ['users'],
       });
+      if (following) {
+        const result = await Promise.all([
+          this.usersService.following({
+            id,
+            following,
+          }),
+          this.followeesService.createFollowee({
+            userid: id,
+            user: await this.usersService.findOneUser({
+              id: following.followingid,
+            }),
+            followeeid: followingid,
+          }),
+        ]);
 
-      if (result) {
-        await this.followingRepository.save({
-          ...users,
-          ...result,
-          users: [{ id }],
-        });
-        return true;
+        return result.length ? true : false;
       }
-      await this.followingRepository.save({
-        followingid,
-        users: [{ id }],
-      });
-      return true;
+
+      const result = await Promise.all([
+        this.followingRepository.save({
+          followingid,
+          users: [{ id }],
+        }),
+        this.followeesService.createFollowee({
+          userid: followingid,
+          followeeid: id,
+        }),
+      ]);
+      return result ? true : false;
     }
     await this.usersService.unfollowing({ id, followingid });
     return false;
@@ -64,6 +82,7 @@ export class FollowingsService {
     result.forEach((el) => {
       if (el.followingid) users.push(el.followingid);
     });
+
     return this.usersService.findByUsers({ users });
   }
 }
