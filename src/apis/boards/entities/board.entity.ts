@@ -12,9 +12,9 @@ import {
 } from 'typeorm';
 import { Hashtag } from '../../hashtags/entities/hashtag.entity';
 import { Product } from '../../products/entities/product.entity';
-import { Comment } from '../../comments/entities/comment.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import { Picture } from 'src/apis/pictures/entities/picture';
+import { Comments } from 'src/apis/comments/entities/comment.entity';
 
 @Entity()
 @ObjectType()
@@ -42,12 +42,12 @@ export class Board {
   @Field(() => [Product])
   products: Product[];
 
-  @OneToMany(() => Comment, (comments) => comments.board, {
+  @OneToMany(() => Comments, (comments) => comments.board, {
     nullable: true,
     onDelete: 'CASCADE',
   })
-  @Field(() => [Comment], { nullable: true })
-  comments: Comment[];
+  @Field(() => [Comments], { nullable: true })
+  comments: Comments[];
 
   @JoinTable()
   @ManyToMany(() => Hashtag, (hashtags) => hashtags.boards, {

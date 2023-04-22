@@ -1,11 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Board } from '../../boards/entities/board.entity';
 import { User } from 'src/apis/users/entities/user.entity';
+import { Comments } from 'src/apis/comments/entities/comment.entity';
 
 @Entity()
 @ObjectType()
-export class Comments {
+export class Reply {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
@@ -14,15 +14,13 @@ export class Comments {
   @Field(() => String)
   content: string;
 
-  @ManyToOne(() => Board, (board) => board.comments, {
+  @ManyToOne(() => Comments, {
     onDelete: 'CASCADE',
   })
-  @Field(() => Board)
-  board: Board;
+  @Field(() => Comments)
+  comment: Comments;
 
-  @ManyToOne(() => User, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(() => User)
   @Field(() => User)
   user: User;
 }
