@@ -54,6 +54,13 @@ type Comments {
   user: User!
 }
 
+type Picture {
+  id: String!
+  url: String!
+  isMain: Boolean!
+  board: Board!
+}
+
 type Board {
   id: String!
   title: String!
@@ -62,6 +69,7 @@ type Board {
   products: [Product!]!
   comments: [Comments!]
   hashtags: [Hashtag!]
+  pictures: [Picture!]!
   likers: [User!]
   writer: User!
   createdAt: DateTime!

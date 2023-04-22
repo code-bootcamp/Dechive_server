@@ -13,8 +13,8 @@ import {
 import { Hashtag } from '../../hashtags/entities/hashtag.entity';
 import { Product } from '../../products/entities/product.entity';
 import { User } from 'src/apis/users/entities/user.entity';
-import { Picture } from 'src/apis/pictures/entities/picture';
 import { Comments } from 'src/apis/comments/entities/comment.entity';
+import { Picture } from 'src/apis/pictures/entities/picture.entity';
 
 @Entity()
 @ObjectType()
@@ -61,14 +61,6 @@ export class Board {
   @Field(() => [Picture])
   pictures: Picture[];
 
-  // @JoinTable()
-  // @ManyToMany(() => User, (viewers) => viewers.view, {
-  //   nullable: true,
-  //   onDelete: 'CASCADE',
-  // })
-  // @Field(() => [User], { nullable: true })
-  // viewers: User[];
-
   @JoinTable()
   @ManyToMany(() => User, (likers) => likers.like, {
     nullable: true,
@@ -91,7 +83,7 @@ export class Board {
   @Field(() => Int, { defaultValue: 0 })
   views: number;
 
-  @Column({ default: 0 })
+  @Column({ type: Number, default: 0 })
   @Field(() => Int, { defaultValue: 0 })
   likes: number;
 }
