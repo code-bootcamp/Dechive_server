@@ -10,6 +10,8 @@ import { HashtagsService } from '../hashtags/hashtags.service';
 import { ProductsService } from '../products/products.service';
 import { UsersService } from '../users/users.service';
 import { Hashtag } from '../hashtags/entities/hashtag.entity';
+import { CommentsService } from '../comments/comment.service';
+import { Comments } from '../comments/entities/comment.entity';
 // import { PicturesService } from '../pictures/pictures.service';
 
 @Injectable()
@@ -22,7 +24,9 @@ export class BoardsService {
 
     private readonly productsService: ProductsService, // private readonly picturesService: PicturesService,
 
-    private readonly usersService: UsersService, // private readonly picturesService: PicturesService,
+    private readonly usersService: UsersService,
+
+    private readonly commentsService: CommentsService,
   ) {}
 
   async findOneBoard({ boardid }): Promise<Board> {
@@ -37,7 +41,7 @@ export class BoardsService {
         // 'picture',
       ],
     });
-    if (!board) throw new ConflictException('존재 하지 않는 게시물 입니다');
+    if (!board) throw new ConflictException('존재 하지 않는 게시물입니다');
     return board;
   }
 
@@ -142,10 +146,7 @@ export class BoardsService {
   }
 
   async deleteBoard({ userid, boardid }): Promise<DeleteResult> {
-    const prevBoard = await this.boardsRepository.findOne({
-      where: { id: boardid },
-      relations: ['writer'],
-    });
+    const prevBoard = await this.findOneBoard({ boardid });
     if (prevBoard.writer.id !== userid)
       throw new UnauthorizedException('삭제 권한이 없습니다.');
 
@@ -171,5 +172,31 @@ export class BoardsService {
       likes,
     });
     return Added;
+  }
+
+  async createComment({
+    userid,
+    createCommentInput, //
+  }): Promise<Comments> {
+    const { boardid } = createCommentInput;
+    const prevBoard = await this.findOneBoard({ boardid });
+    console.log(prevBoard);
+    const comments = await this.commentsService.createComment({
+      userid,
+      createCommentInput,
+    });
+    console.log(comments);
+    return comments;
+  }
+
+  async deleteComment({
+    userid,
+    commentid, //
+  }): Promise<DeleteResult> {
+    const comment = await this.commentsService.findOneComment({ commentid });
+    if (!comment) throw new ConflictException('존재 하지 않는 댓글입니다');
+    else if (comment.user.id !== userid)
+      throw new UnauthorizedException('삭제 권한이 없습니다.');
+    return this.commentsService.deleteComment({ commentid });
   }
 }

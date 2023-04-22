@@ -16,13 +16,6 @@ type Product {
   board: Board!
 }
 
-type Comment {
-  id: String!
-  content: String!
-  board: Board!
-  user: String!
-}
-
 type Following {
   id: String!
   followingid: String!
@@ -47,13 +40,20 @@ type User {
   like: [Board!]
 }
 
+type Comments {
+  id: String!
+  content: String!
+  board: Board!
+  user: User!
+}
+
 type Board {
   id: String!
   title: String!
   recommend: String
   description: String!
   products: [Product!]!
-  comments: [Comment!]
+  comments: [Comments!]
   hashtags: [Hashtag!]
   likers: [User!]
   writer: User!
@@ -74,10 +74,10 @@ type Youtube {
 }
 
 type Query {
-  fetchBoard(boardId: String!): Board!
+  fetchBoard(boardid: String!): Board!
   fetchBoards: [Board!]!
   fetchBestBoards: [Board!]!
-  viewBoard(boardId: String!): Board!
+  viewBoard(boardid: String!): Board!
   fetchFollowings(userid: String!): [User!]!
   fetchYoutube: [Youtube!]!
 }
@@ -93,9 +93,11 @@ type Mutation {
   resetUserPassword(resetPasswordInput: ResetPasswordInput!): Boolean!
   deleteUser: Boolean!
   createBoard(createBoardInput: CreateBoardInput!): Board!
-  updateBoard(updateBoardInput: UpdateBoardInput!, boardId: String!): Board!
-  deleteBoard(boardId: String!): Boolean!
-  updateBoardLiker(boardId: String!): Boolean!
+  updateBoard(updateBoardInput: UpdateBoardInput!, boardid: String!): Board!
+  deleteBoard(boardid: String!): Boolean!
+  updateBoardLiker(boardid: String!): Boolean!
+  createComment(createCommentInput: CreateCommentInput!): Comments!
+  deleteComment(commentid: String!): Boolean!
   updateFollowing(followingid: String!): Boolean!
 }
 
@@ -149,4 +151,9 @@ input UpdateBoardInput {
   likes: Int! = 0
   hashtags: [String!]
   updateProductInputs: [CreateProductInput!]!
+}
+
+input CreateCommentInput {
+  content: String!
+  boardid: String!
 }
