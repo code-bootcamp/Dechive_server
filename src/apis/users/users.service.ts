@@ -137,10 +137,11 @@ export class UsersService {
     let user = await this.findOneUser({ id: id });
 
     if (updateUserInput.picture !== user.picture) {
-      this.picturesService.delete({ id: user.id });
-      this.picturesService.storageDelete({
-        storageDelet: user.picture.split('origin/')[1],
-      });
+      if (user.picture) {
+        this.picturesService.storageDelete({
+          storageDelet: user.picture.split(process.env.GCP_BUCKET + '/')[1],
+        });
+      }
     }
 
     let temp;
