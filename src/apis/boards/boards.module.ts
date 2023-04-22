@@ -10,6 +10,8 @@ import { HashtagsService } from '../hashtags/hashtags.service';
 import { UsersMoulde } from '../users/users.module';
 import { CommentsService } from '../comments/comment.service';
 import { Comments } from '../comments/entities/comment.entity';
+import { Reply } from '../Replies/entities/reply.entity';
+import { RepliesService } from '../Replies/reply.service';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { Comments } from '../comments/entities/comment.entity';
       Comments,
       Hashtag,
       Product,
+      Reply,
     ]),
   ],
   providers: [
@@ -27,6 +30,7 @@ import { Comments } from '../comments/entities/comment.entity';
     CommentsService,
     HashtagsService,
     ProductsService,
+    RepliesService,
   ],
   exports: [
     BoardsService, //
