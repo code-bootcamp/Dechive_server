@@ -57,6 +57,7 @@ export class Board {
   @Field(() => [Hashtag], { nullable: true })
   hashtags: Hashtag[];
 
+  @JoinColumn()
   @OneToMany(() => Picture, (pictures) => pictures.board)
   @Field(() => [Picture])
   pictures: Picture[];

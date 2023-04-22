@@ -32,6 +32,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { dechiveTemplate } from 'src/commons/util/sendTemplate';
 import { Cache } from 'cache-manager';
 import { FetchUser } from './dto/user-fetch.return-type';
+import { PicturesService } from '../pictures/pictures.service';
 
 @Injectable()
 export class UsersService {
@@ -42,6 +43,8 @@ export class UsersService {
     private readonly snsAccountService: SnsAccountService,
 
     private readonly mailerService: MailerService,
+
+    private readonly picturesService: PicturesService,
 
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
@@ -133,8 +136,12 @@ export class UsersService {
   }: IUsersServiceUpdateUser): Promise<User> {
     let user = await this.findOneUser({ id: id });
 
-    // image 업로드 하면 작성
-    // if(updateUserInput.picture !== user.picture)
+    if (updateUserInput.picture !== user.picture) {
+      this.picturesService.delete({ id: user.id });
+      this.picturesService.storageDelete({
+        storageDelet: user.picture.split('origin/')[1],
+      });
+    }
 
     let temp;
     if (updateUserInput?.snsAccount) {

@@ -6,13 +6,15 @@ import { SnsAccountService } from '../snsAccount/snsAccount.service';
 import { User } from './entities/user.entity';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
-import { BoardsModule } from '../boards/boards.module';
+import { PicturesService } from '../pictures/pictures.service';
+import { Picture } from '../pictures/entities/picture.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       User, //
       SnsAccount,
+      Picture,
     ]),
   ],
   providers: [
@@ -20,6 +22,7 @@ import { BoardsModule } from '../boards/boards.module';
     UsersResolver, //
     UsersService,
     SnsAccountService,
+    PicturesService,
   ],
   exports: [
     UsersService, //
