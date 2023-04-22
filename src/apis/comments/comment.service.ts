@@ -1,6 +1,6 @@
 import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { Comments } from './entities/comment.entity';
 
 @Injectable()
@@ -10,11 +10,13 @@ export class CommentsService {
     private readonly commentsRepository: Repository<Comments>, //
   ) {}
 
-  findOneComment({ commentid }): Promise<Comments> {
-    return this.commentsRepository.findOne({
+  async findOneComment({ commentid }): Promise<Comments> {
+    const comment = await this.commentsRepository.findOne({
       where: { id: commentid },
       relations: ['user'],
     });
+    if (!comment) throw new ConflictException('존재 하지 않는 댓글입니다');
+    return comment;
   }
 
   async createComment({

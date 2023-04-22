@@ -12,6 +12,8 @@ import { UsersService } from '../users/users.service';
 import { Hashtag } from '../hashtags/entities/hashtag.entity';
 import { CommentsService } from '../comments/comment.service';
 import { Comments } from '../comments/entities/comment.entity';
+import { Reply } from '../Replies/entities/reply.entity';
+import { RepliesService } from '../Replies/reply.service';
 // import { PicturesService } from '../pictures/pictures.service';
 
 @Injectable()
@@ -27,6 +29,8 @@ export class BoardsService {
     private readonly usersService: UsersService,
 
     private readonly commentsService: CommentsService,
+
+    private readonly repliesService: RepliesService,
   ) {}
 
   async findOneBoard({ boardid }): Promise<Board> {
@@ -179,14 +183,12 @@ export class BoardsService {
     createCommentInput, //
   }): Promise<Comments> {
     const { boardid } = createCommentInput;
-    const prevBoard = await this.findOneBoard({ boardid });
-    console.log(prevBoard);
-    const comments = await this.commentsService.createComment({
+    // 게시물이 존재하는지 확인
+    await this.findOneBoard({ boardid });
+    return await this.commentsService.createComment({
       userid,
       createCommentInput,
     });
-    console.log(comments);
-    return comments;
   }
 
   async deleteComment({
@@ -194,9 +196,31 @@ export class BoardsService {
     commentid, //
   }): Promise<DeleteResult> {
     const comment = await this.commentsService.findOneComment({ commentid });
-    if (!comment) throw new ConflictException('존재 하지 않는 댓글입니다');
-    else if (comment.user.id !== userid)
+    if (comment.user.id !== userid)
       throw new UnauthorizedException('삭제 권한이 없습니다.');
     return this.commentsService.deleteComment({ commentid });
+  }
+
+  async createReply({
+    userid,
+    createReplyInput, //
+  }): Promise<Reply> {
+    const { commentid } = createReplyInput;
+    // 대댓글을 달 댓글이 존재하는지 확인
+    await this.commentsService.findOneComment({ commentid });
+    return this.repliesService.createReply({
+      userid,
+      createReplyInput,
+    });
+  }
+
+  async deleteReply({
+    userid,
+    replyid, //
+  }): Promise<DeleteResult> {
+    const reply = await this.repliesService.findOneReply({ replyid });
+    if (reply.user.id !== userid)
+      throw new UnauthorizedException('삭제 권한이 없습니다.');
+    return this.repliesService.deleteReply({ replyid });
   }
 }
