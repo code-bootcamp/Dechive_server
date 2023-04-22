@@ -16,6 +16,7 @@ type Product {
   board: Board!
 }
 
+
 type Comment {
   id: String!
   content: String!
@@ -54,13 +55,20 @@ type User {
   like: [Board!]
 }
 
+type Comments {
+  id: String!
+  content: String!
+  board: Board!
+  user: User!
+}
+
 type Board {
   id: String!
   title: String!
   recommend: String
   description: String!
   products: [Product!]!
-  comments: [Comment!]
+  comments: [Comments!]
   hashtags: [Hashtag!]
   likers: [User!]
   writer: User!
@@ -88,6 +96,7 @@ type Youtube {
 }
 
 type Query {
+
   fetchUser(userid: String!): FetchUser!
   fetchBoard(boardid: String!): Board!
   fetchBoards: [Board!]!
@@ -112,6 +121,8 @@ type Mutation {
   updateBoard(updateBoardInput: UpdateBoardInput!, boardid: String!): Board!
   deleteBoard(boardid: String!): Boolean!
   updateBoardLiker(boardid: String!): Boolean!
+  createComment(createCommentInput: CreateCommentInput!): Comments!
+  deleteComment(commentid: String!): Boolean!
   updateFollowing(followingid: String!): Boolean!
 }
 
@@ -165,4 +176,9 @@ input UpdateBoardInput {
   likes: Int! = 0
   hashtags: [String!]
   updateProductInputs: [CreateProductInput!]!
+}
+
+input CreateCommentInput {
+  content: String!
+  boardid: String!
 }

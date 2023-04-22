@@ -7,6 +7,8 @@ import { DechiveAuthGuard } from '../auth/guards/auth.guards';
 import { IContext } from 'src/commons/interfaces/context';
 import { UpdateBoardInput } from './dto/board-update.input';
 import { DeleteResult } from 'typeorm';
+import { CreateCommentInput } from '../comments/dto/comment-create.input';
+import { Comments } from '../comments/entities/comment.entity';
 // import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @Resolver()
@@ -98,5 +100,32 @@ export class BoardsResolver {
       userid,
       boardid,
     });
+  }
+
+  @UseGuards(DechiveAuthGuard('access'))
+  @Mutation(() => Comments)
+  async createComment(
+    @Args('createCommentInput') createCommentInput: CreateCommentInput, //
+    @Context() context: IContext,
+  ) {
+    const userid = context.req.user.id;
+    return this.boardsService.createComment({
+      userid,
+      createCommentInput,
+    });
+  }
+
+  @UseGuards(DechiveAuthGuard('access'))
+  @Mutation(() => Boolean)
+  async deleteComment(
+    @Args('commentid') commentid: string, //
+    @Context() context: IContext,
+  ) {
+    const userid = context.req.user.id;
+    const result = await this.boardsService.deleteComment({
+      userid,
+      commentid,
+    });
+    return result.affected === 1;
   }
 }

@@ -8,12 +8,15 @@ import { Product } from '../products/entities/product.entity';
 import { ProductsService } from '../products/products.service';
 import { HashtagsService } from '../hashtags/hashtags.service';
 import { UsersMoulde } from '../users/users.module';
+import { CommentsService } from '../comments/comment.service';
+import { Comments } from '../comments/entities/comment.entity';
 
 @Module({
   imports: [
     UsersMoulde,
     TypeOrmModule.forFeature([
       Board, //레포 imports 최소화 필요
+      Comments,
       Hashtag,
       Product,
     ]),
@@ -21,6 +24,7 @@ import { UsersMoulde } from '../users/users.module';
   providers: [
     BoardsResolver, //
     BoardsService,
+    CommentsService,
     HashtagsService,
     ProductsService,
   ],
