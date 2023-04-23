@@ -17,7 +17,9 @@ export class Picture {
   @Field(() => Boolean)
   isMain: boolean;
 
-  @ManyToOne(() => Board, (board) => board.pictures)
+  @ManyToOne(() => Board, (board) => board.pictures, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Board)
   board: Board;
 }

@@ -58,7 +58,9 @@ export class Board {
   hashtags: Hashtag[];
 
   @JoinColumn()
-  @OneToMany(() => Picture, (pictures) => pictures.board)
+  @OneToMany(() => Picture, (pictures) => pictures.board, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => [Picture])
   pictures: Picture[];
 
