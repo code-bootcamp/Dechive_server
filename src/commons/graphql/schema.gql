@@ -82,13 +82,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Reply {
-  id: String!
-  content: String!
-  comment: Comments!
-  user: User!
-}
-
 type FetchUser {
   user: User!
   boardCount: Int!
@@ -100,6 +93,13 @@ type Youtube {
   videoUrl: String!
   thumbnailUrl: String!
   views: Float!
+}
+
+type Reply {
+  id: String!
+  content: String!
+  comment: Comments!
+  user: User!
 }
 
 type Query {
@@ -130,10 +130,10 @@ type Mutation {
   updateBoardLiker(boardid: String!): Boolean!
   createComment(createCommentInput: CreateCommentInput!): Comments!
   deleteComment(commentid: String!): Boolean!
-  createReply(createReplyInput: CreateReplyInput!): Reply!
-  deleteReply(replyid: String!): Boolean!
   uploadFile(files: [Upload!]!): [String!]!
   updateFollowing(followingid: String!): Boolean!
+  createReply(createReplyInput: CreateReplyInput!): Reply!
+  deleteReply(replyid: String!): Boolean!
 }
 
 input LoginInput {
@@ -195,10 +195,10 @@ input CreateCommentInput {
   boardid: String!
 }
 
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 input CreateReplyInput {
   content: String!
   commentid: String!
 }
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
