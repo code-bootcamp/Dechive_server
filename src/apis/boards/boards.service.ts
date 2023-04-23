@@ -121,6 +121,10 @@ export class BoardsService {
     });
   }
 
+  async test({ storageDelet }) {
+    return this.picturesService.storageDelete({ storageDelet });
+  }
+
   async updateBoard({
     updateBoardInput, //
     boardid,
@@ -140,17 +144,28 @@ export class BoardsService {
         return e;
       }),
     });
+    Promise.all(
+      prevBoard.pictures.map((e) =>
+        this.picturesService.storageDelete({
+          storageDelet: e.url.split('/').at(-1),
+        }),
+      ),
+    );
+    const pictures = await this.picturesService.createPictures({
+      ...updateBoardInput,
+    });
     const hashtags = await this.hashtagsService.createHashtags({
       ...updateBoardInput,
     });
-    await this.productsService.deleteProducts({ boardid });
-    // await this.boardsRepository.delete({ id: boardid });
+    await this.productsService.delete({ boardid });
+    await this.picturesService.delete({ boardid });
 
     return this.boardsRepository.save({
       id: boardid,
       ...updateBoardInput,
       products,
       hashtags,
+      pictures,
     });
   }
 
