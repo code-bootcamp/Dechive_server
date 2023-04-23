@@ -1,13 +1,20 @@
 import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reply } from './entities/reply.entity';
+import { CommentsService } from '../comments/comment.service';
 
 @Injectable()
 export class RepliesService {
   constructor(
     @InjectRepository(Reply)
     private readonly repliesRepository: Repository<Reply>, //
+
+    private readonly commentsService: CommentsService,
   ) {}
 
   async findOneReply({ replyid }): Promise<Reply> {
@@ -24,6 +31,7 @@ export class RepliesService {
     createReplyInput, //
   }): Promise<Reply> {
     const { commentid, content } = createReplyInput;
+    await this.commentsService.findOneComment({ commentid });
     return this.repliesRepository.save({
       content,
       comment: { id: commentid },
@@ -31,7 +39,13 @@ export class RepliesService {
     });
   }
 
-  async deleteReply({ replyid }): Promise<DeleteResult> {
+  async deleteReply({
+    userid,
+    replyid, //
+  }): Promise<DeleteResult> {
+    const reply = await this.findOneReply({ replyid });
+    if (reply.user.id !== userid)
+      throw new UnauthorizedException('삭제 권한이 없습니다.');
     return this.repliesRepository.delete({ id: replyid });
   }
 }

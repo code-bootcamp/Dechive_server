@@ -29,10 +29,6 @@ export class BoardsService {
     private readonly picturesService: PicturesService,
 
     private readonly usersService: UsersService,
-
-    private readonly commentsService: CommentsService,
-
-    private readonly repliesService: RepliesService,
   ) {}
 
   async findOneBoard({ boardid }): Promise<Board> {
@@ -200,51 +196,5 @@ export class BoardsService {
       likes,
     });
     return Added;
-  }
-
-  async createComment({
-    userid,
-    createCommentInput, //
-  }): Promise<Comments> {
-    const { boardid } = createCommentInput;
-    // 게시물이 존재하는지 확인
-    await this.findOneBoard({ boardid });
-    return await this.commentsService.createComment({
-      userid,
-      createCommentInput,
-    });
-  }
-
-  async deleteComment({
-    userid,
-    commentid, //
-  }): Promise<DeleteResult> {
-    const comment = await this.commentsService.findOneComment({ commentid });
-    if (comment.user.id !== userid)
-      throw new UnauthorizedException('삭제 권한이 없습니다.');
-    return this.commentsService.deleteComment({ commentid });
-  }
-
-  async createReply({
-    userid,
-    createReplyInput, //
-  }): Promise<Reply> {
-    const { commentid } = createReplyInput;
-    // 대댓글을 달 댓글이 존재하는지 확인
-    await this.commentsService.findOneComment({ commentid });
-    return this.repliesService.createReply({
-      userid,
-      createReplyInput,
-    });
-  }
-
-  async deleteReply({
-    userid,
-    replyid, //
-  }): Promise<DeleteResult> {
-    const reply = await this.repliesService.findOneReply({ replyid });
-    if (reply.user.id !== userid)
-      throw new UnauthorizedException('삭제 권한이 없습니다.');
-    return this.repliesService.deleteReply({ replyid });
   }
 }
