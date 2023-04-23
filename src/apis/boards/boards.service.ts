@@ -53,12 +53,14 @@ export class BoardsService {
 
   async fetchOneViewCount({ boardid }): Promise<Board> {
     const board = await this.findOneBoard({ boardid });
-    board.views += 1;
-    return this.boardsRepository.save({ ...board });
+    return this.boardsRepository.save({
+      ...board,
+      views: (board.views += 1),
+    });
   }
 
   async findAllBoards(): Promise<Board[]> {
-    const boards = await this.boardsRepository.find({
+    return await this.boardsRepository.find({
       relations: [
         'writer',
         'products',
@@ -71,11 +73,10 @@ export class BoardsService {
         createdAt: 'DESC',
       },
     });
-    return boards;
   }
 
   async findBestBoards(): Promise<Board[]> {
-    const boards = await this.boardsRepository.find({
+    return this.boardsRepository.find({
       relations: [
         'writer',
         'products',
@@ -89,7 +90,6 @@ export class BoardsService {
         views: 'DESC',
       },
     });
-    return boards;
   }
 
   async createBoard({
@@ -144,12 +144,16 @@ export class BoardsService {
         return e;
       }),
     });
+    const toDelete = prevBoard.pictures.filter(
+      (e) => !updateBoardInput.uploadFile.includes(e.url),
+    );
     Promise.all(
-      prevBoard.pictures.map((e) =>
-        this.picturesService.storageDelete({
+      toDelete.map((e) => {
+        console.log(e);
+        return this.picturesService.storageDelete({
           storageDelet: e.url.split('origin/').at(-1),
-        }),
-      ),
+        });
+      }),
     );
     const pictures = await this.picturesService.createPictures({
       ...updateBoardInput,
