@@ -147,7 +147,7 @@ export class BoardsService {
     Promise.all(
       prevBoard.pictures.map((e) =>
         this.picturesService.storageDelete({
-          storageDelet: e.url.split('/').at(-1),
+          storageDelet: e.url.split('origin/').at(-1),
         }),
       ),
     );
@@ -158,7 +158,7 @@ export class BoardsService {
       ...updateBoardInput,
     });
     await this.productsService.delete({ boardid });
-    await this.picturesService.delete({ boardid });
+    await this.picturesService.deleteByboardid({ boardid });
 
     return this.boardsRepository.save({
       id: boardid,
