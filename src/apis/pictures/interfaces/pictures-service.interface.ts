@@ -1,5 +1,5 @@
 export interface IPicturesServiceDelete {
-  id: string;
+  boardid: string;
 }
 
 export interface IPicturesServiceStorageDelet {

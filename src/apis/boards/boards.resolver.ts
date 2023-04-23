@@ -71,6 +71,13 @@ export class BoardsResolver {
     });
   }
 
+  @Mutation(() => Boolean)
+  async test(@Args('a') a: string) {
+    const ab = await this.boardsService.test({ storageDelet: a });
+    console.log(ab);
+    return true;
+  }
+
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Boolean)
   async deleteBoard(

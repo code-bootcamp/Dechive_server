@@ -7,6 +7,7 @@ import {
   IPicturesServiceStorageDelet,
 } from './interfaces/pictures-service.interface';
 import { Picture } from './entities/picture.entity';
+import { Board } from '../boards/entities/board.entity';
 
 @Injectable()
 export class PicturesService {
@@ -28,15 +29,14 @@ export class PicturesService {
   }
 
   // imageUpdate 1번 로직
-  // async delete({ productId }: IImageServiceDelete) : Promise<DeleteResult> {
-
-  //   return this.imagesRepository.remove(product);
-  // }
+  async delete({ boardid }: IPicturesServiceDelete): Promise<DeleteResult> {
+    return this.picturesRepository.delete({ board: { id: boardid } });
+  }
 
   // imageUpdate 2번 로직
-  delete({ id }: IPicturesServiceDelete): Promise<DeleteResult> {
-    return this.picturesRepository.delete(id);
-  }
+  // delete({ id }: IPicturesServiceDelete): Promise<DeleteResult> {
+  //   return this.picturesRepository.delete(id);
+  // }
 
   // storage 삭제
   storageDelete({ storageDelet }: IPicturesServiceStorageDelet) {
@@ -48,7 +48,7 @@ export class PicturesService {
     });
 
     const deleteFile = async () => {
-      await storage.bucket(bucketName).file(storageDelet).delete();
+      await storage.bucket(bucketName).file(`origin/${storageDelet}`).delete();
     };
     deleteFile().catch(console.error);
   }
