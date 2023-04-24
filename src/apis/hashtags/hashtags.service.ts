@@ -11,16 +11,23 @@ export class HashtagsService {
     private readonly hashtagsRepository: Repository<Hashtag>, //
   ) {}
 
-  async findByHash({ keyword }): Promise<string[]> {
-    const result = await this.hashtagsRepository
+  findByHash({ keyword }): Promise<Board[]> {
+    return this.hashtagsRepository
       .findOne({
         where: { hashtag: `#${keyword}` },
         select: { boards: true },
-        relations: ['boards'],
+        relations: [
+          'boards',
+          'boards.writer',
+          'boards.products',
+          'boards.comments',
+          'boards.hashtags',
+          'boards.likers',
+          'boards.pictures',
+        ],
       })
-      .then((e) => e?.boards.map((e) => e.id))
+      .then((e) => e?.boards)
       .catch();
-    return result ? result : [];
   }
 
   createHashtags({ hashtags }): Promise<Hashtag[]> {
