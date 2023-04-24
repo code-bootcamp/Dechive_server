@@ -2,6 +2,7 @@ import { Repository } from 'typeorm';
 import { Hashtag } from './entities/hashtag.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
+import { Board } from '../boards/entities/board.entity';
 
 @Injectable()
 export class HashtagsService {
@@ -10,6 +11,18 @@ export class HashtagsService {
     private readonly hashtagsRepository: Repository<Hashtag>, //
   ) {}
 
+  async findByHash({ keyword }): Promise<string[]> {
+    const result = await this.hashtagsRepository
+      .findOne({
+        where: { hashtag: `#${keyword}` },
+        select: { boards: true },
+        relations: ['boards'],
+      })
+      .then((e) => e?.boards.map((e) => e.id))
+      .catch();
+    return result ? result : [];
+  }
+
   createHashtags({ hashtags }): Promise<Hashtag[]> {
     return Promise.all(
       hashtags.map(async (hashtagWithOutSharp: string) => {
@@ -17,7 +30,6 @@ export class HashtagsService {
         if (hashtagWithOutSharp[0] !== '#') {
           hashtag = `#${hashtagWithOutSharp}`;
         }
-        // console.log(hashtag);
         const prevHashtag = await this.hashtagsRepository.findOne({
           where: { hashtag },
         });

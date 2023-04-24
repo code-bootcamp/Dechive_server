@@ -85,6 +85,17 @@ export class UsersService {
     });
   }
 
+  async findByNick({ keyword }): Promise<string[]> {
+    const result = await this.usersRepository
+      .findOne({
+        where: { nickName: keyword },
+        select: { boards: true },
+        relations: ['boards'],
+      })
+      .then((e) => e?.boards.map((e) => e.id));
+    return result ? result : [];
+  }
+
   async findOneEamil({ email }: IUsersServiceFindOneEmail): Promise<User> {
     if (!email || !email.includes('@'))
       throw new ConflictException('올바르지 않은 이메일 형식입니다.');

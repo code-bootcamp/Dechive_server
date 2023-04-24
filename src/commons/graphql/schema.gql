@@ -108,6 +108,7 @@ type Query {
   fetchBoards: [Board!]!
   fetchBestBoards: [Board!]!
   viewBoard(boardid: String!): Board!
+  searchBoard(keyword: String!): [Board!]!
   fetchFollowees(userid: String!): [User!]!
   fetchFollowings(userid: String!): [User!]!
   fetchYoutube: [Youtube!]!
