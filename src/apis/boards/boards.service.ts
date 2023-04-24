@@ -43,28 +43,11 @@ export class BoardsService {
     return board;
   }
 
-  async findByTitle({ keyword }): Promise<string[]> {
-    const result = await this.boardsRepository
-      .find({
-        where: { title: keyword },
-        select: { id: true },
-      })
-      .then((e) => e?.map((e) => e.id));
-    return result ? result : [];
-  }
-
-  async searchBoard({ keyword }): Promise<Board[]> {
-    let result = [];
-    await Promise.all([
-      this.findByTitle({ keyword }),
-      this.usersService.findByNick({ keyword }),
-      this.hashtagsService.findByHash({ keyword }),
-    ]).then((e) => {
-      result = [].concat(...e);
-    });
-    const set = new Set(result);
+  async findByTitle({ keyword }): Promise<Board[]> {
+    // const result =
+    //   .then((e) => e?.map((e) => e.id));
     return this.boardsRepository.find({
-      where: [{ id: In([...set]) }],
+      where: { title: keyword },
       relations: [
         'writer',
         'products',
@@ -76,11 +59,25 @@ export class BoardsService {
     });
   }
 
+  async searchBoard({ keyword }): Promise<Board[]> {
+    let result = [];
+    await Promise.all([
+      this.findByTitle({ keyword }),
+      this.usersService.findByNick({ keyword }),
+      this.hashtagsService.findByHash({ keyword }),
+    ]).then((e) => {
+      result = [].concat(...e);
+    });
+    console.log(result);
+    const set = new Set(result);
+    return [...set];
+  }
+
   async fetchOneViewCount({ boardid }): Promise<Board> {
     const board = await this.findOneBoard({ boardid });
     return this.boardsRepository.save({
       ...board,
-      views: (board.views += 1),
+      views: board.views + 1,
     });
   }
 
@@ -180,6 +177,7 @@ export class BoardsService {
         });
       }),
     );
+    // forEach 로 리턴값없이 함수만 작동하도록
     const pictures = await this.picturesService.createPictures({
       ...updateBoardInput,
     });

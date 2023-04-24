@@ -33,6 +33,7 @@ import { dechiveTemplate } from 'src/commons/util/sendTemplate';
 import { Cache } from 'cache-manager';
 import { FetchUser } from './dto/user-fetch.return-type';
 import { PicturesService } from '../pictures/pictures.service';
+import { Board } from '../boards/entities/board.entity';
 
 @Injectable()
 export class UsersService {
@@ -85,15 +86,22 @@ export class UsersService {
     });
   }
 
-  async findByNick({ keyword }): Promise<string[]> {
-    const result = await this.usersRepository
-      .findOne({
-        where: { nickName: keyword },
-        select: { boards: true },
-        relations: ['boards'],
-      })
-      .then((e) => e?.boards.map((e) => e.id));
-    return result ? result : [];
+  async findByNick({ keyword }): Promise<User[]> {
+    const result = await this.usersRepository.find({
+      where: { nickName: keyword },
+      select: { boards: true },
+      relations: [
+        'boards',
+        'boards.writer',
+        'boards.products',
+        'boards.comments',
+        'boards.hashtags',
+        'boards.likers',
+        'boards.pictures',
+      ],
+    });
+    //   .then((e) => e?.boards.map((e) => e.id));
+    return;
   }
 
   async findOneEamil({ email }: IUsersServiceFindOneEmail): Promise<User> {

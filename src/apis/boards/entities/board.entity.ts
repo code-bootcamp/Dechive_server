@@ -79,7 +79,7 @@ export class Board {
   writer: User;
 
   @CreateDateColumn()
-  @Field()
+  @Field(())
   createdAt: Date;
 
   @Column({ type: Number, default: 0 })
