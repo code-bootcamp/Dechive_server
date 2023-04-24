@@ -9,7 +9,7 @@ export class Picture {
   @Field(() => String)
   id: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'longtext' })
   @Field(() => String)
   url: string;
 
