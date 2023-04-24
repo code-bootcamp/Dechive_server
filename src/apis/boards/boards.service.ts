@@ -4,16 +4,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, In, Repository } from 'typeorm';
 import { Board } from './entities/board.entity';
 import { HashtagsService } from '../hashtags/hashtags.service';
 import { ProductsService } from '../products/products.service';
 import { UsersService } from '../users/users.service';
 import { Hashtag } from '../hashtags/entities/hashtag.entity';
-import { CommentsService } from '../comments/comment.service';
-import { Comments } from '../comments/entities/comment.entity';
-import { Reply } from '../Replies/entities/reply.entity';
-import { RepliesService } from '../Replies/reply.service';
 import { PicturesService } from '../pictures/pictures.service';
 
 @Injectable()
@@ -45,6 +41,39 @@ export class BoardsService {
     });
     if (!board) throw new ConflictException('존재 하지 않는 게시물입니다');
     return board;
+  }
+
+  async findByTitle({ keyword }): Promise<string[]> {
+    const result = await this.boardsRepository
+      .find({
+        where: { title: keyword },
+        select: { id: true },
+      })
+      .then((e) => e?.map((e) => e.id));
+    return result ? result : [];
+  }
+
+  async searchBoard({ keyword }): Promise<Board[]> {
+    let result = [];
+    await Promise.all([
+      this.findByTitle({ keyword }),
+      this.usersService.findByNick({ keyword }),
+      this.hashtagsService.findByHash({ keyword }),
+    ]).then((e) => {
+      result = [].concat(...e);
+    });
+    const set = new Set(result);
+    return this.boardsRepository.find({
+      where: [{ id: In([...set]) }],
+      relations: [
+        'writer',
+        'products',
+        'comments',
+        'hashtags',
+        'likers',
+        'pictures',
+      ],
+    });
   }
 
   async fetchOneViewCount({ boardid }): Promise<Board> {

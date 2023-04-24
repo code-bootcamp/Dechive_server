@@ -39,6 +39,15 @@ export class BoardsResolver {
     });
   }
 
+  @Query(() => [Board])
+  searchBoard(
+    @Args('keyword') keyword: string, //
+  ) {
+    return this.boardsService.searchBoard({
+      keyword,
+    });
+  }
+
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Board)
   createBoard(
