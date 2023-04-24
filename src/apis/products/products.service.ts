@@ -17,9 +17,13 @@ export class ProductsService {
     return Promise.all(
       createProductInputs.map(
         async (createProductInput: CreateProductInput) => {
+          let picture = '';
+          try {
+            picture = await getOgImageUrl({ ...createProductInput });
+          } catch (error) {}
           return this.productsRepository.save({
             ...createProductInput,
-            picture: await getOgImageUrl({ ...createProductInput }),
+            picture,
           });
         },
       ),
@@ -29,13 +33,15 @@ export class ProductsService {
   async updateProducts({ updateProductInputs }): Promise<Product[]> {
     return Promise.all(
       updateProductInputs.map(
-        async (UpdateProductInput: UpdateProductInput) => {
-          let { picture } = UpdateProductInput;
-          picture = picture
-            ? picture
-            : await getOgImageUrl({ ...UpdateProductInput });
+        async (updateProductInput: UpdateProductInput) => {
+          let { picture } = updateProductInput;
+          if (!picture) {
+            try {
+              picture = await getOgImageUrl({ ...updateProductInput });
+            } catch (error) {}
+          }
           return this.productsRepository.save({
-            ...UpdateProductInput,
+            ...updateProductInput,
             picture,
           });
         },
