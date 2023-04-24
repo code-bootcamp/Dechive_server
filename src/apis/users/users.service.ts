@@ -130,13 +130,20 @@ export class UsersService {
 
     await this.isEamil({ email });
 
-    const password = await this.hashPassword({
-      password: createUserInput.password,
-    });
+    if (createUserInput.password) {
+      const password = await this.hashPassword({
+        password: createUserInput.password,
+      });
+
+      return this.usersRepository.save({
+        ...createUserInput,
+        password,
+        nickName: getRandomNickName(),
+      });
+    }
 
     return this.usersRepository.save({
       ...createUserInput,
-      password,
       nickName: getRandomNickName(),
     });
   }

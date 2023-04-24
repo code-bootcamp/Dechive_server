@@ -28,7 +28,7 @@ export class User {
   @Field(() => String)
   nickName: string;
 
-  @Column()
+  @Column({ nullable: true })
   password: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })

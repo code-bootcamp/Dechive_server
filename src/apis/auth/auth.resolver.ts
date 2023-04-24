@@ -3,7 +3,7 @@ import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/commons/interfaces/context';
 import { AuthService } from './auth.service';
 import { LoginInput } from './dto/auth-login.input';
-import { DechiveAuthGuard } from './guards/auth.guards';
+import { DechiveAuthGuard } from './guards/auth.guard';
 
 @Resolver()
 export class AuthResolver {

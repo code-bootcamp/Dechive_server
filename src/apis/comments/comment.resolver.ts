@@ -1,7 +1,7 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Comments } from './entities/comment.entity';
 import { CommentsService } from './comment.service';
-import { DechiveAuthGuard } from '../auth/guards/auth.guards';
+import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { IContext } from 'src/commons/interfaces/context';
 import { CreateCommentInput } from './dto/comment-create.input';
