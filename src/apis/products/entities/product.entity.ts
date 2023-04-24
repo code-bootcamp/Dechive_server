@@ -13,11 +13,11 @@ export class Product {
   @Field(() => String)
   name: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'text' })
   @Field(() => String)
   url: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ type: 'text', nullable: true })
   @Field(() => String, { nullable: true })
   picture: string;
 

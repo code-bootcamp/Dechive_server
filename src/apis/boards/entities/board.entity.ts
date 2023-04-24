@@ -27,7 +27,7 @@ export class Board {
   @Field(() => String)
   title: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ type: 'text', nullable: true })
   @Field(() => String, { nullable: true })
   recommend: string;
 
@@ -79,7 +79,7 @@ export class Board {
   writer: User;
 
   @CreateDateColumn()
-  @Field(())
+  @Field(() => Date)
   createdAt: Date;
 
   @Column({ type: Number, default: 0 })

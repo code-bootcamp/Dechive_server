@@ -9,7 +9,7 @@ export class Picture {
   @Field(() => String)
   id: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'longtext' })
   @Field(() => String)
   url: string;
 
