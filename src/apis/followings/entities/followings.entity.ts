@@ -9,7 +9,7 @@ export class Following {
   @Field(() => String)
   id: string;
 
-  @Column({ type: 'varchar', length: 50, unique: true })
+  @Column({ type: 'varchar', length: 50 })
   @Field(() => String)
   followingid: string;
 
