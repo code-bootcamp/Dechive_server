@@ -43,18 +43,14 @@ export class BoardsService {
     return board;
   }
 
-  async findByTitle({ keyword }): Promise<Board[]> {
-    return this.boardsRepository.find({
-      where: { title: keyword },
-      relations: [
-        'writer',
-        'products',
-        'comments',
-        'hashtags',
-        'likers',
-        'pictures',
-      ],
-    });
+  async findByTitle({ keyword }): Promise<string[]> {
+    const result = await this.boardsRepository
+      .find({
+        where: { title: keyword },
+        select: { id: true },
+      })
+      .then((e) => e?.map((e) => e.id));
+    return result ? result : [];
   }
 
   async searchBoard({ keyword }): Promise<Board[]> {
@@ -64,14 +60,20 @@ export class BoardsService {
       this.usersService.findByNick({ keyword }),
       this.hashtagsService.findByHash({ keyword }),
     ]).then((e) => {
-      console.log('프로미스');
-      console.log(e);
       result = [].concat(...e);
     });
-    console.log('69번' + result.length);
     const set = new Set(result);
-    console.log(set);
-    return [...set];
+    return this.boardsRepository.find({
+      where: [{ id: In([...set]) }],
+      relations: [
+        'writer',
+        'products',
+        'comments',
+        'hashtags',
+        'likers',
+        'pictures',
+      ],
+    });
   }
 
   async fetchOneViewCount({ boardid }): Promise<Board> {

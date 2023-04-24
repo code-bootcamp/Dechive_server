@@ -86,23 +86,15 @@ export class UsersService {
     });
   }
 
-  findByNick({ keyword }): Promise<Board[]> {
-    return this.usersRepository
+  async findByNick({ keyword }): Promise<string[]> {
+    const result = await this.usersRepository
       .findOne({
         where: { nickName: keyword },
         select: { boards: true },
-        relations: [
-          'boards',
-          'boards.writer',
-          'boards.products',
-          'boards.comments',
-          'boards.hashtags',
-          'boards.likers',
-          'boards.pictures',
-        ],
+        relations: ['boards'],
       })
-      .then((e) => e?.boards)
-      .catch();
+      .then((e) => e?.boards.map((e) => e.id));
+    return result ? result : [];
   }
 
   async findOneEamil({ email }: IUsersServiceFindOneEmail): Promise<User> {
