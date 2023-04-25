@@ -41,6 +41,7 @@ type User {
   intro: String
   picture: String
   jobGroup: String!
+  provider: String!
   snsAccounts: [SnsAccount!]
   followings: [Following!]!
   followees: [Followee!]!
@@ -148,6 +149,7 @@ input CreateUserInput {
   email: String!
   password: String!
   jobGroup: String!
+  provider: String!
 }
 
 input UpdateUserInput {

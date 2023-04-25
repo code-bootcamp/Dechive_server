@@ -3,6 +3,7 @@ import { Board } from 'src/apis/boards/entities/board.entity';
 import { Followee } from 'src/apis/followees/entities/followees.entity';
 import { Following } from 'src/apis/followings/entities/followings.entity';
 import { SnsAccount } from 'src/apis/snsAccount/entities/snsAccount.entity';
+import { PROVIDER_ENUM } from 'src/commons/interfaces/provider';
 import {
   Column,
   Entity,
@@ -42,6 +43,10 @@ export class User {
   @Column({ type: 'varchar', length: '15' })
   @Field(() => String)
   jobGroup: string;
+
+  @Column({ type: 'enum', enum: PROVIDER_ENUM, default: 'dechive' })
+  @Field(() => String)
+  provider: string;
 
   @JoinColumn()
   @OneToMany(() => SnsAccount, (snsAccounts) => snsAccounts.user, {
