@@ -108,12 +108,12 @@ export class AuthService {
   }
 
   async socialLogin({ req, res }: IAuthServiceSocialLogin) {
-    let user = await this.usersService.isEamil({
+    const user = await this.usersService.isEamil({
       email: req.user.email,
     });
 
-    if (!user)
-      user = await this.usersService.createUser({ createUserInput: req.user });
+    // if (!user)
+    // user = await this.usersService.createUser({ createUserInput: req.user });
 
     this.setRefreshToken({ user, res });
     res.redirect(process.env.ORIGIN);

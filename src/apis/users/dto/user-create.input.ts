@@ -8,4 +8,7 @@ export class CreateUserInput {
 
   @Field(() => String)
   password?: User['password'];
+
+  @Field(() => String)
+  jobGroup: User['jobGroup'];
 }

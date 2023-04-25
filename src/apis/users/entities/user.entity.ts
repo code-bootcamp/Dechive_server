@@ -39,6 +39,10 @@ export class User {
   @Field(() => String, { nullable: true })
   picture: string;
 
+  @Column({ type: 'varchar', length: '15' })
+  @Field(() => String)
+  jobGroup: string;
+
   @JoinColumn()
   @OneToMany(() => SnsAccount, (snsAccounts) => snsAccounts.user, {
     onDelete: 'CASCADE',
@@ -47,12 +51,16 @@ export class User {
   snsAccounts: SnsAccount[];
 
   @JoinTable()
-  @ManyToMany(() => Following, (followings) => followings.users)
+  @ManyToMany(() => Following, (followings) => followings.users, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => [Following])
   followings: Following[];
 
   @JoinTable()
-  @ManyToMany(() => Followee, (followees) => followees.users)
+  @ManyToMany(() => Followee, (followees) => followees.users, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => [Followee])
   followees: Followee[];
 
