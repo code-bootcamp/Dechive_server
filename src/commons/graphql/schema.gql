@@ -136,7 +136,7 @@ type Mutation {
   deleteUser: Boolean!
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdateBoardInput!, boardid: String!): Board!
-  test(a: String!): Boolean!
+  fetchProducts(userid: String!): [Product!]!
   deleteBoard(boardid: String!): Boolean!
   updateBoardLiker(boardid: String!): Boolean!
   createComment(createCommentInput: CreateCommentInput!): Comments!

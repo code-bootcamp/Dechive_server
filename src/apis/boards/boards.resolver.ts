@@ -6,6 +6,7 @@ import { UseGuards } from '@nestjs/common';
 import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { IContext } from 'src/commons/interfaces/context';
 import { UpdateBoardInput } from './dto/board-update.input';
+import { Product } from '../products/entities/product.entity';
 
 @Resolver()
 export class BoardsResolver {
@@ -76,11 +77,9 @@ export class BoardsResolver {
     });
   }
 
-  @Mutation(() => Boolean)
-  async test(@Args('a') a: string) {
-    const ab = await this.boardsService.test({ storageDelet: a });
-    console.log(ab);
-    return true;
+  @Mutation(() => [Product])
+  fetchProducts(@Args('userid') userid: string) {
+    return this.boardsService.fetchProductsFromOneUser({ userid });
   }
 
   @UseGuards(DechiveAuthGuard('access'))

@@ -11,6 +11,7 @@ import { ProductsService } from '../products/products.service';
 import { UsersService } from '../users/users.service';
 import { Hashtag } from '../hashtags/entities/hashtag.entity';
 import { PicturesService } from '../pictures/pictures.service';
+import { Product } from '../products/entities/product.entity';
 
 @Injectable()
 export class BoardsService {
@@ -146,8 +147,12 @@ export class BoardsService {
     });
   }
 
-  async test({ storageDelet }) {
-    return this.picturesService.storageDelete({ storageDelet });
+  async fetchProductsFromOneUser({ userid }): Promise<Product[]> {
+    return [].concat(
+      ...(await this.usersService.findOneUser({ id: userid })).boards.map(
+        (board) => board.products,
+      ),
+    );
   }
 
   async updateBoard({
