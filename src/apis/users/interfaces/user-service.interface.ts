@@ -1,4 +1,5 @@
 import { Following } from 'src/apis/followings/entities/followings.entity';
+import { PROVIDER_ENUM } from 'src/commons/interfaces/provider';
 import { MatchAuthInput } from '../dto/matchAuth.Input';
 import { ResetPasswordInput } from '../dto/resetPassword.Input';
 import { CreateUserInput } from '../dto/user-create.input';
@@ -19,6 +20,11 @@ export interface IUsersServiceIsEmail {
 
 export interface IUsersServiceCheckEmail {
   email: User['email'];
+}
+
+export interface IUsersServiceSocailLoginProviderUpdate {
+  id: User['id'];
+  provider: PROVIDER_ENUM;
 }
 
 export interface IUsersServiceHashPassword {

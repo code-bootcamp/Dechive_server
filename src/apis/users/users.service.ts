@@ -26,6 +26,7 @@ import {
   IUsersServiceIsEmail,
   IUsersServiceMathAuth,
   IUsersServiceResetPassword,
+  IUsersServiceSocailLoginProviderUpdate,
   IUsersServiceUpdateUser,
 } from './interfaces/user-service.interface';
 import { SnsAccountService } from '../snsAccount/snsAccount.service';
@@ -163,6 +164,13 @@ export class UsersService {
       password: await this.hashPassword({ password }),
       nickName: getRandomNickName(),
     });
+  }
+
+  socailLoginProviderUpdate({
+    id,
+    provider,
+  }: IUsersServiceSocailLoginProviderUpdate): Promise<User> {
+    return this.usersRepository.save({ id, provider });
   }
 
   async updateUser({

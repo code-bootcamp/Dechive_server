@@ -120,6 +120,12 @@ export class AuthService {
       user = await this.usersService.createUser({
         createUserInput: { ...req.user, provider, jobGroup: '미선택' },
       });
+    console.log(user.provider, provider);
+    if (user.provider !== provider)
+      user = await this.usersService.socailLoginProviderUpdate({
+        id: user.id,
+        provider,
+      });
 
     this.setRefreshToken({ user, res });
     res.redirect(process.env.ORIGIN);
