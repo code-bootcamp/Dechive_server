@@ -7,13 +7,12 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
     super({
       clientID: process.env.NAVER_CLIENT_ID,
       clientSecret: process.env.NAVER_CLIENT_SECRET,
-      callbackURL: 'http://localhost:5000/login/naver',
+      callbackURL: 'https://mobomobo.shop/login/naver',
       scope: ['email'],
     });
   }
 
   validate(_: string, __: string, profile: Profile) {
-    console.log(profile);
     return {
       email: profile.email,
     };
