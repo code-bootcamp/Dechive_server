@@ -7,6 +7,7 @@ import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { IContext } from 'src/commons/interfaces/context';
 import { UpdateBoardInput } from './dto/board-update.input';
 import { Product } from '../products/entities/product.entity';
+import { IBoardsServiceFetchsUserLiked } from './interfaces/board-service.interface';
 
 @Resolver()
 export class BoardsResolver {
@@ -38,6 +39,21 @@ export class BoardsResolver {
     return this.boardsService.fetchOneViewCount({
       boardid,
     });
+  }
+
+  @Query(() => [Product])
+  fetchProducts(@Args('userid') userid: string) {
+    return this.boardsService.fetchProductsFromOneUser({ userid });
+  }
+
+  @UseGuards(DechiveAuthGuard('access'))
+  @Query(() => [Board])
+  fetchBoardsUserLiked(
+    @Args('userid') userid: string, //
+    @Context() context: IContext,
+  ) {
+    const { id } = context.req.user;
+    return this.boardsService.fetchBoardUserLiked({ id, userid });
   }
 
   @Query(() => [Board])
@@ -75,11 +91,6 @@ export class BoardsResolver {
       boardid,
       userid,
     });
-  }
-
-  @Mutation(() => [Product])
-  fetchProducts(@Args('userid') userid: string) {
-    return this.boardsService.fetchProductsFromOneUser({ userid });
   }
 
   @UseGuards(DechiveAuthGuard('access'))

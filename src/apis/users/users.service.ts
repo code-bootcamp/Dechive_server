@@ -59,9 +59,10 @@ export class UsersService {
         'snsAccounts',
         'followings',
         'followees',
+        'like',
         'boards',
         'boards.hashtags',
-        'boards.likers',
+        // 'boards.likers',
         'boards.products',
       ],
     });
