@@ -10,10 +10,10 @@ export class HashtagsService {
     private readonly hashtagsRepository: Repository<Hashtag>, //
   ) {}
 
-  async findByHash({ keyword }): Promise<string[]> {
+  async findByHash({ hashtag }): Promise<string[]> {
     const result = await this.hashtagsRepository
       .findOne({
-        where: { hashtag: `#${keyword}` },
+        where: { hashtag },
         select: { boards: true },
         relations: ['boards'],
       })
