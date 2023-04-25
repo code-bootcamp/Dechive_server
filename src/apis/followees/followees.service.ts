@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../users/entities/user.entity';
+import { FollowingsService } from '../followings/following.service';
 import { UsersService } from '../users/users.service';
+import { FetchFollowee } from './dto/followees-fetch.return-type';
 import { Followee } from './entities/followees.entity';
 import {
   IFolloweesServiceCreateFollowee,
@@ -52,17 +53,26 @@ export class FolloweesService {
 
   async fetchFollowees({
     id,
-  }: IFollowingsServiceFetchFollowees): Promise<User[]> {
-    const result = await this.followeeRepository.find({
-      where: { users: { id } },
-      relations: ['users'],
-    });
+    guestid,
+  }: IFollowingsServiceFetchFollowees): Promise<FetchFollowee> {
+    const result = await this.findOneFollowee({ followeeid: id });
 
-    const users = [];
-    result.forEach((el) => {
-      if (el.followeeid) users.push(el.followeeid);
-    });
+    let followee,
+      user = [];
 
-    return this.usersService.findByUsers({ users });
+    if (result) {
+      const users = [];
+      result?.users.forEach((el) => {
+        if (el.id) users.push(el.id);
+      });
+
+      followee = result?.users.filter((el) => el.id === guestid).length;
+      user = await this.usersService.findByUsers({ users });
+    }
+
+    return {
+      user,
+      followee: followee ? true : false,
+    };
   }
 }

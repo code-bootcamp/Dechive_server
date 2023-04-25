@@ -13,4 +13,5 @@ export interface IFolloweesServiceFindOne {
 
 export interface IFollowingsServiceFetchFollowees {
   id: User['id'];
+  guestid: User['id'];
 }

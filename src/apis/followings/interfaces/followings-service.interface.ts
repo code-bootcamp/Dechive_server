@@ -8,4 +8,9 @@ export interface IFollowingsServiceUpdate {
 
 export interface IFollowingsServiceFetchFollwings {
   id: User['id'];
+  guestid: User['id'];
+}
+
+export interface IFollowingsServiceFindFollwing {
+  followingid: User['id'];
 }
