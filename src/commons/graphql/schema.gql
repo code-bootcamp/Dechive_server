@@ -88,7 +88,9 @@ type FetchUser {
   user: User!
   boardCount: Int!
   followingCount: Int!
-  folloeweeCount: Int!
+  followeeCount: Int!
+  following: Boolean!
+  followee: Boolean!
 }
 
 type Youtube {
@@ -106,7 +108,7 @@ type Reply {
 }
 
 type Query {
-  fetchUser(userid: String!): FetchUser!
+  fetchUser(fetchUserInput: FetchUserInput!): FetchUser!
   fetchBoard(boardid: String!): Board!
   fetchBoards: [Board!]!
   fetchBestBoards: [Board!]!
@@ -115,6 +117,11 @@ type Query {
   fetchFollowees(userid: String!): [User!]!
   fetchFollowings(userid: String!): [User!]!
   fetchYoutube: [Youtube!]!
+}
+
+input FetchUserInput {
+  userid: String!
+  gestid: String
 }
 
 type Mutation {
@@ -149,7 +156,7 @@ input CreateUserInput {
   email: String!
   password: String!
   jobGroup: String!
-  provider: String!
+  provider: String
 }
 
 input UpdateUserInput {

@@ -17,7 +17,6 @@ export class AuthController {
     @Req() req: Request & IAuthUser & IProvider, //
     @Res() res: Response,
   ): Promise<void> {
-    console.log(req.params, 'asdasdasdasas');
     return this.authService.socialLogin({
       req,
       res,

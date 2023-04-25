@@ -5,7 +5,7 @@ import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { MatchAuthInput } from './dto/matchAuth.Input';
 import { ResetPasswordInput } from './dto/resetPassword.Input';
 import { CreateUserInput } from './dto/user-create.input';
-import { FetchUser } from './dto/user-fetch.return-type';
+import { FetchUser, FetchUserInput } from './dto/user-fetch.return-type';
 import { UpdateUserInput } from './dto/user-update.input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -18,11 +18,9 @@ export class UsersResolver {
 
   @Query(() => FetchUser)
   fetchUser(
-    @Args('userid') userid: string, //
+    @Args('fetchUserInput') fetchUserInput: FetchUserInput,
   ): Promise<FetchUser> {
-    console.log('Asdasdas');
-    console.log(userid, ' userid');
-    return this.usersService.fetchUser({ id: userid });
+    return this.usersService.fetchUser({ fetchUserInput });
   }
 
   @Mutation(() => User)
