@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { Youtube } from './dto/youtube.dto';
-import e from 'express';
 
 @Injectable()
 export class YoutubeService {
@@ -17,13 +16,14 @@ export class YoutubeService {
           q: 'desk setup', //desk setup 검색
           type: 'video',
           maxResults: 12, //12개
-          fields: 'items(id(videoId),snippet(thumbnails(high(url))))', //비디오 아이디와 썸네일만 조회
+          fields: 'items(id(videoId),snippet(title,thumbnails(high(url))))', //비디오 아이디와 썸네일만 조회
         },
       });
       const result: Youtube[] = [];
       return Promise.all(
         response.data.items.map(async (e) => {
           return {
+            title: e.snippet.title,
             videoUrl: `https://www.youtube.com/watch?v=${e.id.videoId}`,
             thumbnailUrl: e.snippet.thumbnails.high.url,
             // 비디오 아이디로 조회수 조회

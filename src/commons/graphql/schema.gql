@@ -90,6 +90,7 @@ type FetchUser {
 }
 
 type Youtube {
+  title: String!
   videoUrl: String!
   thumbnailUrl: String!
   views: Float!
