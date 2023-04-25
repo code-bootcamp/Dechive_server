@@ -14,6 +14,7 @@ import { getRandomNickName } from 'src/commons/util/getRandomNickname';
 import {
   IUserServiceUnfollowing,
   IUsersServiceAuthEamil,
+  IUsersServiceCheckEmail,
   IUsersServiceCreateUser,
   IUsersServiceDeleteUser,
   IUsersServiceFetchUser,
@@ -69,14 +70,25 @@ export class UsersService {
     return user;
   }
 
-  async fetchUser({ id }: IUsersServiceFetchUser): Promise<FetchUser> {
-    const user = await this.findOneUser({ id });
+  async fetchUser({
+    fetchUserInput, //
+  }: IUsersServiceFetchUser): Promise<FetchUser> {
+    const { userid, gestid } = fetchUserInput;
+    const user = await this.findOneUser({ id: userid });
 
+    const followee = user?.followees.filter(
+      (el) => el.followeeid === gestid,
+    ).length;
+    const following = user?.followings.filter(
+      (el) => el.followingid === gestid,
+    ).length;
     return {
       user,
       boardCount: user.boards.length,
       followingCount: user.followings.length,
-      folloeweeCount: user.followees.length,
+      followeeCount: user.followees.length,
+      followee: followee ? true : false,
+      following: following ? true : false,
     };
   }
 
@@ -97,11 +109,19 @@ export class UsersService {
     return result ? result : [];
   }
 
-  async findOneEamil({ email }: IUsersServiceFindOneEmail): Promise<User> {
+  async findOneEmail({ email }: IUsersServiceFindOneEmail): Promise<User> {
     if (!email || !email.includes('@'))
       throw new ConflictException('올바르지 않은 이메일 형식입니다.');
 
     return this.usersRepository.findOne({ where: { email } });
+  }
+
+  async checkEmail({ email }: IUsersServiceCheckEmail): Promise<User> {
+    const isEmail = await this.findOneEmail({ email });
+
+    if (!isEmail) throw new ConflictException('등록되지 않은 회원 입니다.');
+
+    return isEmail;
   }
 
   async isEamil({ email }: IUsersServiceIsEmail): Promise<User> {
@@ -124,7 +144,7 @@ export class UsersService {
   async createUser({
     createUserInput,
   }: IUsersServiceCreateUser): Promise<User> {
-    const { email } = createUserInput;
+    const { email, password } = createUserInput;
 
     await this.isEamil({ email });
     const nickName = getRandomNickName();
@@ -132,13 +152,16 @@ export class UsersService {
     if (createUserInput?.provider) {
       return this.usersRepository.save({
         ...createUserInput,
-        password: process.env.RANDOMPASSWORD,
+        password: await this.hashPassword({
+          password: process.env.RANDOMPASSWORD,
+        }),
         nickName,
       });
     }
 
     return this.usersRepository.save({
       ...createUserInput,
+      password: await this.hashPassword({ password }),
       nickName: getRandomNickName(),
     });
   }
@@ -232,7 +255,7 @@ export class UsersService {
     resetPasswordInput,
   }: IUsersServiceResetPassword): Promise<boolean> {
     const { email, password } = resetPasswordInput;
-    const user = await this.findOneEamil({ email });
+    const user = await this.findOneEmail({ email });
     const hashPassword = await this.hashPassword({ password });
 
     await this.usersRepository.save({ ...user, password: hashPassword });

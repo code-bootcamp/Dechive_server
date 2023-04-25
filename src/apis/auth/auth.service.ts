@@ -32,7 +32,7 @@ export class AuthService {
 
   async login({ loginInput, res }: IAuthServiceLogin): Promise<string> {
     const { email, password } = loginInput;
-    const user = await this.usersService.findOneEamil({ email });
+    const user = await this.usersService.checkEmail({ email });
 
     const isPassword = await bcrypt.compare(password, user.password);
 
@@ -112,7 +112,7 @@ export class AuthService {
     res,
     provider,
   }: IAuthServiceSocialLogin): Promise<void> {
-    let user = await this.usersService.findOneEamil({
+    let user = await this.usersService.findOneEmail({
       email: req.user.email,
     });
     console.log(user);

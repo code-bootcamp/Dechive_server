@@ -2,6 +2,7 @@ import { Following } from 'src/apis/followings/entities/followings.entity';
 import { MatchAuthInput } from '../dto/matchAuth.Input';
 import { ResetPasswordInput } from '../dto/resetPassword.Input';
 import { CreateUserInput } from '../dto/user-create.input';
+import { FetchUserInput } from '../dto/user-fetch.return-type';
 import { UpdateUserInput } from '../dto/user-update.input';
 import { User } from '../entities/user.entity';
 
@@ -13,6 +14,10 @@ export interface IUsersServiceFindOneEmail {
 }
 
 export interface IUsersServiceIsEmail {
+  email: User['email'];
+}
+
+export interface IUsersServiceCheckEmail {
   email: User['email'];
 }
 
@@ -62,5 +67,5 @@ export interface IUsersServiceFindByUsers {
 }
 
 export interface IUsersServiceFetchUser {
-  id: User['id'];
+  fetchUserInput: FetchUserInput;
 }

@@ -1,5 +1,14 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { User } from '../entities/user.entity';
+
+@InputType()
+export class FetchUserInput {
+  @Field(() => String)
+  userid: User['id'];
+
+  @Field(() => String, { nullable: true })
+  gestid: User['id'];
+}
 
 @ObjectType()
 export class FetchUser {
@@ -13,5 +22,11 @@ export class FetchUser {
   followingCount: number;
 
   @Field(() => Int)
-  folloeweeCount: number;
+  followeeCount: number;
+
+  @Field(() => Boolean)
+  following: boolean;
+
+  @Field(() => Boolean)
+  followee: boolean;
 }

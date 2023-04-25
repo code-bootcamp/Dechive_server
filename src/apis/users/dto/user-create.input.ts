@@ -12,6 +12,6 @@ export class CreateUserInput {
   @Field(() => String)
   jobGroup: User['jobGroup'];
 
-  @Field(() => String)
-  provider?: User['provider'];
+  @Field(() => String, { nullable: true })
+  provider: User['provider'];
 }
