@@ -101,10 +101,7 @@ export class UsersService {
     if (!email || !email.includes('@'))
       throw new ConflictException('올바르지 않은 이메일 형식입니다.');
 
-    const user = await this.usersRepository.findOne({ where: { email } });
-
-    if (!user) throw new ConflictException('없는 회원 입니다.');
-    return user;
+    return this.usersRepository.findOne({ where: { email } });
   }
 
   async isEamil({ email }: IUsersServiceIsEmail): Promise<User> {
@@ -131,13 +128,20 @@ export class UsersService {
 
     await this.isEamil({ email });
 
-    const password = await this.hashPassword({
-      password: createUserInput.password,
-    });
+    if (createUserInput?.password) {
+      const password = await this.hashPassword({
+        password: createUserInput.password,
+      });
+
+      return this.usersRepository.save({
+        ...createUserInput,
+        password,
+        nickName: getRandomNickName(),
+      });
+    }
 
     return this.usersRepository.save({
       ...createUserInput,
-      password,
       nickName: getRandomNickName(),
     });
   }
@@ -146,7 +150,7 @@ export class UsersService {
     updateUserInput,
     id,
   }: IUsersServiceUpdateUser): Promise<User> {
-    let user = await this.findOneUser({ id: id });
+    const user = await this.findOneUser({ id });
 
     if (updateUserInput.picture !== user.picture) {
       if (user.picture) {
@@ -178,7 +182,7 @@ export class UsersService {
       }
     }
 
-    if (!temp) user = await this.findOneUser({ id });
+    // if (!temp) user = await this.findOneUser({ id });
     const snsAccount = [temp, ...user.snsAccounts];
 
     if (user.nickName === updateUserInput.nickName)

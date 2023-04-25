@@ -14,6 +14,7 @@ import {
   IAuthServiceLogin,
   IAuthServiceLogout,
   IAuthServiceSetRefreshToken,
+  IAuthServiceSocialLogin,
 } from './interfaces/auth-service.interface';
 import * as bcrypt from 'bcrypt';
 import { Cache } from 'cache-manager';
@@ -45,14 +46,14 @@ export class AuthService {
 
   getAccseToken({ user }: IAuthServiceGetAccseToken): string {
     return this.jwtService.sign(
-      { sub: user.id },
+      { sub: { email: user.email, id: user.id } },
       { secret: process.env.ACCESS_TOKEN, expiresIn: '2h' },
     );
   }
 
   setRefreshToken({ user, res }: IAuthServiceSetRefreshToken): void {
     const refreshToken = this.jwtService.sign(
-      { sub: user.id },
+      { sub: { email: user.email, id: user.id } },
       { secret: process.env.REFRESH_TOKEN, expiresIn: '2w' },
     );
 
@@ -104,5 +105,17 @@ export class AuthService {
     ]);
 
     return '로그아웃 완료';
+  }
+
+  async socialLogin({ req, res }: IAuthServiceSocialLogin) {
+    const user = await this.usersService.isEamil({
+      email: req.user.email,
+    });
+
+    // if (!user)
+    // user = await this.usersService.createUser({ createUserInput: req.user });
+
+    this.setRefreshToken({ user, res });
+    res.redirect(process.env.ORIGIN);
   }
 }

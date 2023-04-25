@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import { User } from 'src/apis/users/entities/user.entity';
 import { IAuthUser, IContext } from 'src/commons/interfaces/context';
 import { LoginInput } from '../dto/auth-login.input';
@@ -29,4 +30,9 @@ export interface IAuthServcieIsToken {
     accessToken?: string;
     refreshToken?: string;
   };
+}
+
+export interface IAuthServiceSocialLogin {
+  req: Request & IAuthUser;
+  res: Response;
 }

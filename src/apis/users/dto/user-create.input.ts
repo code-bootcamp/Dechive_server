@@ -7,5 +7,8 @@ export class CreateUserInput {
   email: User['email'];
 
   @Field(() => String)
-  password: User['password'];
+  password?: User['password'];
+
+  @Field(() => String)
+  jobGroup: User['jobGroup'];
 }

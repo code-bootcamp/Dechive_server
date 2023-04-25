@@ -1,5 +1,5 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { DechiveAuthGuard } from '../auth/guards/auth.guards';
+import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { IContext } from 'src/commons/interfaces/context';
 import { Reply } from './entities/reply.entity';

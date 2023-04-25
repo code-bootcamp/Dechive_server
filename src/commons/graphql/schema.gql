@@ -40,6 +40,7 @@ type User {
   nickName: String!
   intro: String
   picture: String
+  jobGroup: String!
   snsAccounts: [SnsAccount!]
   followings: [Following!]!
   followees: [Followee!]!
@@ -146,6 +147,7 @@ input LoginInput {
 input CreateUserInput {
   email: String!
   password: String!
+  jobGroup: String!
 }
 
 input UpdateUserInput {
@@ -153,6 +155,7 @@ input UpdateUserInput {
   intro: String
   picture: String
   snsAccount: String
+  jobGroup: String
 }
 
 input MatchAuthInput {

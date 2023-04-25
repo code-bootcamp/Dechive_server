@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/commons/interfaces/context';
-import { DechiveAuthGuard } from '../auth/guards/auth.guards';
+import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { User } from '../users/entities/user.entity';
 import { Following } from './entities/followings.entity';
 import { FollowingsService } from './following.service';

@@ -22,7 +22,8 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
     if (redisAccessTokne) throw new UnauthorizedException('로그인 해주세요');
 
     return {
-      id: payload.sub,
+      id: payload.sub.id,
+      email: payload.sub.eamil,
       exp: payload.exp,
     };
   }

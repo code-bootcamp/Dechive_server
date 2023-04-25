@@ -3,7 +3,7 @@ import { BoardsService } from './boards.service';
 import { Board } from './entities/board.entity';
 import { CreateBoardInput } from './dto/board-create.input';
 import { UseGuards } from '@nestjs/common';
-import { DechiveAuthGuard } from '../auth/guards/auth.guards';
+import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { IContext } from 'src/commons/interfaces/context';
 import { UpdateBoardInput } from './dto/board-update.input';
 
