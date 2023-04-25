@@ -127,16 +127,13 @@ export class UsersService {
     const { email } = createUserInput;
 
     await this.isEamil({ email });
+    const nickName = getRandomNickName();
 
-    if (createUserInput?.password) {
-      const password = await this.hashPassword({
-        password: createUserInput.password,
-      });
-
+    if (createUserInput?.provider) {
       return this.usersRepository.save({
         ...createUserInput,
-        password,
-        nickName: getRandomNickName(),
+        password: process.env.RANDOMPASSWORD,
+        nickName,
       });
     }
 
@@ -182,7 +179,6 @@ export class UsersService {
       }
     }
 
-    // if (!temp) user = await this.findOneUser({ id });
     const snsAccount = [temp, ...user.snsAccounts];
 
     if (user.nickName === updateUserInput.nickName)

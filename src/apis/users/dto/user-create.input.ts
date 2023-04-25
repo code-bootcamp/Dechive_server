@@ -11,4 +11,7 @@ export class CreateUserInput {
 
   @Field(() => String)
   jobGroup: User['jobGroup'];
+
+  @Field(() => String)
+  provider?: User['provider'];
 }

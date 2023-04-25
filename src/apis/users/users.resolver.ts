@@ -20,6 +20,8 @@ export class UsersResolver {
   fetchUser(
     @Args('userid') userid: string, //
   ): Promise<FetchUser> {
+    console.log('Asdasdas');
+    console.log(userid, ' userid');
     return this.usersService.fetchUser({ id: userid });
   }
 

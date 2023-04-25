@@ -107,13 +107,19 @@ export class AuthService {
     return '로그아웃 완료';
   }
 
-  async socialLogin({ req, res }: IAuthServiceSocialLogin) {
-    const user = await this.usersService.isEamil({
+  async socialLogin({
+    req,
+    res,
+    provider,
+  }: IAuthServiceSocialLogin): Promise<void> {
+    let user = await this.usersService.findOneEamil({
       email: req.user.email,
     });
-
-    // if (!user)
-    // user = await this.usersService.createUser({ createUserInput: req.user });
+    console.log(user);
+    if (!user)
+      user = await this.usersService.createUser({
+        createUserInput: { ...req.user, provider, jobGroup: '미선택' },
+      });
 
     this.setRefreshToken({ user, res });
     res.redirect(process.env.ORIGIN);
