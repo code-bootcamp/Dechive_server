@@ -2,7 +2,6 @@ import { Repository } from 'typeorm';
 import { Hashtag } from './entities/hashtag.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Board } from '../boards/entities/board.entity';
 
 @Injectable()
 export class HashtagsService {
@@ -18,8 +17,7 @@ export class HashtagsService {
         select: { boards: true },
         relations: ['boards'],
       })
-      .then((e) => e?.boards.map((e) => e.id))
-      .catch();
+      .then((e) => e?.boards.map((e) => e.id));
     return result ? result : [];
   }
 

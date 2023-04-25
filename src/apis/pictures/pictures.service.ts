@@ -7,7 +7,6 @@ import {
   IPicturesServiceStorageDelet,
 } from './interfaces/pictures-service.interface';
 import { Picture } from './entities/picture.entity';
-import { Board } from '../boards/entities/board.entity';
 
 @Injectable()
 export class PicturesService {
@@ -17,12 +16,11 @@ export class PicturesService {
   ) {}
 
   createPictures({ uploadFile }): Promise<Picture[]> {
-    let i = 0;
     return Promise.all(
-      uploadFile.map((url: string) => {
+      uploadFile.map((url: string, i: number) => {
         return this.picturesRepository.save({
           url,
-          isMain: !i++,
+          isMain: !i,
         });
       }),
     );

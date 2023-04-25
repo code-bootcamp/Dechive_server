@@ -33,6 +33,7 @@ import { dechiveTemplate } from 'src/commons/util/sendTemplate';
 import { Cache } from 'cache-manager';
 import { FetchUser } from './dto/user-fetch.return-type';
 import { PicturesService } from '../pictures/pictures.service';
+import { Board } from '../boards/entities/board.entity';
 
 @Injectable()
 export class UsersService {

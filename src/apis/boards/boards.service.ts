@@ -80,7 +80,7 @@ export class BoardsService {
     const board = await this.findOneBoard({ boardid });
     return this.boardsRepository.save({
       ...board,
-      views: (board.views += 1),
+      views: board.views + 1,
     });
   }
 
@@ -180,6 +180,7 @@ export class BoardsService {
         });
       }),
     );
+    // forEach 로 리턴값없이 함수만 작동하도록
     const pictures = await this.picturesService.createPictures({
       ...updateBoardInput,
     });
