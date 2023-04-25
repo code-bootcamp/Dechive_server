@@ -62,11 +62,11 @@ export class FolloweesService {
 
     if (result) {
       const users = [];
-      result?.users.forEach((el) => {
+      result.users.forEach((el) => {
         if (el.id) users.push(el.id);
       });
 
-      followee = result?.users.filter((el) => el.id === guestid).length;
+      followee = result.users.filter((el) => el.id === guestid).length;
       user = await this.usersService.findByUsers({ users });
     }
 
