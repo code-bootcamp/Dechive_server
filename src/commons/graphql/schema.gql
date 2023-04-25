@@ -100,6 +100,16 @@ type Youtube {
   views: Float!
 }
 
+type FetchFollowee {
+  user: [User!]!
+  followee: Boolean!
+}
+
+type FetchFollowing {
+  user: [User!]!
+  following: Boolean!
+}
+
 type Reply {
   id: String!
   content: String!
@@ -114,8 +124,8 @@ type Query {
   fetchBestBoards: [Board!]!
   viewBoard(boardid: String!): Board!
   searchBoard(keyword: String!): [Board!]!
-  fetchFollowees(userid: String!): [User!]!
-  fetchFollowings(userid: String!): [User!]!
+  fetchFollowees(userid: String!): FetchFollowee!
+  fetchFollowings(userid: String!): FetchFollowing!
   fetchYoutube: [Youtube!]!
 }
 
