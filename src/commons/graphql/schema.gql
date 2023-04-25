@@ -121,7 +121,7 @@ type Query {
 
 input FetchUserInput {
   userid: String!
-  gestid: String
+  guestid: String
 }
 
 type Mutation {

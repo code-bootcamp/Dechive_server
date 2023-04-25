@@ -115,7 +115,7 @@ export class AuthService {
     let user = await this.usersService.findOneEmail({
       email: req.user.email,
     });
-    console.log(user);
+
     if (!user)
       user = await this.usersService.createUser({
         createUserInput: { ...req.user, provider, jobGroup: '미선택' },

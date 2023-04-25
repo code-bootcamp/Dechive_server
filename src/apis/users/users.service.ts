@@ -34,7 +34,6 @@ import { dechiveTemplate } from 'src/commons/util/sendTemplate';
 import { Cache } from 'cache-manager';
 import { FetchUser } from './dto/user-fetch.return-type';
 import { PicturesService } from '../pictures/pictures.service';
-import { Board } from '../boards/entities/board.entity';
 
 @Injectable()
 export class UsersService {
@@ -73,14 +72,14 @@ export class UsersService {
   async fetchUser({
     fetchUserInput, //
   }: IUsersServiceFetchUser): Promise<FetchUser> {
-    const { userid, gestid } = fetchUserInput;
+    const { userid, guestid } = fetchUserInput;
     const user = await this.findOneUser({ id: userid });
 
     const followee = user?.followees.filter(
-      (el) => el.followeeid === gestid,
+      (el) => el.followeeid === guestid,
     ).length;
     const following = user?.followings.filter(
-      (el) => el.followingid === gestid,
+      (el) => el.followingid === guestid,
     ).length;
     return {
       user,

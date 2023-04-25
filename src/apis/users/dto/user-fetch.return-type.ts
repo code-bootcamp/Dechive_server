@@ -7,7 +7,7 @@ export class FetchUserInput {
   userid: User['id'];
 
   @Field(() => String, { nullable: true })
-  gestid: User['id'];
+  guestid: User['id'];
 }
 
 @ObjectType()
