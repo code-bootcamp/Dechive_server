@@ -1,7 +1,7 @@
-export interface IPicturesServiceDelete {
-  id: string;
-}
-
 export interface IPicturesServiceStorageDelet {
   storageDelet: string;
+}
+
+export interface IPicturesServiceDelete {
+  boardid: string;
 }

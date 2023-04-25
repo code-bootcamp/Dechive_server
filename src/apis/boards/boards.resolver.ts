@@ -27,6 +27,16 @@ export class BoardsResolver {
     return this.boardsService.findAllBoards();
   }
 
+  @UseGuards(DechiveAuthGuard('access'))
+  @Query(() => [Board])
+  fetchUserBoards(
+    @Args('userid') userid: string,
+    @Context() context: IContext, //
+  ) {
+    const { id } = context.req.user;
+    return this.boardsService.findUserBoards({ id, userid });
+  }
+
   @Query(() => [Board])
   fetchBestBoards() {
     return this.boardsService.findAllBoards();

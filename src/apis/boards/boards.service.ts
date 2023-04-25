@@ -45,10 +45,10 @@ export class BoardsService {
     return board;
   }
 
-  async findByTitle({ keyword }): Promise<string[]> {
+  async findByTitle({ title }): Promise<string[]> {
     const result = await this.boardsRepository
       .find({
-        where: { title: keyword },
+        where: { title },
         select: { id: true },
       })
       .then((e) => e?.map((e) => e.id));
@@ -58,9 +58,9 @@ export class BoardsService {
   async searchBoard({ keyword }): Promise<Board[]> {
     let result = [];
     await Promise.all([
-      this.findByTitle({ keyword }),
-      this.usersService.findByNick({ keyword }),
-      this.hashtagsService.findByHash({ keyword }),
+      this.findByTitle({ title: keyword }),
+      this.usersService.findByNick({ nickName: keyword }),
+      this.hashtagsService.findByHash({ hashtag: `#${keyword}` }),
     ]).then((e) => {
       result = [].concat(...e);
     });
@@ -88,6 +88,29 @@ export class BoardsService {
 
   async findAllBoards(): Promise<Board[]> {
     return await this.boardsRepository.find({
+      relations: [
+        'writer',
+        'products',
+        'comments',
+        'hashtags',
+        'likers',
+        'pictures',
+      ],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
+  async findUserBoards({ id, userid }): Promise<Board[]> {
+    if (userid) {
+      id = userid;
+    }
+    await this.usersService.findOneUser({ id });
+    return await this.boardsRepository.find({
+      where: {
+        writer: { id },
+      },
       relations: [
         'writer',
         'products',
@@ -201,7 +224,7 @@ export class BoardsService {
       ...updateBoardInput,
     });
     await this.productsService.delete({ boardid });
-    await this.picturesService.deleteByboardid({ boardid });
+    await this.picturesService.delete({ boardid });
 
     return this.boardsRepository.save({
       id: boardid,

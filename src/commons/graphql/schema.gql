@@ -121,6 +121,7 @@ type Query {
   fetchUser(fetchUserInput: FetchUserInput!): FetchUser!
   fetchBoard(boardid: String!): Board!
   fetchBoards: [Board!]!
+  fetchUserBoards(userid: String!): [Board!]!
   fetchBestBoards: [Board!]!
   viewBoard(boardid: String!): Board!
   fetchProducts(userid: String!): [Product!]!
