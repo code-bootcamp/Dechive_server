@@ -19,7 +19,7 @@ export class BoardsResolver {
   fetchBoard(
     @Args('boardid') boardid: string, //
   ) {
-    return this.boardsService.findOneBoard({ boardid });
+    return this.boardsService.findOneBoard({ boardid, isView: true });
   }
 
   @Query(() => [Board])
@@ -39,16 +39,7 @@ export class BoardsResolver {
 
   @Query(() => [Board])
   fetchBestBoards() {
-    return this.boardsService.findAllBoards();
-  }
-
-  @Query(() => Board)
-  viewBoard(
-    @Args('boardid') boardid: string, //
-  ) {
-    return this.boardsService.fetchOneViewCount({
-      boardid,
-    });
+    return this.boardsService.findBestBoards();
   }
 
   @Query(() => [Product])

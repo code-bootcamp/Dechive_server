@@ -9,6 +9,6 @@ export class YoutubeResolver {
   ) {}
   @Query(() => [Youtube])
   fetchYoutube(): Promise<Youtube[]> {
-    return this.youtubeService.searchVideos();
+    return this.youtubeService.findYoutubeFromCache();
   }
 }

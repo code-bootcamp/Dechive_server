@@ -12,7 +12,10 @@ import { UsersService } from '../users/users.service';
 import { Hashtag } from '../hashtags/entities/hashtag.entity';
 import { PicturesService } from '../pictures/pictures.service';
 import { Product } from '../products/entities/product.entity';
-import { IBoardsServiceFetchsUserLiked } from './interfaces/board-service.interface';
+import {
+  IBoardsServiceFetchBoard,
+  IBoardsServiceFetchsUserLiked,
+} from './interfaces/board-service.interface';
 
 @Injectable()
 export class BoardsService {
@@ -29,7 +32,10 @@ export class BoardsService {
     private readonly usersService: UsersService,
   ) {}
 
-  async findOneBoard({ boardid }): Promise<Board> {
+  async findOneBoard({
+    boardid,
+    isView,
+  }: IBoardsServiceFetchBoard): Promise<Board> {
     const board = await this.boardsRepository.findOne({
       where: { id: boardid },
       relations: [
@@ -42,6 +48,12 @@ export class BoardsService {
       ],
     });
     if (!board) throw new ConflictException('존재 하지 않는 게시물입니다');
+    if (isView) {
+      return this.boardsRepository.save({
+        ...board,
+        views: board.views + 1,
+      });
+    }
     return board;
   }
 
@@ -75,14 +87,9 @@ export class BoardsService {
         'likers',
         'pictures',
       ],
-    });
-  }
-
-  async fetchOneViewCount({ boardid }): Promise<Board> {
-    const board = await this.findOneBoard({ boardid });
-    return this.boardsRepository.save({
-      ...board,
-      views: board.views + 1,
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 
@@ -102,14 +109,10 @@ export class BoardsService {
     });
   }
 
-  async findUserBoards({ id, userid }): Promise<Board[]> {
-    if (userid) {
-      id = userid;
-    }
-    await this.usersService.findOneUser({ id });
-    return await this.boardsRepository.find({
+  findUserBoards({ id, userid }): Promise<Board[]> {
+    return this.boardsRepository.find({
       where: {
-        writer: { id },
+        writer: { id: userid ? userid : id },
       },
       relations: [
         'writer',
@@ -138,6 +141,7 @@ export class BoardsService {
       order: {
         likes: 'DESC',
         views: 'DESC',
+        createdAt: 'DESC',
       },
     });
   }
@@ -154,10 +158,8 @@ export class BoardsService {
     id,
     userid,
   }: IBoardsServiceFetchsUserLiked): Promise<Board[]> {
-    if (userid) {
-      id = userid;
-    }
-    return (await this.usersService.findOneUser({ id })).like;
+    return (await this.usersService.findOneUser({ id: userid ? userid : id }))
+      .like;
   }
 
   async createBoard({

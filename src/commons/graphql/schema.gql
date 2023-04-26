@@ -122,7 +122,6 @@ type Query {
   fetchBoards: [Board!]!
   fetchUserBoards(userid: String!): [Board!]!
   fetchBestBoards: [Board!]!
-  viewBoard(boardid: String!): Board!
   fetchProducts(userid: String!): [Product!]!
   fetchBoardsUserLiked(userid: String!): [Board!]!
   searchBoard(keyword: String!): [Board!]!
