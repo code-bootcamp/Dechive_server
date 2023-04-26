@@ -193,7 +193,7 @@ export class BoardsService {
       ...updateBoardInput,
     });
     await this.productsService.delete({ boardid });
-    await this.picturesService.deleteByboardid({ boardid });
+    await this.picturesService.delete({ boardid });
 
     return this.boardsRepository.save({
       id: boardid,

@@ -27,17 +27,12 @@ export class PicturesService {
   }
 
   // imageUpdate 1번 로직
-  async deleteByboardid({ boardid }): Promise<DeleteResult> {
+  async delete({ boardid }: IPicturesServiceDelete): Promise<DeleteResult> {
     return this.picturesRepository.delete({ board: { id: boardid } });
   }
 
-  // imageUpdate 2번 로직
-  delete({ id }: IPicturesServiceDelete): Promise<DeleteResult> {
-    return this.picturesRepository.delete(id);
-  }
-
   // storage 삭제
-  storageDelete({ storageDelet }: IPicturesServiceStorageDelet) {
+  storageDelete({ storageDelet }: IPicturesServiceStorageDelet): void {
     const bucketName = process.env.GCP_BUCKET;
 
     const storage = new Storage({

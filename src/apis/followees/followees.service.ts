@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FollowingsService } from '../followings/following.service';
 import { UsersService } from '../users/users.service';
 import { FetchFollowee } from './dto/followees-fetch.return-type';
 import { Followee } from './entities/followees.entity';
