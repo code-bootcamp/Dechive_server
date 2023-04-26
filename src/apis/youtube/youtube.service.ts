@@ -36,10 +36,7 @@ export class YoutubeService {
           const regex = /&(amp|lt|gt|quot|#39);/g;
           return {
             title: regex.test(e.snippet.title)
-              ? e.snippet.title.replace(
-                  regex,
-                  (matched) => chars[matched] || matched,
-                )
+              ? e.snippet.title.replace(regex, (matched) => chars[matched])
               : e.snippet.title,
             videoUrl: `https://www.youtube.com/watch?v=${e.id.videoId}`,
             thumbnailUrl: e.snippet.thumbnails.high.url,
@@ -60,23 +57,26 @@ export class YoutubeService {
       console.log('유튜브 API에러');
     }
   }
-  async storeYoutube() {
-    const a = await this.cacheManager.del('youtube');
-    return true;
-  }
+
   async findYoutubeFromCache(): Promise<Youtube[]> {
-    let youtube: Youtube[] = await this.cacheManager.get('youtube');
+    let youtube = await this.cacheManager.get('youtube');
     if (!youtube) {
-      const a = await this.requestYoutubeAPI({
-        keyword: '데스크 셋업',
-      });
-      const b = await this.requestYoutubeAPI({
-        keyword: 'desk setup',
-      });
-      await this.cacheManager.set('youtube', a.concat(b), { ttl: 86410 });
-      youtube = await this.cacheManager.get('youtube');
+      youtube = [].concat(
+        ...(await Promise.all([
+          this.requestYoutubeAPI({
+            keyword: '데스크 셋업',
+          }),
+          this.requestYoutubeAPI({
+            keyword: 'desk setup',
+          }),
+        ])),
+      );
+      await this.cacheManager.set('youtube', youtube, { ttl: 86410 });
     }
-    const randomYoutube = youtube.sort(() => 0.5 - Math.random()).slice(0, 12);
-    return randomYoutube;
+    const set = new Set();
+    while (set.size !== 12) {
+      set.add(Math.floor(Math.random() * 100));
+    }
+    return [...set].map((e: number) => youtube[e]);
   }
 }
