@@ -119,7 +119,7 @@ type Reply {
 
 type Query {
   fetchUser(fetchUserInput: FetchUserInput!): FetchUser!
-  fetchUsers: User!
+  fetchLoginUser: User!
   fetchBoard(boardid: String!): Board!
   fetchBoards: [Board!]!
   fetchUserBoards(userid: String!): [Board!]!

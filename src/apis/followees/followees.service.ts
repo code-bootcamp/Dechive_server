@@ -33,7 +33,7 @@ export class FolloweesService {
   }: IFolloweesServiceCreateFollowee): Promise<Followee> {
     if (user) {
       const followee = await this.findOneFollowee({ followeeid: id });
-
+      console.log(followee, followeeid, id);
       if (followee) {
         const users = [...followee.users, user];
 
@@ -42,6 +42,10 @@ export class FolloweesService {
           users,
         });
       }
+      return this.followeeRepository.save({
+        followeeid: id,
+        users: [{ id: followeeid }],
+      });
     }
 
     return this.followeeRepository.save({
