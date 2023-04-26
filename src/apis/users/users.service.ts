@@ -62,7 +62,6 @@ export class UsersService {
         'like',
         'boards',
         'boards.hashtags',
-        // 'boards.likers',
         'boards.products',
       ],
     });
