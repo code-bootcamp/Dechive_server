@@ -59,9 +59,10 @@ export class UsersService {
         'snsAccounts',
         'followings',
         'followees',
+        'like',
         'boards',
         'boards.hashtags',
-        'boards.likers',
+        // 'boards.likers',
         'boards.products',
       ],
     });
@@ -98,10 +99,10 @@ export class UsersService {
     });
   }
 
-  async findByNick({ keyword }): Promise<string[]> {
+  async findByNick({ nickName }): Promise<string[]> {
     const result = await this.usersRepository
       .findOne({
-        where: { nickName: keyword },
+        where: { nickName },
         select: { boards: true },
         relations: ['boards'],
       })

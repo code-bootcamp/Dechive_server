@@ -12,6 +12,7 @@ import { UsersService } from '../users/users.service';
 import { Hashtag } from '../hashtags/entities/hashtag.entity';
 import { PicturesService } from '../pictures/pictures.service';
 import { Product } from '../products/entities/product.entity';
+import { IBoardsServiceFetchsUserLiked } from './interfaces/board-service.interface';
 
 @Injectable()
 export class BoardsService {
@@ -44,10 +45,10 @@ export class BoardsService {
     return board;
   }
 
-  async findByTitle({ keyword }): Promise<string[]> {
+  async findByTitle({ title }): Promise<string[]> {
     const result = await this.boardsRepository
       .find({
-        where: { title: keyword },
+        where: { title },
         select: { id: true },
       })
       .then((e) => e?.map((e) => e.id));
@@ -57,9 +58,9 @@ export class BoardsService {
   async searchBoard({ keyword }): Promise<Board[]> {
     let result = [];
     await Promise.all([
-      this.findByTitle({ keyword }),
-      this.usersService.findByNick({ keyword }),
-      this.hashtagsService.findByHash({ keyword }),
+      this.findByTitle({ title: keyword }),
+      this.usersService.findByNick({ nickName: keyword }),
+      this.hashtagsService.findByHash({ hashtag: `#${keyword}` }),
     ]).then((e) => {
       result = [].concat(...e);
     });
@@ -101,6 +102,29 @@ export class BoardsService {
     });
   }
 
+  async findUserBoards({ id, userid }): Promise<Board[]> {
+    if (userid) {
+      id = userid;
+    }
+    await this.usersService.findOneUser({ id });
+    return await this.boardsRepository.find({
+      where: {
+        writer: { id },
+      },
+      relations: [
+        'writer',
+        'products',
+        'comments',
+        'hashtags',
+        'likers',
+        'pictures',
+      ],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
   async findBestBoards(): Promise<Board[]> {
     return this.boardsRepository.find({
       relations: [
@@ -118,13 +142,28 @@ export class BoardsService {
     });
   }
 
+  async fetchProductsFromOneUser({ userid }): Promise<Product[]> {
+    return [].concat(
+      ...(await this.usersService.findOneUser({ id: userid })).boards.map(
+        (board) => board.products,
+      ),
+    );
+  }
+
+  async fetchBoardUserLiked({
+    id,
+    userid,
+  }: IBoardsServiceFetchsUserLiked): Promise<Board[]> {
+    if (userid) {
+      id = userid;
+    }
+    return (await this.usersService.findOneUser({ id })).like;
+  }
+
   async createBoard({
     createBoardInput,
-    userid,
-    // files
+    userid, //
   }): Promise<Board> {
-    // image 업로드 후 링크 받아오기
-
     // bulk insert 활용한 최적화 필요
     let hashtags: Hashtag[];
     if (createBoardInput?.hashtags) {
@@ -145,14 +184,6 @@ export class BoardsService {
       products,
       pictures,
     });
-  }
-
-  async fetchProductsFromOneUser({ userid }): Promise<Product[]> {
-    return [].concat(
-      ...(await this.usersService.findOneUser({ id: userid })).boards.map(
-        (board) => board.products,
-      ),
-    );
   }
 
   async updateBoard({

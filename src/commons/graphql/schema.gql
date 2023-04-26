@@ -121,8 +121,11 @@ type Query {
   fetchUser(fetchUserInput: FetchUserInput!): FetchUser!
   fetchBoard(boardid: String!): Board!
   fetchBoards: [Board!]!
+  fetchUserBoards(userid: String!): [Board!]!
   fetchBestBoards: [Board!]!
   viewBoard(boardid: String!): Board!
+  fetchProducts(userid: String!): [Product!]!
+  fetchBoardsUserLiked(userid: String!): [Board!]!
   searchBoard(keyword: String!): [Board!]!
   fetchFollowees(userid: String!): FetchFollowee!
   fetchFollowings(userid: String!): FetchFollowing!
@@ -146,7 +149,6 @@ type Mutation {
   deleteUser: Boolean!
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdateBoardInput!, boardid: String!): Board!
-  fetchProducts(userid: String!): [Product!]!
   deleteBoard(boardid: String!): Boolean!
   updateBoardLiker(boardid: String!): Boolean!
   createComment(createCommentInput: CreateCommentInput!): Comments!
