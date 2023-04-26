@@ -89,8 +89,6 @@ type FetchUser {
   boardCount: Int!
   followingCount: Int!
   followeeCount: Int!
-  following: Boolean!
-  followee: Boolean!
 }
 
 type Youtube {
@@ -118,7 +116,7 @@ type Reply {
 }
 
 type Query {
-  fetchUser(fetchUserInput: FetchUserInput!): FetchUser!
+  fetchUser(userid: String!): FetchUser!
   fetchLoginUser: User!
   fetchBoard(boardid: String!): Board!
   fetchBoards: [Board!]!
@@ -131,11 +129,6 @@ type Query {
   fetchFollowees(userid: String!): FetchFollowee!
   fetchFollowings(userid: String!): FetchFollowing!
   fetchYoutube: [Youtube!]!
-}
-
-input FetchUserInput {
-  userid: String!
-  guestid: String
 }
 
 type Mutation {

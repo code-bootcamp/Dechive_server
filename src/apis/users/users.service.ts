@@ -72,24 +72,15 @@ export class UsersService {
   }
 
   async fetchUser({
-    fetchUserInput, //
+    id, //
   }: IUsersServiceFetchUser): Promise<FetchUser> {
-    const { userid, guestid } = fetchUserInput;
-    const user = await this.findOneUser({ id: userid });
+    const user = await this.findOneUser({ id });
 
-    const followee = user?.followees.filter(
-      (el) => el.followeeid === guestid,
-    ).length;
-    const following = user?.followings.filter(
-      (el) => el.followingid === guestid,
-    ).length;
     return {
       user,
       boardCount: user.boards.length,
       followingCount: user.followings.length,
       followeeCount: user.followees.length,
-      followee: followee ? true : false,
-      following: following ? true : false,
     };
   }
 

@@ -3,7 +3,6 @@ import { PROVIDER_ENUM } from 'src/commons/interfaces/provider';
 import { MatchAuthInput } from '../dto/matchAuth.Input';
 import { ResetPasswordInput } from '../dto/resetPassword.Input';
 import { CreateUserInput } from '../dto/user-create.input';
-import { FetchUserInput } from '../dto/user-fetch.return-type';
 import { UpdateUserInput } from '../dto/user-update.input';
 import { User } from '../entities/user.entity';
 
@@ -73,5 +72,5 @@ export interface IUsersServiceFindByUsers {
 }
 
 export interface IUsersServiceFetchUser {
-  fetchUserInput: FetchUserInput;
+  id: User['id'];
 }
