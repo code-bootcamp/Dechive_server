@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { YoutubeResolver } from './youtube.resolver';
 import { YoutubeService } from './youtube.service';
 
