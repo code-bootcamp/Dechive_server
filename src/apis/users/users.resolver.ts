@@ -23,6 +23,12 @@ export class UsersResolver {
     return this.usersService.fetchUser({ fetchUserInput });
   }
 
+  @UseGuards(DechiveAuthGuard('access'))
+  @Query(() => User)
+  fetchLoginUser(@Context() context: IContext): Promise<User> {
+    return this.usersService.findOneUser({ id: context.req.user.id });
+  }
+
   @Mutation(() => User)
   createUser(
     @Args('createUserInput') createUserInput: CreateUserInput, //

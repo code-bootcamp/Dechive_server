@@ -163,7 +163,7 @@ export class UsersService {
     return this.usersRepository.save({
       ...createUserInput,
       password: await this.hashPassword({ password }),
-      nickName: getRandomNickName(),
+      nickName,
     });
   }
 
