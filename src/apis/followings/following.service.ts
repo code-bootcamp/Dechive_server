@@ -42,10 +42,8 @@ export class FollowingsService {
     );
 
     if (!isFollowing.length) {
-      const following = await this.followingRepository.findOne({
-        where: { followingid },
-        relations: ['users'],
-      });
+      const following = await this.findOneFollowing({ followingid });
+
       if (following) {
         const result = await Promise.all([
           this.usersService.following({
@@ -84,18 +82,21 @@ export class FollowingsService {
     id,
     guestid,
   }: IFollowingsServiceFetchFollwings): Promise<FetchFollowing> {
-    const result = await this.findOneFollowing({ followingid: id });
+    const result = await this.followingRepository.find({
+      where: { users: [{ id }] },
+      relations: ['users'],
+    });
 
     let following,
       user = [];
 
     if (result) {
       const users = [];
-      result.users.forEach((el) => {
-        if (el.id) users.push(el.id);
+      result.forEach((el) => {
+        if (el.followingid) users.push(el.followingid);
       });
 
-      following = result.users.filter((el) => el.id === guestid).length;
+      following = result.filter((el) => el.followingid === guestid).length;
       user = await this.usersService.findByUsers({ users });
     }
 

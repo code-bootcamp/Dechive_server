@@ -58,18 +58,21 @@ export class FolloweesService {
     id,
     guestid,
   }: IFollowingsServiceFetchFollowees): Promise<FetchFollowee> {
-    const result = await this.findOneFollowee({ followeeid: id });
+    const result = await this.followeeRepository.find({
+      where: { users: [{ id }] },
+      relations: ['users'],
+    });
 
     let followee,
       user = [];
 
     if (result) {
       const users = [];
-      result.users.forEach((el) => {
-        if (el.id) users.push(el.id);
+      result.forEach((el) => {
+        if (el.followeeid) users.push(el.followeeid);
       });
 
-      followee = result.users.filter((el) => el.id === guestid).length;
+      followee = result.filter((el) => el.followeeid === guestid).length;
       user = await this.usersService.findByUsers({ users });
     }
 
