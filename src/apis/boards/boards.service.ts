@@ -222,6 +222,7 @@ export class BoardsService {
     const pictures = await this.picturesService.createPictures({
       ...updateBoardInput,
     });
+
     const hashtags = await this.hashtagsService.createHashtags({
       ...updateBoardInput,
     });

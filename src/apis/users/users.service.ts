@@ -170,12 +170,10 @@ export class UsersService {
   }: IUsersServiceUpdateUser): Promise<User> {
     const user = await this.findOneUser({ id });
 
-    if (updateUserInput.picture !== user.picture) {
-      if (user.picture) {
-        this.picturesService.storageDelete({
-          storageDelet: user.picture.split(process.env.GCP_BUCKET + '/')[1],
-        });
-      }
+    if (updateUserInput?.picture !== user?.picture && user.picture) {
+      this.picturesService.storageDelete({
+        storageDelet: user.picture.split(process.env.GCP_BUCKET + '/')[1],
+      });
     }
 
     let temp;
@@ -212,8 +210,8 @@ export class UsersService {
     });
   }
 
-  async authEmail({ email }: IUsersServiceAuthEamil): Promise<boolean> {
-    await this.isEamil({ email });
+  async authEmail({ email, qqq }: IUsersServiceAuthEamil): Promise<boolean> {
+    if (qqq) await this.checkEmail({ email });
 
     const authNumber = String(Math.floor(Math.random() * 1000000)).padStart(
       6,
