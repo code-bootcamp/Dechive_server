@@ -210,8 +210,11 @@ export class UsersService {
     });
   }
 
-  async authEmail({ email, qqq }: IUsersServiceAuthEamil): Promise<boolean> {
-    if (qqq) await this.checkEmail({ email });
+  async authEmail({
+    email,
+    authCheck,
+  }: IUsersServiceAuthEamil): Promise<boolean> {
+    if (authCheck) await this.checkEmail({ email });
 
     const authNumber = String(Math.floor(Math.random() * 1000000)).padStart(
       6,
