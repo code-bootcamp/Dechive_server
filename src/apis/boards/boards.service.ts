@@ -13,9 +13,13 @@ import { Hashtag } from '../hashtags/entities/hashtag.entity';
 import { PicturesService } from '../pictures/pictures.service';
 import { Product } from '../products/entities/product.entity';
 import {
+  IBoardsServiceCreateBoard,
   IBoardsServiceFetchBoard,
+  IBoardsServiceFetchProductsByUserid,
   IBoardsServiceFetchsUserLiked,
+  IBoardsServiceSearchBoards,
 } from './interfaces/board-service.interface';
+import { Picture } from '../pictures/entities/picture.entity';
 
 @Injectable()
 export class BoardsService {
@@ -67,7 +71,9 @@ export class BoardsService {
     return result ? result : [];
   }
 
-  async searchBoard({ keyword }): Promise<Board[]> {
+  async searchBoards({
+    keyword,
+  }: IBoardsServiceSearchBoards): Promise<Board[]> {
     let result = [];
     await Promise.all([
       this.findByTitle({ title: keyword }),
@@ -146,7 +152,9 @@ export class BoardsService {
     });
   }
 
-  async fetchProductsFromOneUser({ userid }): Promise<Product[]> {
+  async fetchProductsFromOneUser({
+    userid,
+  }: IBoardsServiceFetchProductsByUserid): Promise<Product[]> {
     return [].concat(
       ...(await this.usersService.findOneUser({ id: userid })).boards.map(
         (board) => board.products,
@@ -163,9 +171,9 @@ export class BoardsService {
   }
 
   async createBoard({
-    createBoardInput,
     userid, //
-  }): Promise<Board> {
+    createBoardInput,
+  }: IBoardsServiceCreateBoard): Promise<Board> {
     // bulk insert 활용한 최적화 필요
     let hashtags: Hashtag[];
     if (createBoardInput?.hashtags) {

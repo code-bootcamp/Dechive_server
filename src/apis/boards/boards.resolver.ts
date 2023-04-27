@@ -58,10 +58,10 @@ export class BoardsResolver {
   }
 
   @Query(() => [Board])
-  searchBoard(
+  searchBoards(
     @Args('keyword') keyword: string, //
   ) {
-    return this.boardsService.searchBoard({
+    return this.boardsService.searchBoards({
       keyword,
     });
   }

@@ -1,6 +1,6 @@
 import { Field, InputType, OmitType } from '@nestjs/graphql';
-import { CreateProductInput } from 'src/apis/products/dto/product-create.input';
 import { CreateBoardInput } from './board-create.input';
+import { UpdateProductInput } from 'src/apis/products/dto/product-update.input';
 
 @InputType()
 export class UpdateBoardInput extends OmitType(
@@ -8,6 +8,6 @@ export class UpdateBoardInput extends OmitType(
   ['createProductInputs'],
   InputType,
 ) {
-  @Field(() => [CreateProductInput])
-  updateProductInputs: CreateProductInput[];
+  @Field(() => [UpdateProductInput])
+  updateProductInputs: UpdateProductInput[];
 }

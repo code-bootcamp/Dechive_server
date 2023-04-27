@@ -124,7 +124,7 @@ type Query {
   fetchBestBoards: [Board!]!
   fetchProducts(userid: String!): [Product!]!
   fetchBoardsUserLiked(userid: String!): [Board!]!
-  searchBoard(keyword: String!): [Board!]!
+  searchBoards(keyword: String!): [Board!]!
   fetchFollowees(userid: String!): FetchFollowee!
   fetchFollowings(userid: String!): FetchFollowing!
   fetchYoutube: [Youtube!]!
@@ -191,8 +191,6 @@ input CreateBoardInput {
   title: String!
   recommend: String
   description: String!
-  views: Int! = 0
-  likes: Int! = 0
   hashtags: [String!]
   createProductInputs: [CreateProductInput!]!
   uploadFile: [String!]!
@@ -207,11 +205,15 @@ input UpdateBoardInput {
   title: String!
   recommend: String
   description: String!
-  views: Int! = 0
-  likes: Int! = 0
   hashtags: [String!]
   uploadFile: [String!]!
-  updateProductInputs: [CreateProductInput!]!
+  updateProductInputs: [UpdateProductInput!]!
+}
+
+input UpdateProductInput {
+  name: String!
+  url: String!
+  picture: String
 }
 
 input CreateCommentInput {
