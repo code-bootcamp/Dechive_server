@@ -116,10 +116,7 @@ export class UsersService {
   }
 
   async isEamil({ email }: IUsersServiceIsEmail): Promise<User> {
-    if (!email || !email.includes('@'))
-      throw new ConflictException('올바르지 않은 이메일 형식입니다.');
-
-    const isEmail = await this.usersRepository.findOne({ where: { email } });
+    const isEmail = await this.findOneEmail({ email });
 
     if (isEmail) throw new ConflictException('이미 사용중인 이메일 입니다.');
     return isEmail;
@@ -138,7 +135,7 @@ export class UsersService {
     const { email, password } = createUserInput;
 
     await this.isEamil({ email });
-    const nickName = getRandomNickName();
+    createUserInput['nickName'] = getRandomNickName();
 
     if (createUserInput?.provider) {
       return this.usersRepository.save({
@@ -146,14 +143,12 @@ export class UsersService {
         password: await this.hashPassword({
           password: process.env.RANDOMPASSWORD,
         }),
-        nickName,
       });
     }
 
     return this.usersRepository.save({
       ...createUserInput,
       password: await this.hashPassword({ password }),
-      nickName,
     });
   }
 
@@ -211,10 +206,10 @@ export class UsersService {
   }
 
   async authEmail({
-    email,
-    authCheck,
+    authEmailInput,
   }: IUsersServiceAuthEamil): Promise<boolean> {
-    if (authCheck) await this.checkEmail({ email });
+    const { email, authCheck } = authEmailInput;
+    if (!authCheck) await this.checkEmail({ email });
 
     const authNumber = String(Math.floor(Math.random() * 1000000)).padStart(
       6,

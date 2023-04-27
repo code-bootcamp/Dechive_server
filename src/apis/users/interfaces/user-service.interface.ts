@@ -1,5 +1,6 @@
 import { Following } from 'src/apis/followings/entities/followings.entity';
 import { PROVIDER_ENUM } from 'src/commons/interfaces/provider';
+import { AuthEmailInput } from '../dto/authEamil.input';
 import { MatchAuthInput } from '../dto/matchAuth.Input';
 import { ResetPasswordInput } from '../dto/resetPassword.Input';
 import { CreateUserInput } from '../dto/user-create.input';
@@ -40,8 +41,7 @@ export interface IUsersServiceFindeOne {
 }
 
 export interface IUsersServiceAuthEamil {
-  email: User['email'];
-  authCheck: boolean;
+  authEmailInput: AuthEmailInput;
 }
 
 export interface IUsersServiceMathAuth {

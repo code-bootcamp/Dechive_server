@@ -2,6 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/commons/interfaces/context';
 import { DechiveAuthGuard } from '../auth/guards/auth.guard';
+import { AuthEmailInput } from './dto/authEamil.input';
 import { MatchAuthInput } from './dto/matchAuth.Input';
 import { ResetPasswordInput } from './dto/resetPassword.Input';
 import { CreateUserInput } from './dto/user-create.input';
@@ -46,9 +47,9 @@ export class UsersResolver {
 
   @Mutation(() => Boolean)
   authEmail(
-    @Args('email') email: string, //
+    @Args('authEmailInput') authEmailInput: AuthEmailInput, //
   ): Promise<boolean> {
-    return this.usersService.authEmail({ email, authCheck: true });
+    return this.usersService.authEmail({ authEmailInput });
   }
 
   @Mutation(() => Boolean)
