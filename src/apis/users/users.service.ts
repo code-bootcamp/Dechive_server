@@ -31,7 +31,7 @@ import {
 } from './interfaces/user-service.interface';
 import { SnsAccountService } from '../snsAccount/snsAccount.service';
 import { MailerService } from '@nestjs-modules/mailer';
-import { dechiveTemplate } from 'src/commons/util/sendTemplate';
+import { dechiveTemplate, RanmomNumber } from 'src/commons/util/sendTemplate';
 import { Cache } from 'cache-manager';
 import { FetchUser } from './dto/user-fetch.return-type';
 import { PicturesService } from '../pictures/pictures.service';
@@ -212,10 +212,7 @@ export class UsersService {
     if (authCheck) await this.isEamil({ email });
     else await this.checkEmail({ email });
 
-    const authNumber = String(Math.floor(Math.random() * 1000000)).padStart(
-      6,
-      '0',
-    );
+    const authNumber = RanmomNumber();
 
     return this.mailerService
       .sendMail({
