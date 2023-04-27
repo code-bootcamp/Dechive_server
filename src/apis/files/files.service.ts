@@ -18,11 +18,12 @@ export class FilesService {
       awiatedFiles.map(
         (el) =>
           new Promise<string>((resolve, reject) => {
+            const fileName = encodeURIComponent(el.filename);
             el.createReadStream()
-              .pipe(storage.file(`origin/${el.filename}`).createWriteStream())
+              .pipe(storage.file(`origin/${fileName}`).createWriteStream())
               .on('finish', () =>
                 resolve(
-                  `https://storage.googleapis.com/${bucket}/origin/${el.filename}`,
+                  `https://storage.googleapis.com/${bucket}/origin/${fileName}`,
                 ),
               )
               .on('error', () => reject('false'));
