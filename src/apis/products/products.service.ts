@@ -13,7 +13,7 @@ export class ProductsService {
     private readonly productsRepository: Repository<Product>, //
   ) {}
 
-  async createProducts({ createProductInputs }): Promise<Product> {
+  async createProducts({ createProductInputs }): Promise<Product[]> {
     return Promise.all(
       createProductInputs.map(
         async (createProductInput: CreateProductInput) => {

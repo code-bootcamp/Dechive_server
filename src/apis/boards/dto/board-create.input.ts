@@ -1,22 +1,17 @@
-import { Field, InputType, OmitType } from '@nestjs/graphql';
-import { Board } from '../entities/board.entity';
+import { Field, InputType } from '@nestjs/graphql';
 import { CreateProductInput } from 'src/apis/products/dto/product-create.input';
 
 @InputType()
-export class CreateBoardInput extends OmitType(
-  Board, //
-  [
-    'id', //
-    'comments',
-    'likers',
-    'createdAt',
-    'hashtags',
-    'products',
-    'writer',
-    'pictures',
-  ],
-  InputType,
-) {
+export class CreateBoardInput {
+  @Field(() => String)
+  title: string;
+
+  @Field(() => String, { nullable: true })
+  recommend: string;
+
+  @Field(() => String)
+  description: string;
+
   @Field(() => [String], { nullable: true })
   hashtags: string[];
 
