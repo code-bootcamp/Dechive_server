@@ -127,7 +127,7 @@ type Query {
   fetchLoginUser: User!
   fetchBoard(boardid: String!): Board!
   fetchBoards: [Board!]!
-  getOpenGraph(url: String!): OpenGraph!
+  getOpenGraph(url: String!): OpenGraph
   fetchUserBoards(userid: String!): [Board!]!
   fetchBestBoards: [Board!]!
   fetchProducts(userid: String!): [Product!]!

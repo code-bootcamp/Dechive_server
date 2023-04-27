@@ -28,7 +28,7 @@ export class BoardsResolver {
     return this.boardsService.findAllBoards();
   }
 
-  @Query(() => OpenGraph)
+  @Query(() => OpenGraph, { nullable: true })
   getOpenGraph(
     @Args('url') url: string, //
   ) {

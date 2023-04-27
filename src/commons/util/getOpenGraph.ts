@@ -1,3 +1,5 @@
+import { HttpException } from '@nestjs/common';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ogs = require('open-graph-scraper');
 
@@ -10,6 +12,7 @@ export function getOpenGraph({ url }) {
   return ogs(options)
     .then((data) => {
       const { error, result } = data;
+      console.log(error);
       return error
         ? null
         : {
@@ -18,5 +21,5 @@ export function getOpenGraph({ url }) {
             description: result.ogDescription,
           };
     })
-    .catch();
+    .catch(() => null);
 }
