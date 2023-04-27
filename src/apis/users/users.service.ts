@@ -210,7 +210,7 @@ export class UsersService {
   }: IUsersServiceAuthEamil): Promise<boolean> {
     const { email, authCheck } = authEmailInput;
     if (authCheck) await this.isEamil({ email });
-    await this.checkEmail({ email });
+    else await this.checkEmail({ email });
 
     const authNumber = String(Math.floor(Math.random() * 1000000)).padStart(
       6,

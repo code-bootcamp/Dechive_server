@@ -136,7 +136,7 @@ type Mutation {
   logOut: String!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
-  authEmail(email: String!): Boolean!
+  authEmail(authEmailInput: AuthEmailInput!): Boolean!
   matchAuthNumber(matchAuthInput: MatchAuthInput!): Boolean!
   resetUserPassword(resetPasswordInput: ResetPasswordInput!): Boolean!
   deleteUser: Boolean!
@@ -170,6 +170,11 @@ input UpdateUserInput {
   picture: String
   snsAccount: String
   jobGroup: String
+}
+
+input AuthEmailInput {
+  email: String!
+  authCheck: Boolean!
 }
 
 input MatchAuthInput {
