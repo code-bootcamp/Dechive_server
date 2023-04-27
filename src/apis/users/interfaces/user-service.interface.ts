@@ -22,7 +22,7 @@ export interface IUsersServiceCheckEmail {
   email: User['email'];
 }
 
-export interface IUsersServiceSocailLoginProviderUpdate {
+export interface IUsersServiceSocialLoginProviderUpdate {
   id: User['id'];
   provider: PROVIDER_ENUM;
 }
