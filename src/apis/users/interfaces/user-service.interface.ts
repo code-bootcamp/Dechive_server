@@ -41,7 +41,7 @@ export interface IUsersServiceFindeOne {
 
 export interface IUsersServiceAuthEamil {
   email: User['email'];
-  qqq: boolean;
+  authCheck: boolean;
 }
 
 export interface IUsersServiceMathAuth {

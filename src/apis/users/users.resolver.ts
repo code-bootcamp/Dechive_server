@@ -48,7 +48,7 @@ export class UsersResolver {
   authEmail(
     @Args('email') email: string, //
   ): Promise<boolean> {
-    return this.usersService.authEmail({ email, qqq: true });
+    return this.usersService.authEmail({ email, authCheck: true });
   }
 
   @Mutation(() => Boolean)
