@@ -9,13 +9,17 @@ export class Product {
   @Field(() => String)
   id: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'text', nullable: true })
   @Field(() => String)
   name: string;
 
   @Column({ type: 'text' })
   @Field(() => String)
   url: string;
+
+  @Column({ type: 'text', nullable: true })
+  @Field(() => String)
+  description: string;
 
   @Column({ type: 'text', nullable: true })
   @Field(() => String, { nullable: true })

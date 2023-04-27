@@ -1,17 +1,22 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ogs = require('open-graph-scraper');
 
-export async function getOgImageUrl({ url }) {
+export function getOpenGraph({ url }) {
   const options = {
     url,
     onlyGetOpenGraphInfo: true,
     timeout: { request: 500 },
   };
-  const result = await ogs(options)
+  return ogs(options)
     .then((data) => {
       const { error, result } = data;
-      return error ? null : result.ogImage.url;
+      return error
+        ? null
+        : {
+            name: result.ogTitle,
+            imageUrl: result.ogImage.url,
+            description: result.ogDescription,
+          };
     })
     .catch();
-  return result;
 }

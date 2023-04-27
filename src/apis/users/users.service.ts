@@ -26,7 +26,7 @@ import {
   IUsersServiceIsEmail,
   IUsersServiceMathAuth,
   IUsersServiceResetPassword,
-  IUsersServiceSocailLoginProviderUpdate,
+  IUsersServiceSocialLoginProviderUpdate,
   IUsersServiceUpdateUser,
 } from './interfaces/user-service.interface';
 import { SnsAccountService } from '../snsAccount/snsAccount.service';
@@ -152,10 +152,10 @@ export class UsersService {
     });
   }
 
-  socailLoginProviderUpdate({
+  socialLoginProviderUpdate({
     id,
     provider,
-  }: IUsersServiceSocailLoginProviderUpdate): Promise<User> {
+  }: IUsersServiceSocialLoginProviderUpdate): Promise<User> {
     return this.usersRepository.save({ id, provider });
   }
 

@@ -7,7 +7,8 @@ import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { IContext } from 'src/commons/interfaces/context';
 import { UpdateBoardInput } from './dto/board-update.input';
 import { Product } from '../products/entities/product.entity';
-import { IBoardsServiceFetchsUserLiked } from './interfaces/board-service.interface';
+import { getOpenGraph } from 'src/commons/util/getOpenGraph';
+import { OpenGraph } from '../products/dto/openGraph.dto';
 
 @Resolver()
 export class BoardsResolver {
@@ -25,6 +26,13 @@ export class BoardsResolver {
   @Query(() => [Board])
   fetchBoards() {
     return this.boardsService.findAllBoards();
+  }
+
+  @Query(() => OpenGraph)
+  getOpenGraph(
+    @Args('url') url: string, //
+  ) {
+    return getOpenGraph({ url });
   }
 
   @UseGuards(DechiveAuthGuard('access'))

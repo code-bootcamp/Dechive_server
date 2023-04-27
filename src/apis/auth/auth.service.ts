@@ -122,7 +122,7 @@ export class AuthService {
       });
 
     if (user.provider !== provider)
-      user = await this.usersService.socailLoginProviderUpdate({
+      user = await this.usersService.socialLoginProviderUpdate({
         id: user.id,
         provider,
       });

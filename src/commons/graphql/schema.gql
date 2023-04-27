@@ -12,6 +12,7 @@ type Product {
   id: String!
   name: String!
   url: String!
+  description: String!
   picture: String
   board: Board!
 }
@@ -84,6 +85,12 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type OpenGraph {
+  name: String!
+  imageUrl: String!
+  description: String!
+}
+
 type FetchUser {
   user: User!
   boardCount: Int!
@@ -120,6 +127,7 @@ type Query {
   fetchLoginUser: User!
   fetchBoard(boardid: String!): Board!
   fetchBoards: [Board!]!
+  getOpenGraph(url: String!): OpenGraph!
   fetchUserBoards(userid: String!): [Board!]!
   fetchBestBoards: [Board!]!
   fetchProducts(userid: String!): [Product!]!
