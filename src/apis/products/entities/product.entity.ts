@@ -10,7 +10,7 @@ export class Product {
   id: string;
 
   @Column({ type: 'text', nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   name: string;
 
   @Column({ type: 'text' })
@@ -18,7 +18,7 @@ export class Product {
   url: string;
 
   @Column({ type: 'text', nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   description: string;
 
   @Column({ type: 'text', nullable: true })

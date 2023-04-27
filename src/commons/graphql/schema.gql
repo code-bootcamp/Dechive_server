@@ -10,9 +10,9 @@ type Hashtag {
 
 type Product {
   id: String!
-  name: String!
+  name: String
   url: String!
-  description: String!
+  description: String
   picture: String
   board: Board!
 }
