@@ -19,7 +19,7 @@ export class FilesService {
       awiatedFiles.map(
         (el) =>
           new Promise<string>((resolve, reject) => {
-            const fileName = randomUUID();
+            const fileName = randomUUID() + `.${el.filename.split('.')[1]}`;
             el.createReadStream()
               .pipe(storage.file(`origin/${fileName}`).createWriteStream())
               .on('finish', () =>
