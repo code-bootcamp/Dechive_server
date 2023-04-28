@@ -25,7 +25,7 @@ export class ProductsService {
           console.log(og);
           return this.productsRepository.save({
             ...createProductInput,
-            picture: og.imageUrl,
+            picture: og ? og.imageUrl : '',
           });
         },
       ),
