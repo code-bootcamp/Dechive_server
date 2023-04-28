@@ -1,5 +1,6 @@
 import { Storage } from '@google-cloud/storage';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import { IFilesServiceUpload } from './interfaces/files-service.interfacs';
 
 @Injectable()
@@ -18,15 +19,12 @@ export class FilesService {
       awiatedFiles.map(
         (el) =>
           new Promise<string>((resolve, reject) => {
+            const fileName = randomUUID();
             el.createReadStream()
-              .pipe(
-                storage
-                  .file(`origin/${encodeURIComponent(el.filename)}`)
-                  .createWriteStream(),
-              )
+              .pipe(storage.file(`origin/${fileName}`).createWriteStream())
               .on('finish', () =>
                 resolve(
-                  `https://storage.googleapis.com/${bucket}/origin/${el.filename}`,
+                  `https://storage.googleapis.com/${bucket}/origin/${fileName}`,
                 ),
               )
               .on('error', () => reject('false'));
