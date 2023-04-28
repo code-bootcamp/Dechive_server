@@ -21,5 +21,11 @@ export function getOpenGraph({ url }) {
             description: result.ogDescription,
           };
     })
-    .catch(() => null);
+    .catch(() => {
+      return {
+        name: '',
+        imageUrl: '',
+        description: '',
+      };
+    });
 }
