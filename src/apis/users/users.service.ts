@@ -100,10 +100,7 @@ export class UsersService {
     return result ? result : [];
   }
 
-  async findOneEmail({ email }: IUsersServiceFindOneEmail): Promise<User> {
-    if (!email || !email.includes('@'))
-      throw new ConflictException('올바르지 않은 이메일 형식입니다.');
-
+  findOneEmail({ email }: IUsersServiceFindOneEmail): Promise<User> {
     return this.usersRepository.findOne({ where: { email } });
   }
 
@@ -119,6 +116,7 @@ export class UsersService {
     const isEmail = await this.findOneEmail({ email });
 
     if (isEmail) throw new ConflictException('이미 사용중인 이메일 입니다.');
+
     return isEmail;
   }
 
