@@ -33,15 +33,16 @@ export class PicturesService {
 
   // storage 삭제
   storageDelete({ storageDelet }: IPicturesServiceStorageDelet): void {
-    const bucketName = process.env.GCP_BUCKET;
-
     const storage = new Storage({
       projectId: process.env.GCP_PROJECTID,
       keyFilename: process.env.GCP_KEY_FILENAME,
     });
 
     const deleteFile = async () => {
-      await storage.bucket(bucketName).file(`origin/${storageDelet}`).delete();
+      await storage
+        .bucket(process.env.GCP_BUCKET)
+        .file(`origin/${storageDelet}`)
+        .delete();
     };
     deleteFile().catch(console.error);
   }

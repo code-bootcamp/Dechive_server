@@ -18,13 +18,17 @@ export class UsersResolver {
   ) {}
 
   @Query(() => FetchUser)
-  fetchUser(@Args('userid') userid: string): Promise<FetchUser> {
+  fetchUser(
+    @Args('userid') userid: string, //
+  ): Promise<FetchUser> {
     return this.usersService.fetchUser({ id: userid });
   }
 
   @UseGuards(DechiveAuthGuard('access'))
   @Query(() => User)
-  fetchLoginUser(@Context() context: IContext): Promise<User> {
+  fetchLoginUser(
+    @Context() context: IContext, //
+  ): Promise<User> {
     return this.usersService.findOneUser({ id: context.req.user.id });
   }
 
