@@ -87,6 +87,7 @@ scalar DateTime
 
 type OpenGraph {
   name: String!
+  url: String!
   imageUrl: String!
   description: String!
 }

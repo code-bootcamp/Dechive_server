@@ -6,6 +6,9 @@ export class OpenGraph {
   name: string;
 
   @Field(() => String)
+  url: string;
+
+  @Field(() => String)
   imageUrl: string;
 
   @Field(() => String)
