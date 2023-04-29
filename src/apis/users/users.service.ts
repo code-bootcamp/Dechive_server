@@ -70,9 +70,7 @@ export class UsersService {
     return user;
   }
 
-  async fetchUser({
-    id, //
-  }: IUsersServiceFetchUser): Promise<FetchUser> {
+  async fetchUser({ id }: IUsersServiceFetchUser): Promise<FetchUser> {
     const user = await this.findOneUser({ id });
 
     return {
@@ -105,11 +103,11 @@ export class UsersService {
   }
 
   async checkEmail({ email }: IUsersServiceCheckEmail): Promise<User> {
-    const isEmail = await this.findOneEmail({ email });
+    const checkEmail = await this.findOneEmail({ email });
 
-    if (!isEmail) throw new ConflictException('등록되지 않은 회원 입니다.');
+    if (!checkEmail) throw new ConflictException('등록되지 않은 회원 입니다.');
 
-    return isEmail;
+    return checkEmail;
   }
 
   async isEamil({ email }: IUsersServiceIsEmail): Promise<User> {
@@ -123,7 +121,6 @@ export class UsersService {
   hashPassword({
     password,
   }: IUsersServiceHashPassword): Promise<User['password']> {
-    if (!password) throw new BadRequestException('비밀번호 입력해 주세요');
     return bcrypt.hash(password, 10);
   }
 
@@ -246,9 +243,11 @@ export class UsersService {
   }: IUsersServiceResetPassword): Promise<boolean> {
     const { email, password } = resetPasswordInput;
     const user = await this.findOneEmail({ email });
-    const hashPassword = await this.hashPassword({ password });
 
-    await this.usersRepository.save({ ...user, password: hashPassword });
+    await this.usersRepository.save({
+      ...user,
+      password: await this.hashPassword({ password }),
+    });
     return true;
   }
 
