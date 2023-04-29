@@ -20,7 +20,7 @@ export class ProductsService {
         async (createProductInput: CreateProductInput) => {
           let og: OpenGraph;
           try {
-            og = await getOpenGraph({ url: createProductInput.url });
+            og = await getOpenGraph({ ...createProductInput });
           } catch (error) {}
           console.log(og);
           return this.productsRepository.save({
