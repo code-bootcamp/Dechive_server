@@ -4,7 +4,7 @@ import { CommentsService } from './comment.service';
 import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { IContext } from 'src/commons/interfaces/context';
-import { CreateCommentInput } from './dto/comment-create.input';
+import { CreateCommentInput } from './dto/comments-create.input';
 
 @Resolver()
 export class CommentsResolver {
