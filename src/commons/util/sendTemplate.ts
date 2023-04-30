@@ -1,4 +1,4 @@
-export const dechiveTemplate = (authNumber) => {
+export const dechiveTemplate = (authNumber: number) => {
   return `
     <html>
         <body>
