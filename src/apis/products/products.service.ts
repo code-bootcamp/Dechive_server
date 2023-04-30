@@ -1,11 +1,13 @@
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Product } from './entities/product.entity';
-import { CreateProductInput } from './dto/product-create.input';
-import { UpdateProductInput } from './dto/product-update.input';
 import { getOpenGraph } from 'src/commons/util/getOpenGraph';
-import { OpenGraph } from './dto/openGraph.dto';
+import {
+  IProductsServiceCreate,
+  IProductsServiceDelete,
+  IProductsServiceUpdate,
+} from './interfaces/products-service.interface';
 
 @Injectable()
 export class ProductsService {
@@ -14,46 +16,40 @@ export class ProductsService {
     private readonly productsRepository: Repository<Product>, //
   ) {}
 
-  async createProducts({ createProductInputs }): Promise<Product[]> {
+  async createProducts({
+    createProductInputs,
+  }: IProductsServiceCreate): Promise<Product[]> {
     return Promise.all(
-      createProductInputs.map(
-        async (createProductInput: CreateProductInput) => {
-          let og: OpenGraph;
-          try {
-            og = await getOpenGraph({ ...createProductInput });
-          } catch (error) {}
-          console.log(og);
+      createProductInputs //
+        .map(async (createProductInput) => {
           return this.productsRepository.save({
             ...createProductInput,
-            picture: og ? og.imageUrl : '',
+            picture:
+              (await getOpenGraph({ ...createProductInput })).imageUrl ?? '',
           });
-        },
-      ),
-    ).then();
+        }),
+    );
   }
 
-  async updateProducts({ updateProductInputs }): Promise<Product[]> {
+  async updateProducts({
+    updateProductInputs,
+  }: IProductsServiceUpdate): Promise<Product[]> {
     return Promise.all(
-      updateProductInputs.map(
-        async (updateProductInput: UpdateProductInput) => {
-          let { picture } = updateProductInput;
-          let og: OpenGraph;
-          if (!picture) {
-            try {
-              og = await getOpenGraph({ ...updateProductInput });
-              picture = og.imageUrl;
-            } catch (error) {}
-          }
+      updateProductInputs //
+        .map(async (updateProductInput) => {
           return this.productsRepository.save({
             ...updateProductInput,
-            picture,
+            picture:
+              updateProductInput.picture ??
+              (await getOpenGraph({ ...updateProductInput })).imageUrl,
           });
-        },
-      ),
-    ).then();
+        }),
+    );
   }
 
-  async delete({ boardid }) {
+  async delete({
+    boardid, //
+  }: IProductsServiceDelete): Promise<DeleteResult> {
     return this.productsRepository.delete({
       board: { id: boardid },
     });

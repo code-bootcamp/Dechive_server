@@ -7,6 +7,11 @@ import {
 } from '@nestjs/common';
 import { Reply } from './entities/reply.entity';
 import { CommentsService } from '../comments/comment.service';
+import {
+  IRepliesServiceCreate,
+  IRepliesServiceDelete,
+  IRepliesServiceFindOne,
+} from './interfaces/replies-service.interface';
 
 @Injectable()
 export class RepliesService {
@@ -17,7 +22,11 @@ export class RepliesService {
     private readonly commentsService: CommentsService,
   ) {}
 
-  async findOneReply({ replyid }): Promise<Reply> {
+  async findOneReply(
+    {
+      replyid, //
+    }: IRepliesServiceFindOne, //
+  ): Promise<Reply> {
     const reply = await this.repliesRepository.findOne({
       where: { id: replyid },
       relations: ['user'],
@@ -26,10 +35,12 @@ export class RepliesService {
     return reply;
   }
 
-  async createReply({
-    userid,
-    createReplyInput, //
-  }): Promise<Reply> {
+  async createReply(
+    {
+      userid,
+      createReplyInput, //
+    }: IRepliesServiceCreate, //
+  ): Promise<Reply> {
     const { commentid, content } = createReplyInput;
     await this.commentsService.findOneComment({ commentid });
     return this.repliesRepository.save({
@@ -39,10 +50,12 @@ export class RepliesService {
     });
   }
 
-  async deleteReply({
-    userid,
-    replyid, //
-  }): Promise<DeleteResult> {
+  async deleteReply(
+    {
+      userid,
+      replyid, //
+    }: IRepliesServiceDelete, //
+  ): Promise<DeleteResult> {
     const reply = await this.findOneReply({ replyid });
     if (reply.user.id !== userid)
       throw new UnauthorizedException('삭제 권한이 없습니다.');
