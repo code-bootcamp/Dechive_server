@@ -2,7 +2,7 @@ import { HttpException } from '@nestjs/common';
 import axios from 'axios';
 import { Youtube } from 'src/apis/youtube/dto/youtube.dto';
 
-export async function requestYoutubeAPI({ keyword }): Promise<Youtube[]> {
+export const requestYoutubeAPI = async ({ keyword }): Promise<Youtube[]> => {
   try {
     const apiClient = axios.create({
       baseURL: 'https://www.googleapis.com/youtube/v3',
@@ -50,4 +50,4 @@ export async function requestYoutubeAPI({ keyword }): Promise<Youtube[]> {
     console.log('유튜브 API에러');
     throw new HttpException('YoutubeAPI is broken', 401);
   }
-}
+};

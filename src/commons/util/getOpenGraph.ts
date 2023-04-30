@@ -2,8 +2,9 @@ import { HttpException } from '@nestjs/common';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import { parse } from 'parse-open-graph';
+import { async } from 'rxjs';
 
-export async function getOpenGraph({ url }) {
+export const getOpenGraph = async ({ url }) => {
   const getResult = await getHTML({ url });
   const html = getResult.data;
   const $ = cheerio.load(html);
@@ -23,8 +24,8 @@ export async function getOpenGraph({ url }) {
     imageUrl: imageUrl ? imageUrl : '',
     description: description ? description : '',
   };
-}
-const getHTML = ({ url }) => {
+};
+const getHTML = async ({ url }) => {
   return axios
     .get(url, {
       headers: {
