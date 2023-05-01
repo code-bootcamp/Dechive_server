@@ -119,7 +119,12 @@ export class FollowingsService {
   }: IFollowingsServiceFindFollwingBoards): Promise<Following[]> {
     return this.followingRepository.find({
       where: { followingid: id },
-      relations: ['users', 'users.boards'],
+      relations: [
+        'users',
+        'users.boards',
+        'users.boards.writer',
+        'users.boards.pictures',
+      ],
       order: { users: { boards: { createdAt: 'DESC' } } },
       take: 12,
     });

@@ -1,5 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from 'src/apis/users/entities/user.entity';
 import { Comments } from 'src/apis/comments/entities/comment.entity';
 
@@ -14,7 +20,7 @@ export class Reply {
   @Field(() => String)
   content: string;
 
-  @ManyToOne(() => Comments, {
+  @ManyToOne(() => Comments, (comment) => comment.replies, {
     onDelete: 'CASCADE',
   })
   @Field(() => Comments)
@@ -25,4 +31,8 @@ export class Reply {
   })
   @Field(() => User)
   user: User;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 }
