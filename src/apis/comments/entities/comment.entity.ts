@@ -1,5 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Board } from '../../boards/entities/board.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 
@@ -25,4 +31,8 @@ export class Comments {
   })
   @Field(() => User)
   user: User;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 }

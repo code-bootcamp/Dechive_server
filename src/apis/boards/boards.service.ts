@@ -127,6 +127,10 @@ export class BoardsService {
     });
   }
 
+  async findAllProduct(): Promise<Product[]> {
+    return [].concat(...(await this.findAllBoards()).map((e) => e.products));
+  }
+
   findUserBoards(
     {
       id, //

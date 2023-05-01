@@ -15,7 +15,7 @@ import { FollowingsModule } from './apis/followings/following.module';
 import { FolloweesModule } from './apis/followees/followees.module';
 import { FilesModule } from './apis/files/files.module';
 import { CommentsModule } from './apis/comments/comment.module';
-import { RepliesModule } from './apis/Replies/reply.module';
+import { RepliesModule } from './apis/replies/reply.module';
 
 @Module({
   imports: [
