@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { getFollowingByFollowees } from 'src/commons/util/getFollowing-Followee';
 import { Repository } from 'typeorm';
 import { FolloweesService } from '../followees/followees.service';
 import { User } from '../users/entities/user.entity';
@@ -89,7 +90,7 @@ export class FollowingsService {
     });
 
     let user = [];
-    console.log(result);
+
     if (result) {
       const users = [];
       result.forEach((el) => {
@@ -97,20 +98,12 @@ export class FollowingsService {
       });
 
       const guest = await this.usersService.findOneUser({ id: guestid });
-      user = await this.usersService.findByUsers({ users });
 
-      const followeeid = guest.followees.map((el) => el.followeeid);
-      const followingid = guest.followings.map((el) => el.followingid);
-
-      user.forEach((el) => {
-        el['followeesCount'] = el.followees.length;
-        el['followingsCount'] = el.followings.length;
-
-        el['followeeStatus'] = followeeid.includes(el.id) ?? false;
-        el['followingStatus'] = followingid.includes(el.id) ?? false;
+      user = getFollowingByFollowees({
+        guest,
+        user: await this.usersService.findByUsers({ users }),
       });
     }
-    console.log(user);
     return user;
   }
 
