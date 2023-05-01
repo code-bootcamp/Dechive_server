@@ -170,6 +170,7 @@ export class BoardsService {
         views: 'DESC',
         createdAt: 'DESC',
       },
+      take: 10,
     });
   }
 
