@@ -48,6 +48,6 @@ export const requestYoutubeAPI = async ({ keyword }): Promise<Youtube[]> => {
     );
   } catch (error) {
     console.log('유튜브 API에러');
-    throw new HttpException('YoutubeAPI is broken', 401);
+    throw new HttpException('YoutubeAPI is Locked', 423);
   }
 };

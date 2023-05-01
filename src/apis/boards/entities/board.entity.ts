@@ -89,4 +89,7 @@ export class Board {
   @Column({ type: Number, default: 0 })
   @Field(() => Int, { defaultValue: 0 })
   likes: number;
+
+  @Field(() => Boolean, { defaultValue: false })
+  like: boolean;
 }
