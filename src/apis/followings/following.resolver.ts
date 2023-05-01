@@ -4,6 +4,7 @@ import { IContext } from 'src/commons/interfaces/context';
 import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { User } from '../users/entities/user.entity';
 import { FetchFollowing } from './dto/followings-fetch.return-type';
+import { Following } from './entities/followings.entity';
 import { FollowingsService } from './following.service';
 
 @Resolver()
@@ -30,5 +31,14 @@ export class FollowingsResolver {
   ): Promise<FetchFollowing> {
     const guestid = context.req.user.id;
     return this.followingsService.fetchFollowings({ id: userid, guestid });
+  }
+
+  @UseGuards(DechiveAuthGuard('access'))
+  @Query(() => [Following])
+  fetchFollowingBoards(
+    @Context() context: IContext, //
+  ): Promise<Following[]> {
+    const { id } = context.req.user;
+    return this.followingsService.fetchFollowingBoards({ id });
   }
 }

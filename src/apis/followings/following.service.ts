@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Board } from '../boards/entities/board.entity';
 import { FolloweesService } from '../followees/followees.service';
+import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { FetchFollowing } from './dto/followings-fetch.return-type';
 import { Following } from './entities/followings.entity';
 import {
   IFollowingsServiceFetchFollwings,
   IFollowingsServiceFindFollwing,
+  IFollowingsServiceFindFollwingBoards,
   IFollowingsServiceUpdate,
 } from './interfaces/followings-service.interface';
 
@@ -104,5 +107,16 @@ export class FollowingsService {
       user: user,
       following: following ? true : false,
     };
+  }
+
+  fetchFollowingBoards({
+    id,
+  }: IFollowingsServiceFindFollwingBoards): Promise<Following[]> {
+    return this.followingRepository.find({
+      where: { followingid: id },
+      relations: ['users', 'users.boards'],
+      order: { users: { boards: { createdAt: 'DESC' } } },
+      take: 12,
+    });
   }
 }
