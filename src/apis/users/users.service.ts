@@ -73,17 +73,19 @@ export class UsersService {
   async fetchUser({ id }: IUsersServiceFetchUser): Promise<FetchUser> {
     const user = await this.findOneUser({ id });
 
+    user['followeesCount'] = user.followees.length;
+    user['followingsCount'] = user.followings.length;
+
     return {
       user,
       boardCount: user.boards.length,
-      followingCount: user.followings.length,
-      followeeCount: user.followees.length,
     };
   }
 
   findByUsers({ users }: IUsersServiceFindByUsers): Promise<User[]> {
     return this.usersRepository.find({
       where: { id: In(users) },
+      relations: ['followings', 'followees'],
     });
   }
 

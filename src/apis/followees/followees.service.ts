@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
-import { FetchFollowee } from './dto/followees-fetch.return-type';
 import { Followee } from './entities/followees.entity';
 import {
   IFolloweesServiceCreateFollowee,
@@ -57,28 +57,33 @@ export class FolloweesService {
   async fetchFollowees({
     id,
     guestid,
-  }: IFollowingsServiceFetchFollowees): Promise<FetchFollowee> {
+  }: IFollowingsServiceFetchFollowees): Promise<User[]> {
     const result = await this.followeeRepository.find({
       where: { users: [{ id }] },
       relations: ['users'],
     });
-
-    let followee,
-      user = [];
+    let user = [];
 
     if (result) {
       const users = [];
       result.forEach((el) => {
         if (el.followeeid) users.push(el.followeeid);
       });
-
-      followee = result.filter((el) => el.followeeid === guestid).length;
+      const guest = await this.usersService.findOneUser({ id: guestid });
       user = await this.usersService.findByUsers({ users });
-    }
 
-    return {
-      user,
-      followee: followee ? true : false,
-    };
+      const followeeid = guest.followees.map((el) => el.followeeid);
+      const followingid = guest.followings.map((el) => el.followingid);
+
+      user.forEach((el) => {
+        el['followeesCount'] = el.followees.length;
+        el['followingsCount'] = el.followings.length;
+
+        el['followeeStatus'] = followeeid.includes(el.id) ?? false;
+        el['followingStatus'] = followingid.includes(el.id) ?? false;
+      });
+    }
+    console.log(user);
+    return user;
   }
 }

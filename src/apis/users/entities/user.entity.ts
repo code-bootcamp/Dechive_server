@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Board } from 'src/apis/boards/entities/board.entity';
 import { Followee } from 'src/apis/followees/entities/followees.entity';
 import { Following } from 'src/apis/followings/entities/followings.entity';
@@ -59,15 +59,25 @@ export class User {
   @ManyToMany(() => Following, (followings) => followings.users, {
     onDelete: 'CASCADE',
   })
-  @Field(() => [Following])
   followings: Following[];
+
+  @Field(() => Int)
+  followingsCount: number;
+
+  @Field(() => Boolean, { defaultValue: false })
+  followeeStatus: boolean;
 
   @JoinTable()
   @ManyToMany(() => Followee, (followees) => followees.users, {
     onDelete: 'CASCADE',
   })
-  @Field(() => [Followee])
   followees: Followee[];
+
+  @Field(() => Int)
+  followeesCount: number;
+
+  @Field(() => Boolean, { defaultValue: false })
+  followingStatus: boolean;
 
   @OneToMany(() => Board, (boards) => boards.writer, {
     onDelete: 'CASCADE',
