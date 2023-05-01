@@ -14,3 +14,7 @@ export interface IFollowingsServiceFetchFollwings {
 export interface IFollowingsServiceFindFollwing {
   followingid: User['id'];
 }
+
+export interface IFollowingsServiceFindFollwingBoards {
+  id: User['id'];
+}

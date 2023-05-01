@@ -136,6 +136,7 @@ type Query {
   searchBoards(keyword: String!): [Board!]!
   fetchFollowees(userid: String!): FetchFollowee!
   fetchFollowings(userid: String!): FetchFollowing!
+  fetchFollowingBoards: [Following!]!
   fetchYoutube: [Youtube!]!
 }
 
