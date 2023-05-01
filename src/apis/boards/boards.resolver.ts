@@ -55,6 +55,11 @@ export class BoardsResolver {
     return this.boardsService.fetchProductsFromOneUser({ userid });
   }
 
+  @Query(() => [Product])
+  fetchAllProducts() {
+    return this.boardsService.findAllProduct();
+  }
+
   @UseGuards(DechiveAuthGuard('access'))
   @Query(() => [Board])
   fetchBoardsUserLiked(
