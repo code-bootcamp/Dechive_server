@@ -17,12 +17,6 @@ type Product {
   board: Board!
 }
 
-type Followee {
-  id: String!
-  followeeid: String!
-  users: [User!]!
-}
-
 type Following {
   id: String!
   followingid: String!
@@ -44,8 +38,10 @@ type User {
   jobGroup: String!
   provider: String!
   snsAccounts: [SnsAccount!]
-  followings: [Following!]!
-  followees: [Followee!]!
+  followingsCount: Int!
+  followeeStatus: Boolean!
+  followeesCount: Int!
+  followingStatus: Boolean!
   boards: [Board!]
   like: [Board!]
 }
@@ -95,8 +91,6 @@ type OpenGraph {
 type FetchUser {
   user: User!
   boardCount: Int!
-  followingCount: Int!
-  followeeCount: Int!
 }
 
 type Youtube {
@@ -104,16 +98,6 @@ type Youtube {
   videoUrl: String!
   thumbnailUrl: String!
   views: Float!
-}
-
-type FetchFollowee {
-  user: [User!]!
-  followee: Boolean!
-}
-
-type FetchFollowing {
-  user: [User!]!
-  following: Boolean!
 }
 
 type Reply {
@@ -134,8 +118,8 @@ type Query {
   fetchProducts(userid: String!): [Product!]!
   fetchBoardsUserLiked(userid: String!): [Board!]!
   searchBoards(keyword: String!): [Board!]!
-  fetchFollowees(userid: String!): FetchFollowee!
-  fetchFollowings(userid: String!): FetchFollowing!
+  fetchFollowees(userid: String!): [User!]!
+  fetchFollowings(userid: String!): [User!]!
   fetchFollowingBoards: [Following!]!
   fetchYoutube: [Youtube!]!
 }

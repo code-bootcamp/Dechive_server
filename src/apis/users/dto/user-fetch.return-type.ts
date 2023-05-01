@@ -8,10 +8,4 @@ export class FetchUser {
 
   @Field(() => Int)
   boardCount: number;
-
-  @Field(() => Int)
-  followingCount: number;
-
-  @Field(() => Int)
-  followeeCount: number;
 }
