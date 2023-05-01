@@ -16,6 +16,7 @@ import { FolloweesModule } from './apis/followees/followees.module';
 import { FilesModule } from './apis/files/files.module';
 import { CommentsModule } from './apis/comments/comment.module';
 import { RepliesModule } from './apis/replies/reply.module';
+import { ProductsModule } from './apis/products/products.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { RepliesModule } from './apis/replies/reply.module';
     FilesModule,
     FolloweesModule,
     FollowingsModule,
+    ProductsModule,
     RepliesModule,
     UsersMoulde,
     YoutubeModule,

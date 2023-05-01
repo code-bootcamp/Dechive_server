@@ -17,16 +17,14 @@ import {
 export class CommentsService {
   constructor(
     @InjectRepository(Comments)
-    private readonly commentsRepository: Repository<Comments>, //
+    private readonly commentsRepository: Repository<Comments>,
 
     private readonly boardsService: BoardsService,
   ) {}
 
-  async findOneComment(
-    {
-      commentid, //
-    }: ICommentsServiceFindOne, //
-  ): Promise<Comments> {
+  async findOneComment({
+    commentid, //
+  }: ICommentsServiceFindOne): Promise<Comments> {
     const comment = await this.commentsRepository.findOne({
       where: { id: commentid },
       relations: ['user'],
@@ -35,12 +33,10 @@ export class CommentsService {
     return comment;
   }
 
-  async createComment(
-    {
-      userid,
-      createCommentInput, //
-    }: ICommentsServiceCreate, //
-  ): Promise<Comments> {
+  async createComment({
+    userid,
+    createCommentInput,
+  }: ICommentsServiceCreate): Promise<Comments> {
     // 게시물이 존재하는지 확인
     const { boardid, content } = createCommentInput;
     await this.boardsService.findOneBoard({ boardid });
@@ -51,12 +47,10 @@ export class CommentsService {
     });
   }
 
-  async deleteComment(
-    {
-      userid,
-      commentid, //
-    }: ICommentsServiceDelete, //
-  ): Promise<DeleteResult> {
+  async deleteComment({
+    userid,
+    commentid,
+  }: ICommentsServiceDelete): Promise<DeleteResult> {
     const comment = await this.findOneComment({ commentid });
     if (comment.user.id !== userid)
       throw new UnauthorizedException('삭제 권한이 없습니다.');

@@ -8,7 +8,8 @@ import { IContext } from 'src/commons/interfaces/context';
 import { UpdateBoardInput } from './dto/board-update.input';
 import { Product } from '../products/entities/product.entity';
 import { getOpenGraph } from 'src/commons/util/getOpenGraph';
-import { OpenGraph } from '../products/dto/openGraph.dto';
+import { IOpenGraph } from 'src/apis/products/interfaces/openGraph.interface';
+import { CreateProductInput } from '../products/dto/product-create.input';
 
 @Resolver()
 export class BoardsResolver {
@@ -28,7 +29,7 @@ export class BoardsResolver {
     return this.boardsService.findAllBoards();
   }
 
-  @Query(() => OpenGraph, { nullable: true })
+  @Query(() => CreateProductInput)
   getOpenGraph(
     @Args('url') url: string, //
   ) {
@@ -46,18 +47,13 @@ export class BoardsResolver {
   }
 
   @Query(() => [Board])
-  fetchBestBoards() {
-    return this.boardsService.findBestBoards();
+  fetchTop10() {
+    return this.boardsService.findTop10();
   }
 
   @Query(() => [Product])
-  fetchProducts(@Args('userid') userid: string) {
-    return this.boardsService.fetchProductsFromOneUser({ userid });
-  }
-
-  @Query(() => [Product])
-  fetchAllProducts() {
-    return this.boardsService.findAllProduct();
+  fetchUserProducts(@Args('userid') userid: string) {
+    return this.boardsService.findProductsFromOneUser({ userid });
   }
 
   @UseGuards(DechiveAuthGuard('access'))
@@ -67,7 +63,7 @@ export class BoardsResolver {
     @Context() context: IContext,
   ) {
     const { id } = context.req.user;
-    return this.boardsService.fetchBoardUserLiked({ id, userid });
+    return this.boardsService.findBoardUserLiked({ id, userid });
   }
 
   @Query(() => [Board])

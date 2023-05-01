@@ -16,6 +16,10 @@ export class ProductsService {
     private readonly productsRepository: Repository<Product>, //
   ) {}
 
+  findAll(): Promise<Product[]> {
+    return this.productsRepository.find();
+  }
+
   async createProducts({
     createProductInputs,
   }: IProductsServiceCreate): Promise<Product[]> {

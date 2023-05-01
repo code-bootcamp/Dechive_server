@@ -2,9 +2,9 @@ import axios from 'axios';
 import { load } from 'cheerio';
 import { parse } from 'parse-open-graph';
 import { HttpException } from '@nestjs/common';
-import { OpenGraph } from 'src/apis/products/dto/openGraph.dto';
+import { IOpenGraph } from 'src/apis/products/interfaces/openGraph.interface';
 
-export const getOpenGraph = async ({ url }): Promise<OpenGraph> => {
+export const getOpenGraph = async ({ url }): Promise<IOpenGraph> => {
   const html = (await getHTML({ url })).data;
   const $ = load(html);
   const meta = parse(

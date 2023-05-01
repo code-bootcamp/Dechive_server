@@ -40,12 +40,10 @@ export class BoardsService {
     private readonly usersService: UsersService,
   ) {}
 
-  async findOneBoard(
-    {
-      isView,
-      boardid, //
-    }: IBoardsServiceFetchBoard, //
-  ): Promise<Board> {
+  async findOneBoard({
+    isView,
+    boardid, //
+  }: IBoardsServiceFetchBoard): Promise<Board> {
     const board = await this.boardsRepository.findOne({
       where: { id: boardid },
       relations: [
@@ -70,11 +68,9 @@ export class BoardsService {
     return board;
   }
 
-  async findByTitle(
-    {
-      title, //
-    }: IBoardsServiceFindByTitle, //
-  ): Promise<string[]> {
+  async findByTitle({
+    title, //
+  }: IBoardsServiceFindByTitle): Promise<string[]> {
     const result = await this.boardsRepository
       .find({
         where: { title },
@@ -84,11 +80,9 @@ export class BoardsService {
     return result ? result : [];
   }
 
-  async searchBoards(
-    {
-      keyword, //
-    }: IBoardsServiceSearchBoards, //
-  ): Promise<Board[]> {
+  async searchBoards({
+    keyword, //
+  }: IBoardsServiceSearchBoards): Promise<Board[]> {
     let result = [];
     await Promise.all([
       this.findByTitle({ title: keyword }),
@@ -136,16 +130,10 @@ export class BoardsService {
     });
   }
 
-  async findAllProduct(): Promise<Product[]> {
-    return [].concat(...(await this.findAllBoards()).map((e) => e.products));
-  }
-
-  findUserBoards(
-    {
-      id, //
-      userid,
-    }: IBoardsServiceFindUserBoards, //
-  ): Promise<Board[]> {
+  findUserBoards({
+    id, //
+    userid,
+  }: IBoardsServiceFindUserBoards): Promise<Board[]> {
     return this.boardsRepository.find({
       where: {
         writer: { id: userid ? userid : id },
@@ -167,7 +155,7 @@ export class BoardsService {
     });
   }
 
-  async findBestBoards(): Promise<Board[]> {
+  async findTop10(): Promise<Board[]> {
     return this.boardsRepository.find({
       relations: [
         'writer',
@@ -189,11 +177,9 @@ export class BoardsService {
     });
   }
 
-  async fetchProductsFromOneUser(
-    {
-      userid, //
-    }: IBoardsServiceFetchProductsByUserid, //
-  ): Promise<Product[]> {
+  async findProductsFromOneUser({
+    userid, //
+  }: IBoardsServiceFetchProductsByUserid): Promise<Product[]> {
     return [].concat(
       ...(await this.usersService.findOneUser({ id: userid })).boards.map(
         (board) => board.products,
@@ -201,22 +187,18 @@ export class BoardsService {
     );
   }
 
-  async fetchBoardUserLiked(
-    {
-      id, //
-      userid,
-    }: IBoardsServiceFetchsUserLiked, //
-  ): Promise<Board[]> {
+  async findBoardUserLiked({
+    id, //
+    userid,
+  }: IBoardsServiceFetchsUserLiked): Promise<Board[]> {
     return (await this.usersService.findOneUser({ id: userid ? userid : id }))
       .like;
   }
 
-  async createBoard(
-    {
-      userid, //
-      createBoardInput,
-    }: IBoardsServiceCreateBoard, //
-  ): Promise<Board> {
+  async createBoard({
+    userid, //
+    createBoardInput,
+  }: IBoardsServiceCreateBoard): Promise<Board> {
     // bulk insert 활용한 최적화 필요
     let hashtags: Hashtag[];
     if (createBoardInput?.hashtags) {
@@ -239,13 +221,11 @@ export class BoardsService {
     });
   }
 
-  async updateBoard(
-    {
-      userid,
-      boardid,
-      updateBoardInput, //
-    }: IBoardsServiceUpdateBoard, //
-  ): Promise<Board> {
+  async updateBoard({
+    userid,
+    boardid,
+    updateBoardInput, //
+  }: IBoardsServiceUpdateBoard): Promise<Board> {
     const prevBoard = await this.findOneBoard({ boardid });
     if (prevBoard.writer.id !== userid)
       throw new UnauthorizedException('수정 권한이 없습니다.');
@@ -293,12 +273,10 @@ export class BoardsService {
     });
   }
 
-  async deleteBoard(
-    {
-      userid, //
-      boardid,
-    }: IBoardsServiceDeleteBoard, //
-  ): Promise<DeleteResult> {
+  async deleteBoard({
+    userid, //
+    boardid,
+  }: IBoardsServiceDeleteBoard): Promise<DeleteResult> {
     const prevBoard = await this.findOneBoard({ boardid });
     if (prevBoard.writer.id !== userid)
       throw new UnauthorizedException('삭제 권한이 없습니다.');
@@ -306,12 +284,10 @@ export class BoardsService {
     return this.boardsRepository.delete({ id: boardid });
   }
 
-  async updateBoardLiker(
-    {
-      userid, //
-      boardid,
-    }: IBoardsServiceUpdateBoardLiker, //
-  ): Promise<boolean> {
+  async updateBoardLiker({
+    userid, //
+    boardid,
+  }: IBoardsServiceUpdateBoardLiker): Promise<boolean> {
     const prevBoard = await this.findOneBoard({ boardid });
     const index = prevBoard.likers.findIndex((el) => el.id === userid);
     const Added = index === -1;

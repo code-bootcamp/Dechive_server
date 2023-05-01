@@ -14,7 +14,7 @@ export class CommentsResolver {
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Comments)
   async createComment(
-    @Args('createCommentInput') createCommentInput: CreateCommentInput, //
+    @Args('createCommentInput') createCommentInput: CreateCommentInput,
     @Context() context: IContext,
   ) {
     const userid = context.req.user.id;
@@ -27,7 +27,7 @@ export class CommentsResolver {
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Boolean)
   async deleteComment(
-    @Args('commentid') commentid: string, //
+    @Args('commentid') commentid: string,
     @Context() context: IContext,
   ) {
     const userid = context.req.user.id;
