@@ -20,7 +20,7 @@ export class Reply {
   @Field(() => String)
   content: string;
 
-  @ManyToOne(() => Comments, {
+  @ManyToOne(() => Comments, (comment) => comment.replies, {
     onDelete: 'CASCADE',
   })
   @Field(() => Comments)

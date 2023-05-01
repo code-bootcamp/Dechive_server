@@ -55,6 +55,9 @@ export class BoardsService {
         'hashtags',
         'likers',
         'pictures',
+        'comments.replies',
+        'comments.replies.user',
+        'comments.user',
       ],
     });
     if (!board) throw new ConflictException('존재 하지 않는 게시물입니다');
@@ -104,6 +107,7 @@ export class BoardsService {
         'hashtags',
         'likers',
         'pictures',
+        'comments.reply',
       ],
       order: {
         createdAt: 'DESC',
@@ -120,6 +124,7 @@ export class BoardsService {
         'hashtags',
         'likers',
         'pictures',
+        'comments.reply',
       ],
       order: {
         createdAt: 'DESC',
@@ -148,6 +153,7 @@ export class BoardsService {
         'hashtags',
         'likers',
         'pictures',
+        'comments.reply',
       ],
       order: {
         createdAt: 'DESC',
@@ -164,6 +170,8 @@ export class BoardsService {
         'hashtags',
         'likers',
         'pictures',
+        'comments.reply',
+        'comments.user',
       ],
       order: {
         likes: 'DESC',
