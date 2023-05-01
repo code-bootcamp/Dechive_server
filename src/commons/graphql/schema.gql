@@ -89,6 +89,9 @@ type Board {
   createdAt: DateTime!
   views: Int!
   likes: Int!
+
+  like: Boolean!
+
 }
 
 type OpenGraph {
@@ -197,6 +200,9 @@ input CreateBoardInput {
 input CreateProductInput {
   name: String!
   url: String!
+  imageUrl: String!
+  description: String!
+
 }
 
 input UpdateBoardInput {
@@ -211,6 +217,10 @@ input UpdateBoardInput {
 input UpdateProductInput {
   name: String!
   url: String!
+
+  imageUrl: String!
+  description: String!
+
   picture: String
 }
 

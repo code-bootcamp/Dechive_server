@@ -36,6 +36,6 @@ const getHTML = async ({ url }) => {
       timeout: 5000,
     })
     .catch(() => {
-      throw new HttpException('잘못된 주소입니다', 401);
+      throw new HttpException('잘못된 주소입니다', 400);
     });
 };
