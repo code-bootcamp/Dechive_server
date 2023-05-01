@@ -107,7 +107,9 @@ export class BoardsService {
         'hashtags',
         'likers',
         'pictures',
-        'comments.reply',
+        'comments.replies',
+        'comments.replies.user',
+        'comments.user',
       ],
       order: {
         createdAt: 'DESC',
@@ -124,7 +126,9 @@ export class BoardsService {
         'hashtags',
         'likers',
         'pictures',
-        'comments.reply',
+        'comments.replies',
+        'comments.replies.user',
+        'comments.user',
       ],
       order: {
         createdAt: 'DESC',
@@ -153,7 +157,9 @@ export class BoardsService {
         'hashtags',
         'likers',
         'pictures',
-        'comments.reply',
+        'comments.replies',
+        'comments.replies.user',
+        'comments.user',
       ],
       order: {
         createdAt: 'DESC',
@@ -170,7 +176,8 @@ export class BoardsService {
         'hashtags',
         'likers',
         'pictures',
-        'comments.reply',
+        'comments.replies',
+        'comments.replies.user',
         'comments.user',
       ],
       order: {
