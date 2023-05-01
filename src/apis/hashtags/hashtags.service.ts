@@ -14,11 +14,9 @@ export class HashtagsService {
     private readonly hashtagsRepository: Repository<Hashtag>, //
   ) {}
 
-  async findByHash(
-    {
-      hashtag, //
-    }: IHashtagsServiceFindByHash, //
-  ): Promise<string[]> {
+  async findByHash({
+    hashtag, //
+  }: IHashtagsServiceFindByHash): Promise<string[]> {
     const result = await this.hashtagsRepository
       .findOne({
         where: { hashtag },
@@ -29,11 +27,9 @@ export class HashtagsService {
     return result ? result : [];
   }
 
-  createHashtags(
-    {
-      hashtags, //
-    }: IHashtagsServiceCreate, //
-  ): Promise<Hashtag[]> {
+  createHashtags({
+    hashtags, //
+  }: IHashtagsServiceCreate): Promise<Hashtag[]> {
     return Promise.all(
       hashtags.map(async (hashtagWithOutSharp: string) => {
         let hashtag = hashtagWithOutSharp;

@@ -89,9 +89,7 @@ type Board {
   createdAt: DateTime!
   views: Int!
   likes: Int!
-
   like: Boolean!
-
 }
 
 type OpenGraph {
@@ -120,11 +118,11 @@ type Query {
   fetchBoards: [Board!]!
   getOpenGraph(url: String!): OpenGraph
   fetchUserBoards(userid: String!): [Board!]!
-  fetchBestBoards: [Board!]!
-  fetchProducts(userid: String!): [Product!]!
-  fetchAllProducts: [Product!]!
+  fetchTop10: [Board!]!
+  fetchUserProducts(userid: String!): [Product!]!
   fetchBoardsUserLiked(userid: String!): [Board!]!
   searchBoards(keyword: String!): [Board!]!
+  fetchAllProducts: [Product!]!
   fetchFollowees(userid: String!): [User!]!
   fetchFollowings(userid: String!): [User!]!
   fetchFollowingBoards: [Following!]!
@@ -202,7 +200,6 @@ input CreateProductInput {
   url: String!
   imageUrl: String!
   description: String!
-
 }
 
 input UpdateBoardInput {
@@ -217,10 +214,8 @@ input UpdateBoardInput {
 input UpdateProductInput {
   name: String!
   url: String!
-
   imageUrl: String!
   description: String!
-
   picture: String
 }
 

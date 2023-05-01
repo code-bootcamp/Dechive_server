@@ -15,7 +15,7 @@ export class RepliesResolver {
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Reply)
   async createReply(
-    @Args('createReplyInput') createReplyInput: CreateReplyInput, //
+    @Args('createReplyInput') createReplyInput: CreateReplyInput,
     @Context() context: IContext,
   ) {
     const userid = context.req.user.id;
@@ -28,7 +28,7 @@ export class RepliesResolver {
   @UseGuards(DechiveAuthGuard('access'))
   @Mutation(() => Boolean)
   async deleteReply(
-    @Args('replyid') replyid: string, //
+    @Args('replyid') replyid: string,
     @Context() context: IContext,
   ) {
     const userid = context.req.user.id;
