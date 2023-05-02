@@ -89,15 +89,14 @@ export class UsersService {
     });
   }
 
-  async findByNick({ nickName }): Promise<string[]> {
-    const result = await this.usersRepository
+  findByNick({ nickName }): Promise<string[]> {
+    return this.usersRepository
       .findOne({
         where: { nickName },
         select: { boards: true },
         relations: ['boards'],
       })
-      .then((e) => e?.boards.map((e) => e.id));
-    return result ? result : [];
+      .then((e) => (e ? e.boards.map((el) => el.id) : []));
   }
 
   findOneEmail({ email }: IUsersServiceFindOneEmail): Promise<User> {

@@ -14,17 +14,16 @@ export class HashtagsService {
     private readonly hashtagsRepository: Repository<Hashtag>, //
   ) {}
 
-  async findByHash({
+  findByHash({
     hashtag, //
   }: IHashtagsServiceFindByHash): Promise<string[]> {
-    const result = await this.hashtagsRepository
+    return this.hashtagsRepository
       .findOne({
         where: { hashtag },
         select: { boards: true },
         relations: ['boards'],
       })
-      .then((e) => e?.boards.map((e) => e.id));
-    return result ? result : [];
+      .then((e) => (e ? e.boards.map((el) => el.id) : []));
   }
 
   createHashtags({
@@ -41,9 +40,8 @@ export class HashtagsService {
         });
         if (prevHashtag) {
           return prevHashtag;
-        } else {
-          return this.hashtagsRepository.save({ hashtag });
         }
+        return this.hashtagsRepository.save({ hashtag });
       }),
     );
   }

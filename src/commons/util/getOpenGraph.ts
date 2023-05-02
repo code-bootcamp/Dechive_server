@@ -5,7 +5,13 @@ import { HttpException } from '@nestjs/common';
 import { OpenGraph } from 'src/apis/products/dto/opengraph.return-type';
 
 export const getOpenGraph = async ({ url }): Promise<OpenGraph> => {
-  const html = (await getHTML({ url })).data;
+  const response = await getHTML({ url });
+  const contentType = response.headers['content-type'];
+  const charset = contentType.includes('charset=')
+    ? contentType.split('charset=')[1]
+    : 'UTF-8';
+  const decoder = new TextDecoder(charset);
+  const html = decoder.decode(response.data);
   const $ = load(html);
   const meta = parse(
     $('meta[property]')
@@ -22,12 +28,14 @@ export const getOpenGraph = async ({ url }): Promise<OpenGraph> => {
     description: meta.og?.description ?? '',
   };
 };
-const getHTML = async ({ url }) => {
+const getHTML = ({ url }) => {
   return axios
     .get(url, {
+      responseType: 'arraybuffer',
+      responseEncoding: 'binary',
       headers: {
         'Accept-Encoding': 'gzip, deflate, br',
-        'Accept-Language': 'ko,en;q=0.9,en-US;q=0.8',
+        'Accept-Language': 'ko,ko-KR,en,en-US',
         'Cache-Control': 'max-age=0',
         'Upgrade-Insecure-Requests': '1',
         'User-Agent':
