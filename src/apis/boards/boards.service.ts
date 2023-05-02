@@ -57,6 +57,14 @@ export class BoardsService {
         'comments.replies.user',
         'comments.user',
       ],
+      order: {
+        comments: {
+          createdAt: 'DESC',
+          replies: {
+            createdAt: 'DESC',
+          },
+        },
+      },
     });
     if (!board) throw new ConflictException('존재 하지 않는 게시물입니다');
     if (isView) {
