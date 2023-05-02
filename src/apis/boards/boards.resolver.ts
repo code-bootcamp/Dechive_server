@@ -8,7 +8,7 @@ import { IContext } from 'src/commons/interfaces/context';
 import { UpdateBoardInput } from './dto/board-update.input';
 import { Product } from '../products/entities/product.entity';
 import { getOpenGraph } from 'src/commons/util/getOpenGraph';
-import { OpenGraph } from '../products/dto/opengraph';
+import { OpenGraph } from '../products/dto/opengraph.return-type';
 
 @Resolver()
 export class BoardsResolver {

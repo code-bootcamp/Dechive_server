@@ -68,6 +68,72 @@ export class BoardsService {
     return board;
   }
 
+  async findAllBoards(): Promise<Board[]> {
+    return await this.boardsRepository.find({
+      relations: [
+        'writer',
+        'products',
+        'comments',
+        'hashtags',
+        'likers',
+        'pictures',
+        'comments.replies',
+        'comments.replies.user',
+        'comments.user',
+      ],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
+  async findTop10(): Promise<Board[]> {
+    return this.boardsRepository.find({
+      relations: [
+        'writer',
+        'products',
+        'comments',
+        'hashtags',
+        'likers',
+        'pictures',
+        'comments.replies',
+        'comments.replies.user',
+        'comments.user',
+      ],
+      order: {
+        likes: 'DESC',
+        views: 'DESC',
+        createdAt: 'DESC',
+      },
+      take: 10,
+    });
+  }
+
+  findUserBoards({
+    id, //
+    userid,
+  }: IBoardsServiceFindUserBoards): Promise<Board[]> {
+    return this.boardsRepository.find({
+      where: {
+        writer: { id: userid ?? id },
+      },
+      relations: [
+        'writer',
+        'products',
+        'comments',
+        'hashtags',
+        'likers',
+        'pictures',
+        'comments.replies',
+        'comments.replies.user',
+        'comments.user',
+      ],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
   async findByTitle({
     title, //
   }: IBoardsServiceFindByTitle): Promise<string[]> {
@@ -108,72 +174,6 @@ export class BoardsService {
       order: {
         createdAt: 'DESC',
       },
-    });
-  }
-
-  async findAllBoards(): Promise<Board[]> {
-    return await this.boardsRepository.find({
-      relations: [
-        'writer',
-        'products',
-        'comments',
-        'hashtags',
-        'likers',
-        'pictures',
-        'comments.replies',
-        'comments.replies.user',
-        'comments.user',
-      ],
-      order: {
-        createdAt: 'DESC',
-      },
-    });
-  }
-
-  findUserBoards({
-    id, //
-    userid,
-  }: IBoardsServiceFindUserBoards): Promise<Board[]> {
-    return this.boardsRepository.find({
-      where: {
-        writer: { id: userid ? userid : id },
-      },
-      relations: [
-        'writer',
-        'products',
-        'comments',
-        'hashtags',
-        'likers',
-        'pictures',
-        'comments.replies',
-        'comments.replies.user',
-        'comments.user',
-      ],
-      order: {
-        createdAt: 'DESC',
-      },
-    });
-  }
-
-  async findTop10(): Promise<Board[]> {
-    return this.boardsRepository.find({
-      relations: [
-        'writer',
-        'products',
-        'comments',
-        'hashtags',
-        'likers',
-        'pictures',
-        'comments.replies',
-        'comments.replies.user',
-        'comments.user',
-      ],
-      order: {
-        likes: 'DESC',
-        views: 'DESC',
-        createdAt: 'DESC',
-      },
-      take: 10,
     });
   }
 
@@ -245,7 +245,6 @@ export class BoardsService {
     );
     Promise.all(
       toDelete.map((e) => {
-        console.log(e);
         return this.picturesService.storageDelete({
           storageDelet: e.url.split('origin/').at(-1),
         });
