@@ -203,5 +203,9 @@ const getRandomNum = (): number => {
 };
 
 export const getRandomNickName = (): string => {
-  return adjective[getRandomNum()] + ' ' + food[getRandomNum()];
+  return (
+    (adjective[getRandomNum()] ?? '짱구') +
+    ' ' +
+    (food[getRandomNum()] ?? '철수')
+  );
 };
