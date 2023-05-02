@@ -12,6 +12,7 @@ import {
   ICommentsServiceDelete,
   ICommentsServiceFindOne,
 } from './interfaces/comment-service.interface';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class CommentsService {
@@ -20,6 +21,8 @@ export class CommentsService {
     private readonly commentsRepository: Repository<Comments>,
 
     private readonly boardsService: BoardsService,
+
+    private readonly usersService: UsersService,
   ) {}
 
   async findOneComment({
@@ -40,10 +43,11 @@ export class CommentsService {
     // 게시물이 존재하는지 확인
     const { boardid, content } = createCommentInput;
     await this.boardsService.findOneBoard({ boardid });
+
     return this.commentsRepository.save({
       content,
       board: { id: boardid },
-      user: { id: userid },
+      user: await this.usersService.findOneUser({ id: userid }),
     });
   }
 
