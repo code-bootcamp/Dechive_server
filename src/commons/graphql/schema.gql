@@ -93,10 +93,10 @@ type Board {
 }
 
 type OpenGraph {
-  name: String!
-  url: String!
-  imageUrl: String!
-  description: String!
+  name: String
+  url: String
+  imageUrl: String
+  description: String
 }
 
 type FetchUser {
@@ -116,7 +116,7 @@ type Query {
   fetchLoginUser: User!
   fetchBoard(boardid: String!): Board!
   fetchBoards: [Board!]!
-  getOpenGraph(url: String!): OpenGraph
+  getOpenGraph(url: String!): OpenGraph!
   fetchUserBoards(userid: String!): [Board!]!
   fetchTop10: [Board!]!
   fetchUserProducts(userid: String!): [Product!]!
@@ -196,10 +196,10 @@ input CreateBoardInput {
 }
 
 input CreateProductInput {
-  name: String!
-  url: String!
-  imageUrl: String!
-  description: String!
+  name: String
+  url: String
+  imageUrl: String
+  description: String
 }
 
 input UpdateBoardInput {
@@ -212,10 +212,10 @@ input UpdateBoardInput {
 }
 
 input UpdateProductInput {
-  name: String!
-  url: String!
-  imageUrl: String!
-  description: String!
+  name: String
+  url: String
+  imageUrl: String
+  description: String
   picture: String
 }
 

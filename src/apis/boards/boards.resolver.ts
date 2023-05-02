@@ -8,8 +8,7 @@ import { IContext } from 'src/commons/interfaces/context';
 import { UpdateBoardInput } from './dto/board-update.input';
 import { Product } from '../products/entities/product.entity';
 import { getOpenGraph } from 'src/commons/util/getOpenGraph';
-import { IOpenGraph } from 'src/apis/products/interfaces/openGraph.interface';
-import { CreateProductInput } from '../products/dto/product-create.input';
+import { OpenGraph } from '../products/dto/opengraph';
 
 @Resolver()
 export class BoardsResolver {
@@ -29,10 +28,10 @@ export class BoardsResolver {
     return this.boardsService.findAllBoards();
   }
 
-  @Query(() => CreateProductInput)
+  @Query(() => OpenGraph)
   getOpenGraph(
     @Args('url') url: string, //
-  ) {
+  ): Promise<OpenGraph> {
     return getOpenGraph({ url });
   }
 

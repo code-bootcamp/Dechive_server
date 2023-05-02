@@ -29,7 +29,9 @@ export class ProductsService {
           return this.productsRepository.save({
             ...createProductInput,
             picture:
-              (await getOpenGraph({ ...createProductInput })).imageUrl ?? '',
+              createProductInput.imageUrl ??
+              (await getOpenGraph({ ...createProductInput })).imageUrl ??
+              '',
           });
         }),
     );
@@ -45,7 +47,9 @@ export class ProductsService {
             ...updateProductInput,
             picture:
               updateProductInput.picture ??
-              (await getOpenGraph({ ...updateProductInput })).imageUrl,
+              updateProductInput.imageUrl ??
+              (await getOpenGraph({ ...updateProductInput })).imageUrl ??
+              '',
           });
         }),
     );
