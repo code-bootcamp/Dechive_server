@@ -40,9 +40,8 @@ export class HashtagsService {
         });
         if (prevHashtag) {
           return prevHashtag;
-        } else {
-          return this.hashtagsRepository.save({ hashtag });
         }
+        return this.hashtagsRepository.save({ hashtag });
       }),
     );
   }

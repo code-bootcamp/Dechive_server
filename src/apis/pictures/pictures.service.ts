@@ -27,7 +27,7 @@ export class PicturesService {
   }
 
   // imageUpdate 1번 로직
-  async delete({ boardid }: IPicturesServiceDelete): Promise<DeleteResult> {
+  delete({ boardid }: IPicturesServiceDelete): Promise<DeleteResult> {
     return this.picturesRepository.delete({ board: { id: boardid } });
   }
 

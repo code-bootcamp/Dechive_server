@@ -208,6 +208,7 @@ export class BoardsService {
   }: IBoardsServiceCreateBoard): Promise<Board> {
     // bulk insert 활용한 최적화 필요
     let hashtags: Hashtag[];
+    // Promise.all
     if (createBoardInput.hashtags) {
       hashtags = await this.hashtagsService.createHashtags({
         ...createBoardInput,
@@ -251,14 +252,13 @@ export class BoardsService {
     const toDelete = prevBoard.pictures.filter(
       (e) => !updateBoardInput.uploadFile.includes(e.url),
     );
-    Promise.all(
-      toDelete.map((e) => {
-        return this.picturesService.storageDelete({
-          storageDelet: e.url.split('origin/').at(-1),
-        });
-      }),
-    );
-    // forEach 로 리턴값없이 함수만 작동하도록
+
+    toDelete.forEach((e) => {
+      this.picturesService.storageDelete({
+        storageDelet: e.url.split('origin/').at(-1),
+      });
+    });
+
     const pictures = await this.picturesService.createPictures({
       ...updateBoardInput,
     });
