@@ -17,9 +17,8 @@ export class CommentsResolver {
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
     @Context() context: IContext,
   ) {
-    const userid = context.req.user.id;
     return this.commentsService.createComment({
-      userid,
+      userid: context.req.user.id,
       createCommentInput,
     });
   }

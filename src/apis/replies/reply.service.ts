@@ -12,6 +12,7 @@ import {
   IRepliesServiceDelete,
   IRepliesServiceFindOne,
 } from './interfaces/replies-service.interface';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class RepliesService {
@@ -20,6 +21,8 @@ export class RepliesService {
     private readonly repliesRepository: Repository<Reply>,
 
     private readonly commentsService: CommentsService,
+
+    private readonly usersService: UsersService,
   ) {}
 
   async findOneReply({
@@ -42,7 +45,7 @@ export class RepliesService {
     return this.repliesRepository.save({
       content,
       comment: { id: commentid },
-      user: { id: userid },
+      user: await this.usersService.findOneUser({ id: userid }),
     });
   }
 
