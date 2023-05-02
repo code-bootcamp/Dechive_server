@@ -42,6 +42,6 @@ export class Comments {
   user: User;
 
   @CreateDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   createdAt: Date;
 }

@@ -65,7 +65,7 @@ type Comments {
   board: Board!
   replies: [Reply!]
   user: User!
-  createdAt: DateTime!
+  createdAt: DateTime
 }
 
 type Picture {

@@ -76,18 +76,18 @@ export class BoardsService {
     return board;
   }
 
-  async findAllBoards(): Promise<Board[]> {
-    return await this.boardsRepository.find({
+  findAllBoards(): Promise<Board[]> {
+    return this.boardsRepository.find({
       relations: [
         'writer',
         'products',
-        'comments',
+        // 'comments',
+        // 'comments.replies',
+        // 'comments.replies.user',
+        // 'comments.user',
         'hashtags',
         'likers',
         'pictures',
-        'comments.replies',
-        'comments.replies.user',
-        'comments.user',
       ],
       order: {
         createdAt: 'DESC',
@@ -95,18 +95,18 @@ export class BoardsService {
     });
   }
 
-  async findTop10(): Promise<Board[]> {
+  findTop10(): Promise<Board[]> {
     return this.boardsRepository.find({
       relations: [
         'writer',
         'products',
-        'comments',
+        // 'comments',
+        // 'comments.replies',
+        // 'comments.replies.user',
+        // 'comments.user',
         'hashtags',
         'likers',
         'pictures',
-        'comments.replies',
-        'comments.replies.user',
-        'comments.user',
       ],
       order: {
         likes: 'DESC',
@@ -118,7 +118,7 @@ export class BoardsService {
   }
 
   findUserBoards({
-    id, //
+    id,
     userid,
   }: IBoardsServiceFindUserBoards): Promise<Board[]> {
     return this.boardsRepository.find({
@@ -128,13 +128,13 @@ export class BoardsService {
       relations: [
         'writer',
         'products',
-        'comments',
+        // 'comments',
+        // 'comments.replies',
+        // 'comments.replies.user',
+        // 'comments.user',
         'hashtags',
         'likers',
         'pictures',
-        'comments.replies',
-        'comments.replies.user',
-        'comments.user',
       ],
       order: {
         createdAt: 'DESC',
@@ -142,16 +142,15 @@ export class BoardsService {
     });
   }
 
-  async findByTitle({
+  findByTitle({
     title, //
   }: IBoardsServiceFindByTitle): Promise<string[]> {
-    const result = await this.boardsRepository
+    return this.boardsRepository
       .find({
         where: { title },
         select: { id: true },
       })
-      .then((e) => e?.map((e) => e.id));
-    return result ? result : [];
+      .then((e) => (e ? e.map((el) => el.id) : []));
   }
 
   async searchBoards({
@@ -171,13 +170,13 @@ export class BoardsService {
       relations: [
         'writer',
         'products',
-        'comments',
+        // 'comments',
+        // 'comments.replies',
+        // 'comments.replies.user',
+        // 'comments.user',
         'hashtags',
         'likers',
         'pictures',
-        'comments.replies',
-        'comments.replies.user',
-        'comments.user',
       ],
       order: {
         createdAt: 'DESC',
@@ -196,20 +195,20 @@ export class BoardsService {
   }
 
   async findBoardUserLiked({
-    id, //
+    id,
     userid,
   }: IBoardsServiceFetchsUserLiked): Promise<Board[]> {
-    return (await this.usersService.findOneUser({ id: userid ? userid : id }))
-      .like;
+    if (userid) id = userid;
+    return (await this.usersService.findOneUser({ id })).like;
   }
 
   async createBoard({
-    userid, //
+    userid,
     createBoardInput,
   }: IBoardsServiceCreateBoard): Promise<Board> {
     // bulk insert 활용한 최적화 필요
     let hashtags: Hashtag[];
-    if (createBoardInput?.hashtags) {
+    if (createBoardInput.hashtags) {
       hashtags = await this.hashtagsService.createHashtags({
         ...createBoardInput,
       });
@@ -220,12 +219,13 @@ export class BoardsService {
     const pictures = await this.picturesService.createPictures({
       ...createBoardInput,
     });
+    const writer = await this.usersService.findOneUser({ id: userid });
     return this.boardsRepository.save({
       ...createBoardInput,
-      writer: { id: userid },
-      hashtags: hashtags ? hashtags : null,
+      hashtags: hashtags ?? null,
       products,
       pictures,
+      writer,
     });
   }
 
