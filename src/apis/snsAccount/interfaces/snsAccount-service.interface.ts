@@ -2,10 +2,13 @@ import { User } from 'src/apis/users/entities/user.entity';
 import { SnsAccount } from '../entities/snsAccount.entity';
 
 export interface ISnsAccountServiceDelete {
-  sns: SnsAccount['sns'];
-  user: User;
+  id: SnsAccount['sns'];
 }
 
 export interface ISnsAccountServiceCreate {
-  sns: SnsAccount['sns'];
+  snsAcounts: { sns: SnsAccount['sns'] }[];
+}
+
+export interface ISnsAccountServiceFindeSnsNames {
+  id: User['id'];
 }
