@@ -114,7 +114,7 @@ type Youtube {
 type Query {
   fetchUser(userid: String!): FetchUser!
   fetchLoginUser: User!
-  fetchBoard(boardid: String!): Board!
+  fetchBoard(userid: String!, boardid: String!): Board!
   fetchBoards(userid: String!): [Board!]!
   getOpenGraph(url: String!): OpenGraph!
   fetchUserBoards(userid: String!): [Board!]!
