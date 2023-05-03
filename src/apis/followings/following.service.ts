@@ -111,7 +111,7 @@ export class FollowingsService {
     id,
   }: IFollowingsServiceFindFollwingBoards): Promise<Following[]> {
     return this.followingRepository.find({
-      where: { followingid: id },
+      where: { users: { id } },
       relations: [
         'users',
         'users.boards',
