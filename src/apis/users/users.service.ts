@@ -22,6 +22,7 @@ import {
   IUsersServiceFindeOne,
   IUsersServiceFindOneEmail,
   IUsersServiceFollowing,
+  IUSersServiceFollowingBoards,
   IUsersServiceHashPassword,
   IUsersServiceIsEmail,
   IUsersServiceMathAuth,
@@ -92,6 +93,15 @@ export class UsersService {
     return this.usersRepository.find({
       where: { id: In(users) },
       relations: ['followings', 'followees'],
+    });
+  }
+
+  followingBoards({ users }: IUSersServiceFollowingBoards): Promise<User[]> {
+    return this.usersRepository.find({
+      where: { id: In(users) },
+      relations: ['boards', 'boards.writer', 'boards.pictures'],
+      order: { boards: { createdAt: 'DESC' } },
+      take: 12,
     });
   }
 
