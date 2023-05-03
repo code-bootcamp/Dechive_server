@@ -76,17 +76,22 @@ export class BoardsService {
     }
     return board;
   }
-  async findOneWithLike({
-    isView,
-    boardid,
-    userid, //
-  }: IBoardsServiceFetchBoard) {
-    const board = await this.findOneBoard({
-      isView,
-      boardid,
-    });
-    return this.getLikeStatus({ boards: [board], userid })[0];
-  }
+  // findOneWithLike({
+  //   isView,
+  //   boardid,
+  //   userid, //
+  // }: IBoardsServiceFetchBoard) {
+  //   // const board = await this.findOneBoard({
+  //   //   isView,
+  //   //   boardid,
+  //   // });
+  //   // this.getLikeStatus({ boards: [board], userid })[0];
+  //   // 프론트에서 서버사이드 렌더링 관련 이슈로 userid값을 넘겨주기 어려워 userid를 사용하지 않음
+  //   return this.findOneBoard({
+  //     isView,
+  //     boardid,
+  //   });
+  // }
 
   async findAllBoards({ userid }): Promise<Board[]> {
     const boards = await this.boardsRepository.find({
