@@ -114,6 +114,16 @@ export class UsersService {
       .then((e) => (e ? e.boards.map((el) => el.id) : []));
   }
 
+  findByJob({ jobGroup }): Promise<string[]> {
+    return this.usersRepository
+      .findOne({
+        where: { jobGroup },
+        select: { boards: true },
+        relations: ['boards'],
+      })
+      .then((e) => (e ? e.boards.map((el) => el.id) : []));
+  }
+
   findOneEmail({ email }: IUsersServiceFindOneEmail): Promise<User> {
     return this.usersRepository.findOne({ where: { email } });
   }

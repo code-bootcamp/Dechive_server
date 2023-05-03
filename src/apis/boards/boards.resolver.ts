@@ -21,9 +21,8 @@ export class BoardsResolver {
     @Args('userid') userid: string, //
     @Args('boardid') boardid: string, //
   ) {
-    return this.boardsService.findOneWithLike({
+    return this.boardsService.findOneBoard({
       boardid,
-      userid,
       isView: true,
     });
   }
