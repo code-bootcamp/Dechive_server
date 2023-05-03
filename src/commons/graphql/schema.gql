@@ -167,7 +167,7 @@ input UpdateUserInput {
   nickName: String
   intro: String
   picture: String
-  snsAccount: String
+  snsAccount: [String!]
   jobGroup: String
 }
 

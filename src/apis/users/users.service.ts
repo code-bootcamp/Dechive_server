@@ -167,44 +167,57 @@ export class UsersService {
   }: IUsersServiceUpdateUser): Promise<User> {
     const user = await this.findOneUser({ id });
 
-    if (updateUserInput?.picture !== user?.picture && user.picture) {
+    if (updateUserInput.picture && updateUserInput.picture !== user.picture) {
       this.picturesService.storageDelete({
         storageDelet: user.picture.split(process.env.GCP_BUCKET + '/')[1],
       });
     }
 
-    let temp;
-    if (updateUserInput?.snsAccount) {
-      const result = [];
-
-      user.snsAccounts.forEach(async (el) => {
-        if (el.sns === updateUserInput.snsAccount) {
-          result.push(el.sns);
-        }
-      });
-
-      if (result.length) {
-        await this.snsAccountService.deleteSnsAccount({
-          sns: result[0],
-          user,
-        });
-      } else {
-        temp = await this.snsAccountService.createSnsAccount({
-          sns: updateUserInput.snsAccount,
-        });
-      }
-    }
-
-    const snsAccount = [temp, ...user.snsAccounts];
-
     if (user.nickName === updateUserInput.nickName)
       throw new ConflictException('이미 사용중인 닉네임 입니다.');
 
-    return this.usersRepository.save({
+    let snsAccounts;
+    if (updateUserInput.snsAccount) {
+      const { snsAccount } = updateUserInput;
+
+      const snsAccountNames = await this.snsAccountService.find({
+        id: user.id,
+      });
+
+      const insertSns = [];
+      const snsObj = {};
+      snsAccountNames.forEach((el) => {
+        snsObj[el.sns] = el.id;
+      });
+
+      snsAccount.forEach((el) => {
+        const isExists = snsAccountNames.find((prevEl) => el === prevEl.sns);
+        if (!isExists) insertSns.push({ sns: el });
+        if (snsObj[el]) delete snsObj[el];
+      });
+
+      for (const id in snsObj) {
+        this.snsAccountService.deleteSnsAccount({ id: snsObj[id] });
+      }
+
+      const newqqq = await this.snsAccountService.bulkInsert({
+        snsAcounts: insertSns,
+      });
+      snsAccounts = [...snsAccountNames, ...newqqq.identifiers];
+    }
+
+    // bulkInsert는 id 값만 반환 -> Graphql (snsAccounts.sns을 볼 수 없다)
+    const qqq = await this.usersRepository.save({
       ...user,
       ...updateUserInput,
-      snsAccounts: temp ? snsAccount : [...user.snsAccounts],
+      snsAccounts,
     });
+
+    // 최종 수정본은 한번더 조회한뒤 보내줌( 프론트 협의 필요 )
+    return {
+      ...qqq,
+      snsAccounts: await this.snsAccountService.find({ id: user.id }),
+    };
   }
 
   async authEmail({

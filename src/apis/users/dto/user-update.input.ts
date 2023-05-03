@@ -12,8 +12,8 @@ export class UpdateUserInput {
   @Field(() => String, { nullable: true })
   picture: User['picture'];
 
-  @Field(() => String, { nullable: true })
-  snsAccount: string;
+  @Field(() => [String], { nullable: true })
+  snsAccount: string[];
 
   @Field(() => String, { nullable: true })
   jobGroup: string;
