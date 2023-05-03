@@ -10,7 +10,7 @@ export class ResetPasswordInput {
   @Field(() => String)
   email: User['email'];
 
-  @Matches(/^(?=.*[a-z])(?=.*\d).{6,13}$/, {
+  @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,13}$/, {
     message: '비밀번호 형식이 올바르지 않습니다.',
   })
   @Field(() => String)
