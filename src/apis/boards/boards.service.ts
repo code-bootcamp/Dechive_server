@@ -78,17 +78,7 @@ export class BoardsService {
 
   findAllBoards(): Promise<Board[]> {
     return this.boardsRepository.find({
-      relations: [
-        'writer',
-        'products',
-        // 'comments',
-        // 'comments.replies',
-        // 'comments.replies.user',
-        // 'comments.user',
-        'hashtags',
-        'likers',
-        'pictures',
-      ],
+      relations: ['writer', 'products', 'hashtags', 'likers', 'pictures'],
       order: {
         createdAt: 'DESC',
       },
@@ -97,17 +87,7 @@ export class BoardsService {
 
   findTop10(): Promise<Board[]> {
     return this.boardsRepository.find({
-      relations: [
-        'writer',
-        'products',
-        // 'comments',
-        // 'comments.replies',
-        // 'comments.replies.user',
-        // 'comments.user',
-        'hashtags',
-        'likers',
-        'pictures',
-      ],
+      relations: ['writer', 'products', 'hashtags', 'likers', 'pictures'],
       order: {
         likes: 'DESC',
         views: 'DESC',
@@ -125,17 +105,7 @@ export class BoardsService {
       where: {
         writer: { id: userid ?? id },
       },
-      relations: [
-        'writer',
-        'products',
-        // 'comments',
-        // 'comments.replies',
-        // 'comments.replies.user',
-        // 'comments.user',
-        'hashtags',
-        'likers',
-        'pictures',
-      ],
+      relations: ['writer', 'products', 'hashtags', 'likers', 'pictures'],
       order: {
         createdAt: 'DESC',
       },
@@ -167,17 +137,7 @@ export class BoardsService {
     const set = new Set(result);
     return this.boardsRepository.find({
       where: [{ id: In([...set]) }],
-      relations: [
-        'writer',
-        'products',
-        // 'comments',
-        // 'comments.replies',
-        // 'comments.replies.user',
-        // 'comments.user',
-        'hashtags',
-        'likers',
-        'pictures',
-      ],
+      relations: ['writer', 'products', 'hashtags', 'likers', 'pictures'],
       order: {
         createdAt: 'DESC',
       },
@@ -199,7 +159,18 @@ export class BoardsService {
     userid,
   }: IBoardsServiceFetchsUserLiked): Promise<Board[]> {
     if (userid) id = userid;
-    return (await this.usersService.findOneUser({ id })).like;
+    const result = (await this.usersService.findOneUser({ id })).like.map(
+      (e) => e.id,
+    );
+    return this.boardsRepository.find({
+      where: {
+        id: In(result),
+      },
+      relations: ['writer', 'products', 'hashtags', 'likers', 'pictures'],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   async createBoard({
