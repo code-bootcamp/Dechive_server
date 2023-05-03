@@ -122,7 +122,7 @@ export class UsersService {
         relations: ['boards'],
       })
       .then((e) =>
-        e
+        e.length
           ? [].concat(e.map((el) => [].concat(el.boards.map((el) => el.id))))
           : [],
       );
