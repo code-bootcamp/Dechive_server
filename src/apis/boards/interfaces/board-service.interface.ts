@@ -19,7 +19,6 @@ export interface IBoardsServiceFetchProductsByUserid {
 
 export interface IBoardsServiceSearchBoards {
   keyword: string;
-  userid: User['id'];
 }
 
 export interface IBoardsServiceCreateBoard {

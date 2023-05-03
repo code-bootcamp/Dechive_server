@@ -131,7 +131,6 @@ export class BoardsService {
 
   async searchBoards({
     keyword, //
-    userid,
   }: IBoardsServiceSearchBoards): Promise<Board[]> {
     let result = [];
     await Promise.all([
@@ -142,15 +141,13 @@ export class BoardsService {
       result = [].concat(...e);
     });
     const set = new Set(result);
-    const boards = await this.boardsRepository.find({
+    return this.boardsRepository.find({
       where: [{ id: In([...set]) }],
       relations: ['writer', 'products', 'hashtags', 'likers', 'pictures'],
       order: {
         createdAt: 'DESC',
       },
     });
-    if (userid) return this.getLikeStatus({ boards, userid });
-    return boards;
   }
 
   async findProductsFromOneUser({
