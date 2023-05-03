@@ -63,7 +63,13 @@ export class UsersService {
         'boards',
         'boards.hashtags',
         'boards.products',
+        'boards.pictures',
       ],
+      order: {
+        boards: {
+          createdAt: 'DESC',
+        },
+      },
     });
 
     if (!user) throw new ConflictException('등록 되지 않은 유저 입니다');
