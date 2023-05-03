@@ -18,9 +18,14 @@ export class BoardsResolver {
 
   @Query(() => Board)
   fetchBoard(
+    @Args('userid') userid: string, //
     @Args('boardid') boardid: string, //
   ) {
-    return this.boardsService.findOneBoard({ boardid, isView: true });
+    return this.boardsService.findOneWithLike({
+      boardid,
+      userid,
+      isView: true,
+    });
   }
 
   @Query(() => [Board])

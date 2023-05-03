@@ -23,6 +23,7 @@ import {
   IBoardsServiceFindUserBoards,
   IBoardsServiceDeleteBoard,
   IBoardsServiceUpdateBoardLiker,
+  IBoardsServiceFindBoard,
 } from './interfaces/board-service.interface';
 
 @Injectable()
@@ -43,7 +44,7 @@ export class BoardsService {
   async findOneBoard({
     isView,
     boardid, //
-  }: IBoardsServiceFetchBoard): Promise<Board> {
+  }: IBoardsServiceFindBoard): Promise<Board> {
     const board = await this.boardsRepository.findOne({
       where: { id: boardid },
       relations: [
@@ -74,6 +75,17 @@ export class BoardsService {
       });
     }
     return board;
+  }
+  async findOneWithLike({
+    isView,
+    boardid,
+    userid, //
+  }: IBoardsServiceFetchBoard) {
+    const board = await this.findOneBoard({
+      isView,
+      boardid,
+    });
+    return this.getLikeStatus({ boards: [board], userid })[0];
   }
 
   async findAllBoards({ userid }): Promise<Board[]> {

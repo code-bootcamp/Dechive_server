@@ -5,10 +5,15 @@ import { UpdateBoardInput } from '../dto/board-update.input';
 
 export interface IBoardsServiceFetchsUserLiked {
   id: User['id'];
-  // userid: User['id'];
 }
 
 export interface IBoardsServiceFetchBoard {
+  boardid: Board['id'];
+  userid: User['id'];
+  isView?: boolean;
+}
+
+export interface IBoardsServiceFindBoard {
   boardid: Board['id'];
   isView?: boolean;
 }
