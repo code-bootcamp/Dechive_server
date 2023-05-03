@@ -1,6 +1,14 @@
 import { User } from 'src/apis/users/entities/user.entity';
 
-export const getFollowingByFollowees = ({ guest, user }): User[] => {
+interface getFollowingByFollowees {
+  guest: User;
+  user: User[];
+}
+
+export const getFollowingByFollowees = ({
+  guest,
+  user,
+}: getFollowingByFollowees): User[] => {
   const followeeid = guest.followees.map((el) => el.followeeid);
   const followingid = guest.followings.map((el) => el.followingid);
 
@@ -11,5 +19,9 @@ export const getFollowingByFollowees = ({ guest, user }): User[] => {
     el['followeeStatus'] = followeeid.includes(el.id) ?? false;
     el['followingStatus'] = followingid.includes(el.id) ?? false;
   });
+  user.sort((a, b) =>
+    a.followingStatus === b.followingStatus ? 0 : a.followingStatus ? -1 : 1,
+  );
+
   return user;
 };
