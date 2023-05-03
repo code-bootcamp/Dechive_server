@@ -107,19 +107,15 @@ export class FollowingsService {
     return user;
   }
 
-  fetchFollowingBoards({
+  async fetchFollowingBoards({
     id,
-  }: IFollowingsServiceFindFollwingBoards): Promise<Following[]> {
-    return this.followingRepository.find({
-      where: { users: { id } },
-      relations: [
-        'users',
-        'users.boards',
-        'users.boards.writer',
-        'users.boards.pictures',
-      ],
-      order: { users: { boards: { createdAt: 'DESC' } } },
-      take: 12,
-    });
+  }: IFollowingsServiceFindFollwingBoards): Promise<User[]> {
+    const users = await this.followingRepository
+      .find({
+        where: { users: { id } },
+      })
+      .then((e) => (e ? e.map((el) => el.followingid) : []));
+
+    return this.usersService.followingBoards({ users });
   }
 }
