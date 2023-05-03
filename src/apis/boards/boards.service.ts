@@ -153,6 +153,7 @@ export class BoardsService {
     await Promise.all([
       this.findByTitle({ title: keyword }),
       this.usersService.findByNick({ nickName: keyword }),
+      this.usersService.findByJob({ jobGroup: keyword }),
       this.hashtagsService.findByHash({ hashtag: `#${keyword}` }),
     ]).then((e) => {
       result = [].concat(...e);
