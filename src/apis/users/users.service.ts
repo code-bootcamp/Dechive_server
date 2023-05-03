@@ -204,20 +204,24 @@ export class UsersService {
         snsAcounts: insertSns,
       });
       snsAccounts = [...snsAccountNames, ...newqqq.identifiers];
-    }
 
-    // bulkInsert는 id 값만 반환 -> Graphql (snsAccounts.sns을 볼 수 없다)
-    const qqq = await this.usersRepository.save({
+      // bulkInsert는 id 값만 반환 -> Graphql (snsAccounts.sns을 볼 수 없다)
+      const qqq = await this.usersRepository.save({
+        ...user,
+        ...updateUserInput,
+        snsAccounts,
+      });
+
+      // 최종 수정본은 한번더 조회한뒤 보내줌( 프론트 협의 필요 )
+      return {
+        ...qqq,
+        snsAccounts: await this.snsAccountService.find({ id: user.id }),
+      };
+    }
+    return await this.usersRepository.save({
       ...user,
       ...updateUserInput,
-      snsAccounts,
     });
-
-    // 최종 수정본은 한번더 조회한뒤 보내줌( 프론트 협의 필요 )
-    return {
-      ...qqq,
-      snsAccounts: await this.snsAccountService.find({ id: user.id }),
-    };
   }
 
   async authEmail({

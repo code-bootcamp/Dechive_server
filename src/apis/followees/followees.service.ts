@@ -77,6 +77,7 @@ export class FolloweesService {
         user: await this.usersService.findByUsers({ users }),
       });
     }
+
     return user;
   }
 }
