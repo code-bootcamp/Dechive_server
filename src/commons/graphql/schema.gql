@@ -121,7 +121,7 @@ type Query {
   fetchTop10(userid: String!): [Board!]!
   fetchUserProducts(userid: String!): [Product!]!
   fetchBoardsUserLiked: [Board!]!
-  searchBoards(keyword: String!, userid: String!): [Board!]!
+  searchBoards(keyword: String!): [Board!]!
   fetchAllProducts: [Product!]!
   fetchFollowees(userid: String!): [User!]!
   fetchFollowings(userid: String!): [User!]!

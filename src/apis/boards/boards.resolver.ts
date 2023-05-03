@@ -71,11 +71,9 @@ export class BoardsResolver {
   @Query(() => [Board])
   searchBoards(
     @Args('keyword') keyword: string, //
-    @Args('userid') userid: string, //
   ) {
     return this.boardsService.searchBoards({
       keyword,
-      userid,
     });
   }
 
