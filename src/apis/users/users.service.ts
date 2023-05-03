@@ -123,7 +123,11 @@ export class UsersService {
       })
       .then((e) =>
         e.length
-          ? [].concat(e.map((el) => [].concat(el.boards.map((el) => el.id))))
+          ? [].concat(
+              e.map((el) =>
+                [].concat(el.boards.length ? el.boards.map((el) => el.id) : ''),
+              ),
+            )
           : [],
       );
   }
