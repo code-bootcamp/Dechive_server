@@ -33,10 +33,10 @@ export class FollowingsResolver {
   }
 
   @UseGuards(DechiveAuthGuard('access'))
-  @Query(() => [Following])
+  @Query(() => [User])
   fetchFollowingBoards(
     @Context() context: IContext, //
-  ): Promise<Following[]> {
+  ): Promise<User[]> {
     const { id } = context.req.user;
     return this.followingsService.fetchFollowingBoards({ id });
   }

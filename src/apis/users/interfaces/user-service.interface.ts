@@ -75,3 +75,7 @@ export interface IUsersServiceFindByUsers {
 export interface IUsersServiceFetchUser {
   id: User['id'];
 }
+
+export interface IUSersServiceFollowingBoards {
+  users: string[];
+}

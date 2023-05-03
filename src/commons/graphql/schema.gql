@@ -17,12 +17,6 @@ type Product {
   board: Board!
 }
 
-type Following {
-  id: String!
-  followingid: String!
-  users: [User!]!
-}
-
 type SnsAccount {
   id: String!
   sns: String!
@@ -125,7 +119,7 @@ type Query {
   fetchAllProducts: [Product!]!
   fetchFollowees(userid: String!): [User!]!
   fetchFollowings(userid: String!): [User!]!
-  fetchFollowingBoards: [Following!]!
+  fetchFollowingBoards: [User!]!
   fetchYoutube: [Youtube!]!
 }
 
