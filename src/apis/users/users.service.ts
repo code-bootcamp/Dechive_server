@@ -74,14 +74,13 @@ export class UsersService {
     });
 
     if (!user) throw new ConflictException('등록 되지 않은 유저 입니다');
+    user['followeesCount'] = user.followees.length;
+    user['followingsCount'] = user.followings.length;
     return user;
   }
 
   async fetchUser({ id }: IUsersServiceFetchUser): Promise<FetchUser> {
     const user = await this.findOneUser({ id });
-
-    user['followeesCount'] = user.followees.length;
-    user['followingsCount'] = user.followings.length;
 
     return {
       user,
