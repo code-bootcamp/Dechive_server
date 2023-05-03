@@ -116,12 +116,16 @@ export class UsersService {
 
   findByJob({ jobGroup }): Promise<string[]> {
     return this.usersRepository
-      .findOne({
+      .find({
         where: { jobGroup },
         select: { boards: true },
         relations: ['boards'],
       })
-      .then((e) => (e ? e.boards.map((el) => el.id) : []));
+      .then((e) =>
+        e
+          ? [].concat(e.map((el) => [].concat(el.boards.map((el) => el.id))))
+          : [],
+      );
   }
 
   findOneEmail({ email }: IUsersServiceFindOneEmail): Promise<User> {
