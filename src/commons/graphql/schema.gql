@@ -115,13 +115,13 @@ type Query {
   fetchUser(userid: String!): FetchUser!
   fetchLoginUser: User!
   fetchBoard(boardid: String!): Board!
-  fetchBoards: [Board!]!
+  fetchBoards(userid: String!): [Board!]!
   getOpenGraph(url: String!): OpenGraph!
   fetchUserBoards(userid: String!): [Board!]!
-  fetchTop10: [Board!]!
+  fetchTop10(userid: String!): [Board!]!
   fetchUserProducts(userid: String!): [Product!]!
-  fetchBoardsUserLiked(userid: String!): [Board!]!
-  searchBoards(keyword: String!): [Board!]!
+  fetchBoardsUserLiked: [Board!]!
+  searchBoards(keyword: String!, userid: String!): [Board!]!
   fetchAllProducts: [Product!]!
   fetchFollowees(userid: String!): [User!]!
   fetchFollowings(userid: String!): [User!]!

@@ -76,17 +76,19 @@ export class BoardsService {
     return board;
   }
 
-  findAllBoards(): Promise<Board[]> {
-    return this.boardsRepository.find({
+  async findAllBoards({ userid }): Promise<Board[]> {
+    const boards = await this.boardsRepository.find({
       relations: ['writer', 'products', 'hashtags', 'likers', 'pictures'],
       order: {
         createdAt: 'DESC',
       },
     });
+    if (userid) return this.getLikeStatus({ boards, userid });
+    return boards;
   }
 
-  findTop10(): Promise<Board[]> {
-    return this.boardsRepository.find({
+  async findTop10({ userid }): Promise<Board[]> {
+    const boards = await this.boardsRepository.find({
       relations: ['writer', 'products', 'hashtags', 'likers', 'pictures'],
       order: {
         likes: 'DESC',
@@ -95,13 +97,15 @@ export class BoardsService {
       },
       take: 10,
     });
+    if (userid) return this.getLikeStatus({ boards, userid });
+    return boards;
   }
 
-  findUserBoards({
+  async findUserBoards({
     id,
     userid,
   }: IBoardsServiceFindUserBoards): Promise<Board[]> {
-    return this.boardsRepository.find({
+    const boards = await this.boardsRepository.find({
       where: {
         writer: { id: userid ?? id },
       },
@@ -110,6 +114,8 @@ export class BoardsService {
         createdAt: 'DESC',
       },
     });
+    if (userid) return this.getLikeStatus({ boards, userid });
+    return boards;
   }
 
   findByTitle({
@@ -125,6 +131,7 @@ export class BoardsService {
 
   async searchBoards({
     keyword, //
+    userid,
   }: IBoardsServiceSearchBoards): Promise<Board[]> {
     let result = [];
     await Promise.all([
@@ -135,13 +142,15 @@ export class BoardsService {
       result = [].concat(...e);
     });
     const set = new Set(result);
-    return this.boardsRepository.find({
+    const boards = await this.boardsRepository.find({
       where: [{ id: In([...set]) }],
       relations: ['writer', 'products', 'hashtags', 'likers', 'pictures'],
       order: {
         createdAt: 'DESC',
       },
     });
+    if (userid) return this.getLikeStatus({ boards, userid });
+    return boards;
   }
 
   async findProductsFromOneUser({
@@ -156,13 +165,12 @@ export class BoardsService {
 
   async findBoardUserLiked({
     id,
-    userid,
   }: IBoardsServiceFetchsUserLiked): Promise<Board[]> {
-    if (userid) id = userid;
     const result = (await this.usersService.findOneUser({ id })).like.map(
       (e) => e.id,
     );
-    return this.boardsRepository.find({
+    //유저 relations를 like의 세부항목까지 거는 것 보다 쿼리속도가 빨라서 아래방법 사용
+    const boards = await this.boardsRepository.find({
       where: {
         id: In(result),
       },
@@ -171,7 +179,26 @@ export class BoardsService {
         createdAt: 'DESC',
       },
     });
+    return boards.map((e) => {
+      return {
+        ...e,
+        like: true,
+      };
+    });
   }
+
+  getLikeStatus = ({ boards, userid }) => {
+    boards.forEach((el) => {
+      if (el.likers.length) {
+        el.likers.forEach((e) => {
+          if (userid === e.id) {
+            el['like'] = true;
+          }
+        });
+      }
+    });
+    return boards;
+  };
 
   async createBoard({
     userid,

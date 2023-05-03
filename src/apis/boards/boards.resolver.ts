@@ -24,8 +24,10 @@ export class BoardsResolver {
   }
 
   @Query(() => [Board])
-  fetchBoards() {
-    return this.boardsService.findAllBoards();
+  fetchBoards(
+    @Args('userid') userid: string, //
+  ) {
+    return this.boardsService.findAllBoards({ userid });
   }
 
   @Query(() => OpenGraph)
@@ -46,8 +48,10 @@ export class BoardsResolver {
   }
 
   @Query(() => [Board])
-  fetchTop10() {
-    return this.boardsService.findTop10();
+  fetchTop10(
+    @Args('userid') userid: string, //
+  ) {
+    return this.boardsService.findTop10({ userid });
   }
 
   @Query(() => [Product])
@@ -58,19 +62,20 @@ export class BoardsResolver {
   @UseGuards(DechiveAuthGuard('access'))
   @Query(() => [Board])
   fetchBoardsUserLiked(
-    @Args('userid') userid: string, //
-    @Context() context: IContext,
+    @Context() context: IContext, //
   ) {
     const { id } = context.req.user;
-    return this.boardsService.findBoardUserLiked({ id, userid });
+    return this.boardsService.findBoardUserLiked({ id });
   }
 
   @Query(() => [Board])
   searchBoards(
     @Args('keyword') keyword: string, //
+    @Args('userid') userid: string, //
   ) {
     return this.boardsService.searchBoards({
       keyword,
+      userid,
     });
   }
 

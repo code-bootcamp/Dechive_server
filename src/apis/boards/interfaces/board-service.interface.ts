@@ -5,7 +5,7 @@ import { UpdateBoardInput } from '../dto/board-update.input';
 
 export interface IBoardsServiceFetchsUserLiked {
   id: User['id'];
-  userid: User['id'];
+  // userid: User['id'];
 }
 
 export interface IBoardsServiceFetchBoard {
@@ -19,6 +19,7 @@ export interface IBoardsServiceFetchProductsByUserid {
 
 export interface IBoardsServiceSearchBoards {
   keyword: string;
+  userid: User['id'];
 }
 
 export interface IBoardsServiceCreateBoard {
