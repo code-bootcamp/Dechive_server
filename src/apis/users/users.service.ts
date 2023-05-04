@@ -181,26 +181,26 @@ export class UsersService {
         storageDelet: user.picture.split(process.env.GCP_BUCKET + '/')[1],
       });
     }
-
-    if (user.nickName === updateUserInput.nickName)
-      throw new ConflictException('이미 사용중인 닉네임 입니다.');
+    if (updateUserInput.nickName) {
+      const userNickname = await this.usersRepository.findOne({
+        where: { nickName: updateUserInput.nickName },
+      });
+      if (userNickname)
+        throw new ConflictException('이미 사용중인 닉네임 입니다.');
+    }
 
     let snsAccounts;
     if (updateUserInput.snsAccount) {
       const { snsAccount } = updateUserInput;
 
-      const snsAccountNames = await this.snsAccountService.find({
-        id: user.id,
-      });
-
       const insertSns = [];
       const snsObj = {};
-      snsAccountNames.forEach((el) => {
+      user.snsAccounts.forEach((el) => {
         snsObj[el.sns] = el.id;
       });
 
       snsAccount.forEach((el) => {
-        const isExists = snsAccountNames.find((prevEl) => el === prevEl.sns);
+        const isExists = user.snsAccounts.find((prevEl) => el === prevEl.sns);
         if (!isExists) insertSns.push({ sns: el });
         if (snsObj[el]) delete snsObj[el];
       });
@@ -212,7 +212,7 @@ export class UsersService {
       const newqqq = await this.snsAccountService.bulkInsert({
         snsAcounts: insertSns,
       });
-      snsAccounts = [...snsAccountNames, ...newqqq.identifiers];
+      snsAccounts = [...user.snsAccounts, ...newqqq.identifiers];
 
       // bulkInsert는 id 값만 반환 -> Graphql (snsAccounts.sns을 볼 수 없다)
       const qqq = await this.usersRepository.save({
