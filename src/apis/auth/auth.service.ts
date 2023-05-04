@@ -61,7 +61,7 @@ export class AuthService {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader(
       'Set-Cookie',
-      `refreshToken=${refreshToken};path=/; domain=.${process.env.DOMAIN}; SameSite=None; Secure; httpOnly`,
+      `refreshToken=${refreshToken};path=/; domain=.mobomobo.shop; SameSite=None; Secure; httpOnly`,
     );
   }
 
