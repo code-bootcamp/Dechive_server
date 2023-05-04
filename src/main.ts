@@ -5,17 +5,14 @@ import { graphqlUploadExpress } from 'graphql-upload';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(graphqlUploadExpress());
-  app
-    .enableCors
-    // {
-    // origin: ['http://localhost:3000', 'https://client-web-dechive.vercel.app/'],
-    // credentials: true,
-    // }
-    ();
+  app.enableCors({
+    origin: process.env.ORIGIN,
+    credentials: true,
+  });
   await app.listen(5000, () => {
     console.log('=================');
     console.log('🐶🐶🐶 graphql 백엔드 서버 오픈 🐶🐶🐶');
