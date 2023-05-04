@@ -36,10 +36,13 @@ import { ProductsModule } from './apis/products/products.module';
       useFactory: () => ({
         autoSchemaFile: 'src/commons/graphql/schema.gql',
         context: ({ req, res }) => ({ req, res }),
-        cors: {
-          origin: process.env.WHITELIST.split(', '),
-          credentials: true,
-        },
+        // cors: {
+        //   origin: [
+        //     'http://localhost:3000',
+        //     'https://client-web-dechive.vercel.app/',
+        //   ],
+        //   credentials: true,
+        // },
       }),
     }),
     TypeOrmModule.forRoot({
