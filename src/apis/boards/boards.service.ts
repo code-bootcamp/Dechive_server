@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, In, Repository } from 'typeorm';
+import { DeleteResult, In, Like, Repository } from 'typeorm';
 import { Board } from './entities/board.entity';
 import { HashtagsService } from '../hashtags/hashtags.service';
 import { ProductsService } from '../products/products.service';
@@ -140,7 +140,7 @@ export class BoardsService {
   }: IBoardsServiceFindByTitle): Promise<string[]> {
     return this.boardsRepository
       .find({
-        where: { title },
+        where: { title: Like(`%${title}%`) },
         select: { id: true },
       })
       .then((e) => (e ? e.map((el) => el.id) : []));

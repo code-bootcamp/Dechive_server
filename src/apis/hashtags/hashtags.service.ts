@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Hashtag } from './entities/hashtag.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
@@ -19,7 +19,7 @@ export class HashtagsService {
   }: IHashtagsServiceFindByHash): Promise<string[]> {
     return this.hashtagsRepository
       .findOne({
-        where: { hashtag },
+        where: { hashtag: Like(`%${hashtag}%`) },
         select: { boards: true },
         relations: ['boards'],
       })

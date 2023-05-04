@@ -7,7 +7,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { getRandomNickName } from 'src/commons/util/getRandomNickname';
@@ -107,7 +107,7 @@ export class UsersService {
   findByNick({ nickName }): Promise<string[]> {
     return this.usersRepository
       .findOne({
-        where: { nickName },
+        where: { nickName: Like(`%${nickName}%`) },
         select: { boards: true },
         relations: ['boards'],
       })
