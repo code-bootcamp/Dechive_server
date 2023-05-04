@@ -5,12 +5,23 @@ import { graphqlUploadExpress } from 'graphql-upload';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(graphqlUploadExpress());
   app.enableCors({
-    origin: process.env.ORIGIN,
+    origin: process.env.WHITELIST.split(' '),
+    // origin: process.env.WHITELIST.split(' '),
+    // (origin, callback) => {
+    //   if (
+    //     !origin ||
+    //     process.env.WHITELIST.split(' ').indexOf(origin) !== -1
+    //   ) {
+    //     callback(null, true);
+    //   } else {
+    //     callback(new Error('Not allowed by CORS'));
+    //   }
+    // },
     credentials: true,
   });
   await app.listen(5000, () => {
