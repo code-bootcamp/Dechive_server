@@ -117,7 +117,7 @@ export class UsersService {
   findByJob({ jobGroup }): Promise<string[]> {
     return this.usersRepository
       .find({
-        where: { jobGroup: Like(`%${jobGroup}%`) },
+        where: { jobGroup },
         select: { boards: true },
         relations: ['boards'],
       })
