@@ -1,4 +1,4 @@
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Product } from './entities/product.entity';
@@ -18,6 +18,15 @@ export class ProductsService {
 
   findAll(): Promise<Product[]> {
     return this.productsRepository.find();
+  }
+
+  findByProduct({ name }): Promise<string[]> {
+    return this.productsRepository
+      .find({
+        where: { name: Like(`%${name}%`) },
+        relations: ['board'],
+      })
+      .then((e) => (e.length ? e.map((el) => el.board?.id) : []));
   }
 
   async createProducts({
