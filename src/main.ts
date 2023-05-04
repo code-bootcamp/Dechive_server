@@ -9,14 +9,15 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(graphqlUploadExpress());
-  app.enableCors({
-    origin: process.env.WHITELIST.split(', '),
-    credentials: true,
-  });
+  app
+    .enableCors
+    // {
+    // origin: ['http://localhost:3000', 'https://client-web-dechive.vercel.app/'],
+    // credentials: true,
+    // }
+    ();
   await app.listen(5000, () => {
     console.log('=================');
-    console.log(process.env.WHITELIST.split(', '));
-    console.log(process.env.WHITELIST);
     console.log('🐶🐶🐶 graphql 백엔드 서버 오픈 🐶🐶🐶');
     console.log('=================');
   });

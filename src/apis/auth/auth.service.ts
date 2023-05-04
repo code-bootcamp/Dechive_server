@@ -57,7 +57,10 @@ export class AuthService {
       { secret: process.env.REFRESH_TOKEN, expiresIn: '2w' },
     );
 
-    res.setHeader('Access-Control-Allow-Origin', process.env.ORIGIN);
+    res.setHeader(
+      'Access-Control-Allow-Origin',
+      'http://localhost:3000, https://client-web-dechive.vercel.app/',
+    );
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader(
       'Set-Cookie',
