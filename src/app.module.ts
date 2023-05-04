@@ -37,7 +37,7 @@ import { ProductsModule } from './apis/products/products.module';
         autoSchemaFile: 'src/commons/graphql/schema.gql',
         context: ({ req, res }) => ({ req, res }),
         cors: {
-          origin: process.env.ORIGIN,
+          origin: process.env.WHITELIST.split(', '),
           credentials: true,
         },
       }),
