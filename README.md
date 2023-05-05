@@ -1,5 +1,8 @@
 # ⌨️ [Dechive](https://client-web-dechive.vercel.app/) 
-
+ 데스크 셋업에 관심이 있는 사람들의 정보를 공유하고 다른 인테리어, 몰랐던 장비들을 알게 되는 계기를 만들어 줄 수 있는 커뮤니티를 만드는 프로젝트입니다.
+ <br/>
+ 사용자들은 자신의 책상 사진을 소개하고 구성한 장비들을 구입한 곳을 공유하고,
+ 팔로우와 팔로위 기능으로 사용자들을 연결하고 게시물에 좋아요를 남겨 취향에 맞는 셋업에 쉽게 접근할 수 있습니다.
 
 
 <br/>
@@ -11,49 +14,45 @@
 <br/>
 
 ## 🧱 아키택처
+<p align="center" style="color:gray">
+<img src="https://cdn.discordapp.com/attachments/1103877631629344821/1103922738629967912/8701efb5ec86ec85.png" />
+</p>
 
+- Node.js에서 Express 프레임 워크를 기반으로 IoC와 같은 기능을 포함하며 모듈, 컨트롤러, 서비스 등 기본적인 구조를 갖춘 Nest.js를 통해 개발 속도를 향상시키고 typescript를 통해 안정적인 개발이 가능.
 
-- 백엔드는 NestJs 서버를 구성.
+- 각각의 서버를 동일한 환경에서 작업할 수 있게 Docker-Container를 사용.
 
-- 대규모 서비스를 생각를 해서 MSA 방식을 채택.(독립적으로 개발과, 운용이 가능하고, 의존성이 낮아진다.)
+- Graphql 통신을 통해 REST API의 over,under-vetching을 피하고 하나의 엔드 포인트로 다양한 데이터들 중 필요한 정보만 요청 가능.
 
-- Nginx를 통해서 Api-GateWat를 만들어서 proxy_pass를 통해 MSA방식을 구축했다.
+- Redis를 통해 로그아웃시 토큰을 저장해 유저의 토큰을 만료시키고, 유튜브 API를 통해 받아온 데스크셋업 정보를 일정 기간에 한번 씩 초기화 할 수 있도록 사용.
 
-- 각각의 서버를 Docker-Container를 사용함으로써, 동일한 환경에서 작업할 수 있게 사용했다.
-
-- Container 관리툴인 Kubernetes, ECS, Dokcer Swarm 중, Docker Swarm 를 채택했다.
-
-- Kubernetes는 대규모 서비스에서 더 적합하고, 다루기가 어렵다, ECS(비용 문제)
-
-- Dokcer Swarm은 소규모 서비스에 더 적합하고, CLI를 통해 간단하게 배포가 가능해 진다. -> Kubernetes 보다는 적은 기능을 가지고 있다.
-
-- Github Action을 통해서 Image Build를 하고 VM SSH로 접속후 Docker Swarm Rolling 배포를 선택했다.
-
-- Graphql, RestAPI 통신을 통해, 데이터의 효율성을 생각해 RestAPI <-> MongoDB(mongoose), Graphql <-> MySQL(TypeOrm)을 선택.
-
-- Graphql은 원하는 정보만 받을 수 있기때문에 MySQL과 연결 해서 사용한다. -> 데이터의 전송량이 줄어들어 불필요한 데이터를 전송하지 않는다.
-
-- RestAPI은 모든 정보를 다받기 때문에 데이터를 처리하는데 있어 빠른 MongoDB와 연결해서 사용했다.
-
-- Redis를 통해 일회용성 데이터, 로그아웃시 토큰을 저장해 로그아웃 한 유저는 사용을 제한 하는 용도로 사용
+- GCP의 내부의 SQL 데이터베이스를 통해 안정적인 데이터 보관과 백엔드와의 통신을 지향
 
 <br/>
 
 ## 🏖 ERD
 
-<img src="https://cdn.discordapp.com/attachments/1065225648563560500/1103718982038585404/4.png" width="1000"/>
-
+<p align="center" style="color:gray">
+<img src="https://cdn.discordapp.com/attachments/1103877631629344821/1103877674901962833/4.png" width="800"/>
+</p>
 <br/>
 
 ## 🛠 기술 스택
 
-![TypeScript](https://img.shields.io/badge/typescript-3178C6.svg?style=for-the-badge&logo=typescript&logoColor=white)
-![NestJs](https://img.shields.io/badge/nest.js-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
-![Graphql](https://img.shields.io/badge/graphql-E10098.svg?style=for-the-badge&logo=graphql&logoColor=white)
+### Environment
+![Vscode](https://img.shields.io/badge/visualstudiocode-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
+![Git](https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![Github](https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white)
 <br>
 ![Eslint](https://img.shields.io/badge/Eslint-4B32C3?style=for-the-badge&logo=Eslint&logoColor=white)
 ![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=Prettier&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED.svg?style=for-the-badge&logo=Docker&logoColor=white)
+<br>
+
+### Developement
+![TypeScript](https://img.shields.io/badge/typescript-3178C6.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![NestJs](https://img.shields.io/badge/nest.js-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
+![Graphql](https://img.shields.io/badge/graphql-E10098.svg?style=for-the-badge&logo=graphql&logoColor=white)
 <br>
 ![Mysql](https://img.shields.io/badge/MYSQL-4479A1?style=for-the-badge&logo=MYSQL&logoColor=white)
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
@@ -68,9 +67,9 @@
 ## 🕹️ 주요 기능
 
 1. 데스크 셋업을 공유하고 구성 장비를 소개
-2. 지금 유튜브에서 유행인 데스크 셋업을 소개
-3. 유저간 팔로워, 팔로위 기능을 제공
-
+2. 이미지 업로드와 게시물, 댓글, 대댓글 기능제공 
+3. 지금 유튜브에서 유행인 데스크 셋업을 소개
+4. 유저간 팔로워, 팔로위 기능을 통해 본인취향의 셋업에 손쉽게 접근
 
 
 <br/>
@@ -79,9 +78,9 @@
 
 | 이름                 | 설명                     |
 | :-----------------: | :--------------------- | 
-| typeorm             | 
-| axios               | 
-| redis               | 
+| typeorm             | Nest.js와 함께 사용하며 점유율이 가장 높고 데이터 매퍼 패턴을 지원하며 유지보수가 용이한 TypeORM을 사용 
+| axios               | Fetch API와는 달리 요청및 응답객체를 직접작성하지 않고 매서드와 속성을 제공하여 코드가 간결해지고, Promise 처리과정에서 에러를 catch블록으로 던져주기에 자동으로 에러를 다룰수 있으므로 axios를 사용
+| redis               | 클라이언트에서 동일한 요청이 계속 올때 서버에서 직접 데이터를 찾으면 상당히 비효율적이고 데이터의 크기에 따라 응답속도가 느려짐. 이때 요청결과를 미리 저장해 두었다가, 동일한 데이터 요청이 오면 바로 전달할 수 있도록 redis를 사용
 | bcrypt              | 해시 함수들은 무결성 검사를 위해 빠른 속도가 필요하지만, 해커가 DB를 탈취 했을때 빠른 속도로 비밀번호를 알아낼 수 있음. 패스워드 저장에서의 해시 함수의 문제점을 보완해서 나온것이 pbkfd2. 8글자 부터는 동일 시스템에서 bcrypt가 pbkfd2보다 4배 이상의 시간을 소모해야 비밀번호를 알아낼 수 있기 때문에 보안성을 위해 사용
 | passport            | passport는 express 프레임워크 상에서 사용되는 인증 미들웨어 라이브러리. strategies로 알려져 있는 인증 메커니즘을 각 모듈로 패키지화해서 제공. 즉, 앱은 passport에서 지원하는 전략을 선택해 의존성 없이 독립적으로 이용 가능함
 | nodemailer          | 이메일 인증을 위해서 이메일 전송에 필요한 네트워크 프로토콜인 SMTP(우편 전송 프로토콜)을 사용해야 함. Node.js SMTP기반으로 개발된 전용 모듈인 nodemailer는 사용법이 매우 간단하여 사용하게 됨
