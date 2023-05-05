@@ -88,6 +88,10 @@ export class UsersService {
     };
   }
 
+  fetchUsers(): Promise<User[]> {
+    return this.usersRepository.find();
+  }
+
   findByUsers({ users }: IUsersServiceFindByUsers): Promise<User[]> {
     return this.usersRepository.find({
       where: { id: In(users) },
