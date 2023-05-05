@@ -88,8 +88,16 @@ export class UsersService {
     };
   }
 
-  fetchUsers(): Promise<User[]> {
-    return this.usersRepository.find();
+  async fetchUsers(): Promise<User[]> {
+    const users = await this.usersRepository.find({
+      relations: ['snsAccounts', 'followings', 'followees'],
+    });
+
+    users.forEach((el) => {
+      el['followeesCount'] = el.followees.length;
+      el['followingsCount'] = el.followings.length;
+    });
+    return users;
   }
 
   findByUsers({ users }: IUsersServiceFindByUsers): Promise<User[]> {
