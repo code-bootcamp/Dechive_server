@@ -24,6 +24,11 @@ export class UsersResolver {
     return this.usersService.fetchUser({ id: userid });
   }
 
+  @Query(() => [User])
+  fetchUsers(): Promise<User[]> {
+    return this.usersService.fetchUsers();
+  }
+
   @UseGuards(DechiveAuthGuard('access'))
   @Query(() => User)
   fetchLoginUser(

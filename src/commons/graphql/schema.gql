@@ -107,6 +107,7 @@ type Youtube {
 
 type Query {
   fetchUser(userid: String!): FetchUser!
+  fetchUsers: [User!]!
   fetchLoginUser: User!
   fetchBoard(userid: String!, boardid: String!): Board!
   fetchBoards(userid: String!): [Board!]!
