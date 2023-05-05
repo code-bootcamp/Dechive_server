@@ -7,12 +7,6 @@ export interface IBoardsServiceFetchsUserLiked {
   id: User['id'];
 }
 
-export interface IBoardsServiceFetchBoard {
-  boardid: Board['id'];
-  userid: User['id'];
-  isView?: boolean;
-}
-
 export interface IBoardsServiceFindBoard {
   boardid: Board['id'];
   isView?: boolean;
@@ -59,4 +53,8 @@ export interface IBoardsServiceDeleteBoard {
 export interface IBoardsServiceUpdateBoardLiker {
   userid: User['id'];
   boardid: Board['id'];
+}
+export interface IBoardsServiceGetLikeStatus {
+  userid: User['id'];
+  boards: Board[];
 }
