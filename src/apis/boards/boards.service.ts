@@ -14,7 +14,6 @@ import { PicturesService } from '../pictures/pictures.service';
 import { Product } from '../products/entities/product.entity';
 import {
   IBoardsServiceCreateBoard,
-  IBoardsServiceFetchBoard,
   IBoardsServiceFetchProductsByUserid,
   IBoardsServiceFetchsUserLiked,
   IBoardsServiceSearchBoards,
@@ -24,7 +23,9 @@ import {
   IBoardsServiceDeleteBoard,
   IBoardsServiceUpdateBoardLiker,
   IBoardsServiceFindBoard,
+  IBoardsServiceGetLikeStatus,
 } from './interfaces/board-service.interface';
+import { getLikeStatus } from 'src/commons/util/getLikeStatus';
 
 @Injectable()
 export class BoardsService {
@@ -76,22 +77,6 @@ export class BoardsService {
     }
     return board;
   }
-  // findOneWithLike({
-  //   isView,
-  //   boardid,
-  //   userid, //
-  // }: IBoardsServiceFetchBoard) {
-  //   // const board = await this.findOneBoard({
-  //   //   isView,
-  //   //   boardid,
-  //   // });
-  //   // this.getLikeStatus({ boards: [board], userid })[0];
-  //   // 프론트에서 서버사이드 렌더링 관련 이슈로 userid값을 넘겨주기 어려워 userid를 사용하지 않음
-  //   return this.findOneBoard({
-  //     isView,
-  //     boardid,
-  //   });
-  // }
 
   async findAllBoards({ userid }): Promise<Board[]> {
     const boards = await this.boardsRepository.find({
@@ -100,7 +85,7 @@ export class BoardsService {
         createdAt: 'DESC',
       },
     });
-    if (userid) return this.getLikeStatus({ boards, userid });
+    if (userid) getLikeStatus({ boards, userid });
     return boards;
   }
 
@@ -114,7 +99,7 @@ export class BoardsService {
       },
       take: 10,
     });
-    if (userid) return this.getLikeStatus({ boards, userid });
+    if (userid) getLikeStatus({ boards, userid });
     return boards;
   }
 
@@ -131,7 +116,7 @@ export class BoardsService {
         createdAt: 'DESC',
       },
     });
-    if (userid) return this.getLikeStatus({ boards, userid });
+    if (userid) getLikeStatus({ boards, userid });
     return boards;
   }
 
@@ -202,19 +187,6 @@ export class BoardsService {
       };
     });
   }
-
-  getLikeStatus = ({ boards, userid }) => {
-    boards.forEach((el) => {
-      if (el.likers.length) {
-        el.likers.forEach((e) => {
-          if (userid === e.id) {
-            el['like'] = true;
-          }
-        });
-      }
-    });
-    return boards;
-  };
 
   async createBoard({
     userid,

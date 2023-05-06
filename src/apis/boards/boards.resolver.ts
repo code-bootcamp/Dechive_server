@@ -18,7 +18,7 @@ export class BoardsResolver {
 
   @Query(() => Board)
   fetchBoard(
-    @Args('userid') userid: string, //
+    @Args('userid') userid: string, //아무의미없는 값, 좋아요 여부는 프론트에서 판단
     @Args('boardid') boardid: string, //
   ) {
     return this.boardsService.findOneBoard({
