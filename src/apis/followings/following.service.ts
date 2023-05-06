@@ -12,6 +12,7 @@ import {
   IFollowingsServiceFindFollwingBoards,
   IFollowingsServiceUpdate,
 } from './interfaces/followings-service.interface';
+import { getLikeStatus } from 'src/commons/util/getLikeStatus';
 
 @Injectable()
 export class FollowingsService {
@@ -110,12 +111,15 @@ export class FollowingsService {
   async fetchFollowingBoards({
     id,
   }: IFollowingsServiceFindFollwingBoards): Promise<User[]> {
-    const users = await this.followingRepository
+    const userids = await this.followingRepository
       .find({
         where: { users: { id } },
       })
       .then((e) => (e ? e.map((el) => el.followingid) : []));
-
-    return this.usersService.followingBoards({ users });
+    const users = await this.usersService.followingBoards({ users: userids });
+    users.forEach((user) => {
+      if (user.boards) getLikeStatus({ boards: user.boards, userid: id });
+    });
+    return users;
   }
 }

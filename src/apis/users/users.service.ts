@@ -110,7 +110,12 @@ export class UsersService {
   followingBoards({ users }: IUSersServiceFollowingBoards): Promise<User[]> {
     return this.usersRepository.find({
       where: { id: In(users) },
-      relations: ['boards', 'boards.writer', 'boards.pictures'],
+      relations: [
+        'boards',
+        'boards.writer',
+        'boards.likers',
+        'boards.pictures',
+      ],
       order: { boards: { createdAt: 'DESC' } },
       take: 12,
     });

@@ -25,6 +25,7 @@ import {
   IBoardsServiceFindBoard,
   IBoardsServiceGetLikeStatus,
 } from './interfaces/board-service.interface';
+import { getLikeStatus } from 'src/commons/util/getLikeStatus';
 
 @Injectable()
 export class BoardsService {
@@ -84,7 +85,7 @@ export class BoardsService {
         createdAt: 'DESC',
       },
     });
-    if (userid) this.getLikeStatus({ boards, userid });
+    if (userid) getLikeStatus({ boards, userid });
     return boards;
   }
 
@@ -98,7 +99,7 @@ export class BoardsService {
       },
       take: 10,
     });
-    if (userid) this.getLikeStatus({ boards, userid });
+    if (userid) getLikeStatus({ boards, userid });
     return boards;
   }
 
@@ -115,7 +116,7 @@ export class BoardsService {
         createdAt: 'DESC',
       },
     });
-    if (userid) this.getLikeStatus({ boards, userid });
+    if (userid) getLikeStatus({ boards, userid });
     return boards;
   }
 
@@ -186,19 +187,6 @@ export class BoardsService {
       };
     });
   }
-
-  getLikeStatus = ({ boards, userid }: IBoardsServiceGetLikeStatus) => {
-    boards.forEach((el) => {
-      if (el.likers.length) {
-        el.likers.forEach((e) => {
-          if (userid === e.id) {
-            el['like'] = true;
-          }
-        });
-      }
-    });
-    return boards;
-  };
 
   async createBoard({
     userid,
