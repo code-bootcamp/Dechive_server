@@ -15,25 +15,28 @@
 
 ## 🧱 아키택처
 <p align="center" style="color:gray">
-<img src="https://cdn.discordapp.com/attachments/1103877631629344821/1103922738629967912/8701efb5ec86ec85.png" />
+<img src="https://cdn.discordapp.com/attachments/1103877631629344821/1104685967098519565/drawio_2.png" width="500"/>
 </p>
+</br>
 
-- Node.js에서 Express 프레임 워크를 기반으로 IoC와 같은 기능을 포함하며 모듈, 컨트롤러, 서비스 등 기본적인 구조를 갖춘 Nest.js를 통해 개발 속도를 향상시키고 typescript를 통해 안정적인 개발이 가능.
-
-- 각각의 서버를 동일한 환경에서 작업할 수 있게 Docker-Container를 사용.
-
+- Node.js에서 Express 프레임 워크를 기반으로 만들어진 Nest.js를 통해 IoC와 같은 기능과 기본적으로 제공되는 모듈, 컨트롤러, 서비스 구조를 통해 개발 속도를 향상시키고 typescript를 통해 안정적인 개발이 가능.
+ 
 - Graphql 통신을 통해 REST API의 over,under-vetching을 피하고 하나의 엔드 포인트로 다양한 데이터들 중 필요한 정보만 요청 가능.
 
-- Redis를 통해 로그아웃시 토큰을 저장해 유저의 토큰을 만료시키고, 유튜브 API를 통해 받아온 데스크셋업 정보를 일정 기간에 한번 씩 초기화 할 수 있도록 사용.
+- Nest.js와 Graphql과 함꼐 사용할 ORM은 팀원이 모두 사용해보고, 가장 점유율이 높아 다양한 예시코드와 Nest 공식문서에도 자료가 많은 TypeORM으로 선정하여 유지보수와 개발이 용이하게 함.
 
-- GCP의 내부의 SQL 데이터베이스를 통해 안정적인 데이터 보관과 백엔드와의 통신을 지향
+- 유저의 회원등록에 편의성을 더하기위해 Google과 kakao 소셜로그인을 추가.
+
+- 특정 키워드에 대한 YouTube 영상들과 영상들에 대한 정보를 받아오기위해 YouTube Data API v3을 사용.
+
+- Redis를 통해 로그아웃시 토큰을 저장해 유저의 토큰을 만료시키고, 유튜브 API를 통해 받아온 데스크셋업 정보를 일정 기간에 한번 씩 초기화 할 수 있도록 사용.
 
 <br/>
 
 ## 🏖 ERD
 
 <p align="center" style="color:gray">
-<img src="https://cdn.discordapp.com/attachments/1103877631629344821/1103877674901962833/4.png" width="800"/>
+<img src="https://cdn.discordapp.com/attachments/1103877631629344821/1104715182665637968/5.png" width="1200"/>
 </p>
 <br/>
 
@@ -66,10 +69,9 @@
 
 ## 🕹️ 주요 기능
 
-1. 데스크 셋업을 공유하고 구성 장비를 소개
-2. 이미지 업로드와 게시물, 댓글, 대댓글 기능제공 
-3. 지금 유튜브에서 유행인 데스크 셋업을 소개
-4. 유저간 팔로워, 팔로위 기능을 통해 본인취향의 셋업에 손쉽게 접근
+1. 지금 유튜브에서 유행인 데스크 셋업을 소개
+2. 유저간 팔로워, 팔로위 기능을 통해 본인취향의 셋업에 손쉽게 접근
+3. 유저가 공유한 구입처 링크를 통해 og정보들 받아와 간략한 상품 정보를 제공한다.
 
 
 <br/>
