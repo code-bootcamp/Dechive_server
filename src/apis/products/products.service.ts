@@ -17,7 +17,9 @@ export class ProductsService {
   ) {}
 
   findAll(): Promise<Product[]> {
-    return this.productsRepository.find();
+    return this.productsRepository.find({
+      relations: ['board'],
+    });
   }
 
   findByProduct({ name }): Promise<string[]> {

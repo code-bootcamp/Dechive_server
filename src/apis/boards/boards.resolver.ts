@@ -41,14 +41,11 @@ export class BoardsResolver {
     return getOpenGraph({ url });
   }
 
-  @UseGuards(DechiveAuthGuard('access'))
   @Query(() => [Board])
   fetchUserBoards(
-    @Args('userid') userid: string,
-    @Context() context: IContext, //
+    @Args('userid') userid: string, //
   ) {
-    const { id } = context.req.user;
-    return this.boardsService.findUserBoards({ id, userid });
+    return this.boardsService.findUserBoards({ userid });
   }
 
   @Query(() => [Board])

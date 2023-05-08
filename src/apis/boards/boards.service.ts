@@ -104,12 +104,11 @@ export class BoardsService {
   }
 
   async findUserBoards({
-    id,
     userid,
   }: IBoardsServiceFindUserBoards): Promise<Board[]> {
     const boards = await this.boardsRepository.find({
       where: {
-        writer: { id: userid ?? id },
+        writer: { id: userid },
       },
       relations: ['writer', 'products', 'hashtags', 'likers', 'pictures'],
       order: {
