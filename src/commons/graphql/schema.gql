@@ -14,7 +14,7 @@ type Product {
   url: String!
   description: String
   picture: String
-  board: Board
+  board: Board!
 }
 
 type SnsAccount {
