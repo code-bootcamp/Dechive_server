@@ -36,10 +36,7 @@ import { ProductsModule } from './apis/products/products.module';
       useFactory: () => ({
         autoSchemaFile: 'src/commons/graphql/schema.gql',
         context: ({ req, res }) => ({ req, res }),
-        cors: {
-          origin: process.env.ORIGIN,
-          credentials: true,
-        },
+        cors: false,
       }),
     }),
     TypeOrmModule.forRoot({

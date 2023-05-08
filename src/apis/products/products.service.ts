@@ -6,14 +6,18 @@ import { getOpenGraph } from 'src/commons/util/getOpenGraph';
 import {
   IProductsServiceCreate,
   IProductsServiceDelete,
+  IProductsServiceFetchByUserid,
   IProductsServiceUpdate,
 } from './interfaces/products-service.interface';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productsRepository: Repository<Product>, //
+
+    private readonly usersService: UsersService,
   ) {}
 
   findAll(): Promise<Product[]> {
@@ -22,13 +26,25 @@ export class ProductsService {
     });
   }
 
-  findByProduct({ name }): Promise<string[]> {
+  findByProduct({
+    name, //
+  }): Promise<string[]> {
     return this.productsRepository
       .find({
         where: { name: Like(`%${name}%`) },
         relations: ['board'],
       })
       .then((e) => (e.length ? e.map((el) => el.board?.id) : []));
+  }
+
+  async findProductsFromOneUser({
+    userid, //
+  }: IProductsServiceFetchByUserid): Promise<Product[]> {
+    return [].concat(
+      ...(await this.usersService.findOneUser({ id: userid })).boards.map(
+        (board) => board.products,
+      ),
+    );
   }
 
   async createProducts({

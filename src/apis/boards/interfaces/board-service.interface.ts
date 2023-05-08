@@ -12,12 +12,12 @@ export interface IBoardsServiceFindBoard {
   isView?: boolean;
 }
 
-export interface IBoardsServiceFetchProductsByUserid {
-  userid: User['id'];
-}
-
 export interface IBoardsServiceSearchBoards {
   keyword: string;
+}
+
+export interface IBoardsServiceFindByTitle {
+  title: IBoardsServiceSearchBoards['keyword'];
 }
 
 export interface IBoardsServiceCreateBoard {
@@ -29,10 +29,6 @@ export interface IBoardsServiceUpdateBoard {
   userid: User['id'];
   boardid: Board['id'];
   updateBoardInput: UpdateBoardInput;
-}
-
-export interface IBoardsServiceFindByTitle {
-  title: IBoardsServiceSearchBoards['keyword'];
 }
 
 export interface IBoardsServiceFindUserBoards {
@@ -48,7 +44,16 @@ export interface IBoardsServiceUpdateBoardLiker {
   userid: User['id'];
   boardid: Board['id'];
 }
+
 export interface IBoardsServiceGetLikeStatus {
   userid: User['id'];
   boards: Board[];
+}
+
+export interface IBoardsServicfindAllBoards {
+  userid: User['id'];
+}
+
+export interface IBoardsServicfindTop10 {
+  userid: User['id'];
 }

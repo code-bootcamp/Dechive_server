@@ -11,10 +11,8 @@ import { ProductsService } from '../products/products.service';
 import { UsersService } from '../users/users.service';
 import { Hashtag } from '../hashtags/entities/hashtag.entity';
 import { PicturesService } from '../pictures/pictures.service';
-import { Product } from '../products/entities/product.entity';
 import {
   IBoardsServiceCreateBoard,
-  IBoardsServiceFetchProductsByUserid,
   IBoardsServiceFetchsUserLiked,
   IBoardsServiceSearchBoards,
   IBoardsServiceUpdateBoard,
@@ -23,7 +21,8 @@ import {
   IBoardsServiceDeleteBoard,
   IBoardsServiceUpdateBoardLiker,
   IBoardsServiceFindBoard,
-  IBoardsServiceGetLikeStatus,
+  IBoardsServicfindAllBoards,
+  IBoardsServicfindTop10,
 } from './interfaces/board-service.interface';
 import { getLikeStatus } from 'src/commons/util/getLikeStatus';
 
@@ -78,7 +77,9 @@ export class BoardsService {
     return board;
   }
 
-  async findAllBoards({ userid }): Promise<Board[]> {
+  async findAllBoards({
+    userid, //
+  }: IBoardsServicfindAllBoards): Promise<Board[]> {
     const boards = await this.boardsRepository.find({
       relations: ['writer', 'products', 'hashtags', 'likers', 'pictures'],
       order: {
@@ -89,7 +90,9 @@ export class BoardsService {
     return boards;
   }
 
-  async findTop10({ userid }): Promise<Board[]> {
+  async findTop10({
+    userid, //
+  }: IBoardsServicfindTop10): Promise<Board[]> {
     const boards = await this.boardsRepository.find({
       relations: ['writer', 'products', 'hashtags', 'likers', 'pictures'],
       order: {
@@ -104,7 +107,7 @@ export class BoardsService {
   }
 
   async findUserBoards({
-    userid,
+    userid, //
   }: IBoardsServiceFindUserBoards): Promise<Board[]> {
     const boards = await this.boardsRepository.find({
       where: {
@@ -151,16 +154,6 @@ export class BoardsService {
         createdAt: 'DESC',
       },
     });
-  }
-
-  async findProductsFromOneUser({
-    userid, //
-  }: IBoardsServiceFetchProductsByUserid): Promise<Product[]> {
-    return [].concat(
-      ...(await this.usersService.findOneUser({ id: userid })).boards.map(
-        (board) => board.products,
-      ),
-    );
   }
 
   async findBoardUserLiked({
