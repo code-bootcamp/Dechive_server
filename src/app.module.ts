@@ -36,12 +36,24 @@ import { ProductsModule } from './apis/products/products.module';
       useFactory: () => ({
         autoSchemaFile: 'src/commons/graphql/schema.gql',
         context: ({ req, res }) => ({ req, res }),
-        cors: {
-          origin: process.env.ORIGIN,
-          credentials: true,
-        },
+        cors: false,
+        // cors: {
+        //   origin: process.env.WHITELIST.split(', '),
+        //   // origin: process.env.ORIGIN,
+        //   credentials: true,
+        // },
       }),
     }),
+    // GraphQLModule.forRoot<ApolloDriverConfig>({
+    //   driver: ApolloDriver,
+    //   autoSchemaFile: 'src/commons/graphql/schema.gql',
+    //   context: ({ req, res }) => ({ req, res }),
+    //   cors: {
+    //     // origin: process.env.WHITELIST.split(', '),
+    //     origin: process.env.ORIGIN,
+    //     credentials: true,
+    //   },
+    // }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',
       host: process.env.DATABASE_HOST,
