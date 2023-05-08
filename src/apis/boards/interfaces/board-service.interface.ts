@@ -31,17 +31,11 @@ export interface IBoardsServiceUpdateBoard {
   updateBoardInput: UpdateBoardInput;
 }
 
-export interface IBoardsServiceFindUserBoards {
-  id: User['id'];
-  userid: User['id'];
-}
-
 export interface IBoardsServiceFindByTitle {
   title: IBoardsServiceSearchBoards['keyword'];
 }
 
 export interface IBoardsServiceFindUserBoards {
-  id: User['id'];
   userid: User['id'];
 }
 
