@@ -11,8 +11,8 @@ async function bootstrap() {
   app.use(graphqlUploadExpress());
   app.enableCors({
     origin: (origin, callback) => {
-      if (!origin || process.env.WHITELIST.includes(origin)) {
-        callback(null, true);
+      if (process.env.WHITELIST.split(' ').includes(origin)) {
+        callback(null, origin);
       } else {
         callback(new Error('Not allowed by CORS'));
       }
