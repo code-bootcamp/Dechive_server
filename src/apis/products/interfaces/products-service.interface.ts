@@ -1,10 +1,11 @@
 import { Board } from 'src/apis/boards/entities/board.entity';
 import { CreateProductInput } from '../dto/product-create.input';
 import { UpdateProductInput } from '../dto/product-update.input';
-import { Hashtag } from 'src/apis/hashtags/entities/hashtag.entity';
+import { User } from 'src/apis/users/entities/user.entity';
+import { Product } from '../entities/product.entity';
 
-export interface IProductsServiceFindByHash {
-  hashtag: Hashtag['hashtag'];
+export interface IProductsServiceFindByProduct {
+  name: Product['name'];
 }
 
 export interface IProductsServiceCreate {
@@ -17,4 +18,8 @@ export interface IProductsServiceUpdate {
 
 export interface IProductsServiceDelete {
   boardid: Board['id'];
+}
+
+export interface IProductsServiceFetchByUserid {
+  userid: User['id'];
 }

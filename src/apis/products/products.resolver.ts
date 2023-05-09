@@ -1,4 +1,4 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
 
@@ -11,5 +11,12 @@ export class ProductsResolver {
   @Query(() => [Product])
   async fetchAllProducts(): Promise<Product[]> {
     return this.productsService.findAll();
+  }
+
+  @Query(() => [Product])
+  fetchUserProducts(
+    @Args('userid') userid: string, //
+  ): Promise<Product[]> {
+    return this.productsService.findProductsFromOneUser({ userid });
   }
 }

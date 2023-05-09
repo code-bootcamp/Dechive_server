@@ -17,7 +17,7 @@ export class RepliesResolver {
   async createReply(
     @Args('createReplyInput') createReplyInput: CreateReplyInput,
     @Context() context: IContext,
-  ) {
+  ): Promise<Reply> {
     const userid = context.req.user.id;
     return this.RepliesService.createReply({
       userid,
@@ -30,12 +30,12 @@ export class RepliesResolver {
   async deleteReply(
     @Args('replyid') replyid: string,
     @Context() context: IContext,
-  ) {
+  ): Promise<boolean> {
     const userid = context.req.user.id;
     const result = await this.RepliesService.deleteReply({
       userid,
       replyid,
     });
-    return result.affected === 1;
+    return Boolean(result.affected);
   }
 }

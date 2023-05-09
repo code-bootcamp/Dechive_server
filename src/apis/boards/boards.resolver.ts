@@ -6,7 +6,6 @@ import { UseGuards } from '@nestjs/common';
 import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { IContext } from 'src/commons/interfaces/context';
 import { UpdateBoardInput } from './dto/board-update.input';
-import { Product } from '../products/entities/product.entity';
 import { getOpenGraph } from 'src/commons/util/getOpenGraph';
 import { OpenGraph } from '../products/dto/opengraph.return-type';
 
@@ -20,7 +19,7 @@ export class BoardsResolver {
   fetchBoard(
     @Args('userid') userid: string, //아무의미없는 값, 좋아요 여부는 프론트에서 판단
     @Args('boardid') boardid: string, //
-  ) {
+  ): Promise<Board> {
     return this.boardsService.findOneBoard({
       boardid,
       isView: true,
@@ -30,7 +29,7 @@ export class BoardsResolver {
   @Query(() => [Board])
   fetchBoards(
     @Args('userid') userid: string, //
-  ) {
+  ): Promise<Board[]> {
     return this.boardsService.findAllBoards({ userid });
   }
 
@@ -44,27 +43,23 @@ export class BoardsResolver {
   @Query(() => [Board])
   fetchUserBoards(
     @Args('userid') userid: string, //
-  ) {
-    return this.boardsService.findUserBoards({ userid });
+    @Args('searchid') searchid: string,
+  ): Promise<Board[]> {
+    return this.boardsService.findUserBoards({ searchid, userid });
   }
 
   @Query(() => [Board])
   fetchTop10(
     @Args('userid') userid: string, //
-  ) {
+  ): Promise<Board[]> {
     return this.boardsService.findTop10({ userid });
-  }
-
-  @Query(() => [Product])
-  fetchUserProducts(@Args('userid') userid: string) {
-    return this.boardsService.findProductsFromOneUser({ userid });
   }
 
   @UseGuards(DechiveAuthGuard('access'))
   @Query(() => [Board])
   fetchBoardsUserLiked(
     @Context() context: IContext, //
-  ) {
+  ): Promise<Board[]> {
     const { id } = context.req.user;
     return this.boardsService.findBoardUserLiked({ id });
   }
@@ -72,7 +67,7 @@ export class BoardsResolver {
   @Query(() => [Board])
   searchBoards(
     @Args('keyword') keyword: string, //
-  ) {
+  ): Promise<Board[]> {
     return this.boardsService.searchBoards({
       keyword,
     });
@@ -111,7 +106,7 @@ export class BoardsResolver {
   async deleteBoard(
     @Args('boardid') boardid: string, //
     @Context() context: IContext,
-  ) {
+  ): Promise<boolean> {
     const userid = context.req.user.id;
     await this.boardsService.deleteBoard({
       userid,
@@ -125,7 +120,7 @@ export class BoardsResolver {
   updateBoardLiker(
     @Args('boardid') boardid: string, //
     @Context() context: IContext,
-  ) {
+  ): Promise<boolean> {
     const userid = context.req.user.id;
     return this.boardsService.updateBoardLiker({
       userid,

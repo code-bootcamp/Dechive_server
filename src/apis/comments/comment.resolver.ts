@@ -16,7 +16,7 @@ export class CommentsResolver {
   async createComment(
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
     @Context() context: IContext,
-  ) {
+  ): Promise<Comments> {
     return this.commentsService.createComment({
       userid: context.req.user.id,
       createCommentInput,
@@ -28,12 +28,12 @@ export class CommentsResolver {
   async deleteComment(
     @Args('commentid') commentid: string,
     @Context() context: IContext,
-  ) {
+  ): Promise<boolean> {
     const userid = context.req.user.id;
     const result = await this.commentsService.deleteComment({
       userid,
       commentid,
     });
-    return result.affected;
+    return Boolean(result.affected);
   }
 }
