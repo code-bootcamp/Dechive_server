@@ -63,7 +63,7 @@ export class AuthService {
     if (process.env.ORIGIN === 'http://localhost:3000')
       res.setHeader(
         'Set-Cookie',
-        `refreshToken=${refreshToken}; path=/; domain=http://34.64.190.109:5000; Secure=false; SameSite=None; httpOnly`,
+        `refreshToken=${refreshToken}; path=/; Secure=false; SameSite=None; httpOnly`,
       );
     else {
       res.setHeader(
