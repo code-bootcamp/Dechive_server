@@ -60,6 +60,7 @@ export class AuthService {
       { secret: process.env.REFRESH_TOKEN, expiresIn: '2w' },
     );
     const header = res.req?.rawHeaders;
+    console.log(header);
     const origin = header ? header[header.indexOf('Origin') + 1] : 'Error';
     console.log(origin);
     if (process.env.WHITELIST.split(' ').includes(origin)) {
