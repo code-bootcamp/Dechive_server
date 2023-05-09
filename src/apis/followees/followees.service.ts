@@ -70,12 +70,20 @@ export class FolloweesService {
       result.forEach((el) => {
         if (el.followeeid) users.push(el.followeeid);
       });
-      const guest = await this.usersService.findOneUser({ id: guestid });
+      if (guestid) {
+        const guest = await this.usersService.findOneUser({ id: guestid });
 
-      user = getFollowingByFollowees({
-        guest,
-        user: await this.usersService.findByUsers({ users }),
-      });
+        user = getFollowingByFollowees({
+          guest,
+          user: await this.usersService.findByUsers({ users }),
+        });
+      } else {
+        user = await this.usersService.findByUsers({ users });
+        user.forEach((el) => {
+          el['followeesCount'] = el.followees.length;
+          el['followingsCount'] = el.followings.length;
+        });
+      }
     }
 
     return user;

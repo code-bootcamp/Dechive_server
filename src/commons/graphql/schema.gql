@@ -118,10 +118,15 @@ type Query {
   fetchBoardsUserLiked: [Board!]!
   searchBoards(keyword: String!): [Board!]!
   fetchAllProducts: [Product!]!
-  fetchFollowees(userid: String!): [User!]!
+  fetchFollowees(FetchFollowees: FetchFollowees!): [User!]!
   fetchFollowings(FetchFollowings: FetchFollowings!): [User!]!
   fetchFollowingBoards: [User!]!
   fetchYoutube: [Youtube!]!
+}
+
+input FetchFollowees {
+  userid: String!
+  loginUserid: String
 }
 
 input FetchFollowings {
