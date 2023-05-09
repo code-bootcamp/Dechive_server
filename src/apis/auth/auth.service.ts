@@ -62,7 +62,10 @@ export class AuthService {
       res.setHeader('Access-Control-Allow-Origin', origin);
       res.setHeader('Access-Control-Allow-Credentials', 'true');
       if (origin.split(':')[1] === '//localhost')
-        res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+        res.setHeader(
+          'Set-Cookie',
+          `refreshToken=${refreshToken}; path=/; domain=.mobomobo.shop`,
+        );
       else {
         res.setHeader(
           'Set-Cookie',
