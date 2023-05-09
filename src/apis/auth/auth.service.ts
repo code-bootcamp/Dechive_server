@@ -61,11 +61,8 @@ export class AuthService {
     if (process.env.WHITELIST.split(' ').includes(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin);
       res.setHeader('Access-Control-Allow-Credentials', 'true');
-      if (origin.split(':')[1] === '//localhost')
-        res.setHeader(
-          'Set-Cookie',
-          `refreshToken=${refreshToken}; path=/; domain=.mobomobo.shop`,
-        );
+      if (origin === 'http://localhost:3000')
+        res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
       else {
         res.setHeader(
           'Set-Cookie',
