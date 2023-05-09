@@ -60,9 +60,8 @@ export class AuthService {
       { secret: process.env.REFRESH_TOKEN, expiresIn: '2w' },
     );
     const header = res.req?.rawHeaders;
-    console.log(header);
-    const origin = header ? header[header.indexOf('Origin') + 1] : 'Error';
-    console.log(origin);
+    const origin =
+      header[Math.max(header.indexOf('Origin'), header.indexOf('origin')) + 1];
     if (process.env.WHITELIST.split(' ').includes(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin);
       res.setHeader('Access-Control-Allow-Credentials', 'true');
