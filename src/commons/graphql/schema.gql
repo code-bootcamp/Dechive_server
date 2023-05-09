@@ -124,6 +124,16 @@ type Query {
   fetchYoutube: [Youtube!]!
 }
 
+input FetchFollowees {
+  userid: String!
+  loginUserid: String
+}
+
+input FetchFollowings {
+  userid: String!
+  loginUserid: String
+}
+
 type Mutation {
   login(loginInput: LoginInput!): String!
   restoreAccessToken: String!

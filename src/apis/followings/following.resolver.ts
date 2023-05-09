@@ -3,6 +3,7 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/commons/interfaces/context';
 import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { User } from '../users/entities/user.entity';
+import { FetchFollowings } from './dto/following-fetch.input';
 import { Following } from './entities/followings.entity';
 import { FollowingsService } from './following.service';
 
@@ -22,13 +23,12 @@ export class FollowingsResolver {
     return this.followingsService.updateFollowing({ id, followingid });
   }
 
-  @UseGuards(DechiveAuthGuard('access'))
   @Query(() => [User])
   fetchFollowings(
-    @Args('userid') userid: string, //
-    @Context() context: IContext,
+    @Args('FetchFollowings') fetchFollowings: FetchFollowings, //
   ): Promise<User[]> {
-    const guestid = context.req.user.id;
+    const { userid, loginUserid: guestid } = fetchFollowings;
+
     return this.followingsService.fetchFollowings({ id: userid, guestid });
   }
 

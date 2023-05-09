@@ -3,6 +3,7 @@ import { Args, Resolver, Query, Context } from '@nestjs/graphql';
 import { IContext } from 'src/commons/interfaces/context';
 import { DechiveAuthGuard } from '../auth/guards/auth.guard';
 import { User } from '../users/entities/user.entity';
+import { FetchFollowees } from './dto/followee-fetch.input';
 import { FolloweesService } from './followees.service';
 
 @Resolver()
@@ -11,13 +12,11 @@ export class FolloweesResolver {
     private readonly followeesService: FolloweesService, //
   ) {}
 
-  @UseGuards(DechiveAuthGuard('access'))
   @Query(() => [User])
   fetchFollowees(
-    @Args('userid') userid: string, //
-    @Context() context: IContext,
+    @Args('FetchFollowees') fetchFollowees: FetchFollowees, //
   ): Promise<User[]> {
-    const guestid = context.req.user.id;
+    const { userid, loginUserid: guestid } = fetchFollowees;
     return this.followeesService.fetchFollowees({ id: userid, guestid });
   }
 }
