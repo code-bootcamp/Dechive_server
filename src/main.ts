@@ -10,7 +10,16 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(graphqlUploadExpress());
   app.enableCors({
-    origin: process.env.ORIGIN,
+    origin: (requestOrigin, callback) => {
+      if (
+        !requestOrigin ||
+        process.env.WHITELIST.split(' ').includes(requestOrigin)
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   });
   await app.listen(5000, () => {
