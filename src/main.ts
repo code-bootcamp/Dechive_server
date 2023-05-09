@@ -10,13 +10,19 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(graphqlUploadExpress());
   app.enableCors({
-    origin: (origin, callback) => {
-      if (!origin || process.env.WHITELIST.split(' ').includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: true,
+    // (requestOrigin, callback) => {
+    //   if (
+    //     !
+    //     requestOrigin ||
+    //     process.env.WHITELIST.split(' ').includes(
+    //       requestOrigin)
+    //   ) {
+    //     callback(null, true);
+    //   } else {
+    //     callback(new Error('Not allowed by CORS'));
+    //   }
+    // },
     credentials: true,
   });
   await app.listen(5000, () => {
