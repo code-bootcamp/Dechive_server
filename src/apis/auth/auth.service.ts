@@ -56,12 +56,20 @@ export class AuthService {
       { sub: { email: user.email, id: user.id } },
       { secret: process.env.REFRESH_TOKEN, expiresIn: '2w' },
     );
-    res.setHeader('Access-Control-Allow-Origin', process.env.ORIGIN);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader(
-      'Set-Cookie',
-      `refreshToken=${refreshToken};path=/; domain=.mobomobo.shop; Secure; SameSite=None; httpOnly`,
-    );
+    const header = res.req?.rawHeaders;
+    const origin = header ? header[header.indexOf('Origin') + 1] : 'Error';
+    if (process.env.WHITELIST.split(' ').includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      if (origin.split(':')[1] === '//localhost')
+        res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+      else {
+        res.setHeader(
+          'Set-Cookie',
+          `refreshToken=${refreshToken};path=/; domain=.mobomobo.shop; Secure; SameSite=None; httpOnly`,
+        );
+      }
+    }
   }
 
   restoreAccessToken({ user }: IAuthServiceGetRefreshToken): string {
@@ -127,6 +135,8 @@ export class AuthService {
       });
 
     this.setRefreshToken({ user, res });
-    res.redirect(process.env.ORIGIN);
+    const header = res.req?.rawHeaders;
+    const origin = header ? header[header.indexOf('Origin') + 1] : 'Error';
+    res.redirect(origin);
   }
 }
