@@ -61,7 +61,11 @@ export class AuthService {
     res.setHeader('Access-Control-Allow-Origin', process.env.ORIGIN);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     if (process.env.ORIGIN === 'http://localhost:3000')
-      res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+      res.setHeader(
+        'Set-Cookie',
+        `refreshToken=${refreshToken}; path=/; domain=http://34.64.190.109:5000; SameSite=lax;
+Secure=false; httpOnly`,
+      );
     else {
       res.setHeader(
         'Set-Cookie',
