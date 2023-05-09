@@ -1,5 +1,8 @@
 import {
   CACHE_MANAGER,
+  ConflictException,
+  HttpException,
+  HttpStatus,
   Inject,
   Injectable,
   UnauthorizedException,
@@ -56,20 +59,17 @@ export class AuthService {
       { sub: { email: user.email, id: user.id } },
       { secret: process.env.REFRESH_TOKEN, expiresIn: '2w' },
     );
-    // const header = res.req?.rawHeaders;
-    // const origin = header ? header[header.indexOf('Origin') + 1] : 'Error';
-    res.setHeader('Access-Control-Allow-Origin', process.env.ORIGIN);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    if (process.env.ORIGIN === 'http://localhost:3000') {
+    const header = res.req?.rawHeaders;
+    const origin = header ? header[header.indexOf('Origin') + 1] : 'Error';
+    if (process.env.WHITELIST.split(' ').includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
       res.setHeader(
         'Set-Cookie',
-        `refreshToken=${refreshToken}; path=/; domain=.http://34.64.190.109:5000; Secure=false; SameSite=None; httpOnly`,
+        `refreshToken=${refreshToken}; path=/; domain=.mobomobo.shop; Secure; SameSite=None; httpOnly`,
       );
     } else {
-      res.setHeader(
-        'Set-Cookie',
-        `refreshToken=${refreshToken};path=/; domain=.mobomobo.shop; Secure; SameSite=None; httpOnly`,
-      );
+      throw new HttpException('refresh CORS 오류', HttpStatus.BAD_REQUEST);
     }
   }
 
