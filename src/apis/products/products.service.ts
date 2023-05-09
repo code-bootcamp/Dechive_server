@@ -42,7 +42,10 @@ export class ProductsService {
   }: IProductsServiceFetchByUserid): Promise<Product[]> {
     return [].concat(
       ...(await this.usersService.findOneUser({ id: userid })).boards.map(
-        (board) => board.products,
+        (board) => {
+          board.products.forEach((e) => (e['board'] = board));
+          return board.products;
+        },
       ),
     );
   }
