@@ -60,12 +60,12 @@ export class AuthService {
     // const origin = header ? header[header.indexOf('Origin') + 1] : 'Error';
     res.setHeader('Access-Control-Allow-Origin', process.env.ORIGIN);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
-    if (process.env.ORIGIN === 'http://localhost:3000')
+    if (process.env.ORIGIN === 'http://localhost:3000') {
       res.setHeader(
         'Set-Cookie',
-        `refreshToken=${refreshToken}; path=/; Secure=false; SameSite=None; httpOnly`,
+        `refreshToken=${refreshToken}; path=/; domain=.http://34.64.190.109; Secure=false; SameSite=None; httpOnly`,
       );
-    else {
+    } else {
       res.setHeader(
         'Set-Cookie',
         `refreshToken=${refreshToken};path=/; domain=.mobomobo.shop; Secure; SameSite=None; httpOnly`,
