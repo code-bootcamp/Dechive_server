@@ -60,13 +60,14 @@ export class AuthService {
     // const origin = header ? header[header.indexOf('Origin') + 1] : 'Error';
     res.setHeader('Access-Control-Allow-Origin', process.env.ORIGIN);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
-    // if (origin === 'http://localhost:3000')
-    //   res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
-    // else {
-    res.setHeader(
-      'Set-Cookie',
-      `refreshToken=${refreshToken};path=/; domain=.mobomobo.shop; Secure; SameSite=None; httpOnly`,
-    );
+    if (process.env.ORIGIN === 'http://localhost:3000')
+      res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    else {
+      res.setHeader(
+        'Set-Cookie',
+        `refreshToken=${refreshToken};path=/; domain=.mobomobo.shop; Secure; SameSite=None; httpOnly`,
+      );
+    }
   }
 
   restoreAccessToken({ user }: IAuthServiceGetRefreshToken): string {
