@@ -56,8 +56,8 @@ export class AuthService {
       { sub: { email: user.email, id: user.id } },
       { secret: process.env.REFRESH_TOKEN, expiresIn: '2w' },
     );
-    const header = res.req.rawHeaders;
-    const origin = header[header.indexOf('Origin') + 1];
+    const header = res.req?.rawHeaders;
+    const origin = header ? header[header.indexOf('Origin') + 1] : 'Error';
     if (process.env.WHITELIST.split(' ').includes(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin);
       res.setHeader('Access-Control-Allow-Credentials', 'true');

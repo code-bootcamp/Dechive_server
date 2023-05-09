@@ -112,7 +112,7 @@ type Query {
   fetchBoard(userid: String!, boardid: String!): Board!
   fetchBoards(userid: String!): [Board!]!
   getOpenGraph(url: String!): OpenGraph!
-  fetchUserBoards(userid: String!): [Board!]!
+  fetchUserBoards(userid: String!, searchid: String!): [Board!]!
   fetchTop10(userid: String!): [Board!]!
   fetchBoardsUserLiked: [Board!]!
   searchBoards(keyword: String!): [Board!]!

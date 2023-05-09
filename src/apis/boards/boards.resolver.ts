@@ -43,8 +43,9 @@ export class BoardsResolver {
   @Query(() => [Board])
   fetchUserBoards(
     @Args('userid') userid: string, //
+    @Args('searchid') searchid: string,
   ): Promise<Board[]> {
-    return this.boardsService.findUserBoards({ userid });
+    return this.boardsService.findUserBoards({ searchid, userid });
   }
 
   @Query(() => [Board])

@@ -33,6 +33,7 @@ export interface IBoardsServiceUpdateBoard {
 
 export interface IBoardsServiceFindUserBoards {
   userid: User['id'];
+  searchid: User['id'];
 }
 
 export interface IBoardsServiceDeleteBoard {
