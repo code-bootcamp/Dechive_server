@@ -61,6 +61,7 @@ export class AuthService {
     );
     const header = res.req?.rawHeaders;
     const origin = header ? header[header.indexOf('Origin') + 1] : 'Error';
+    console.log(origin);
     if (process.env.WHITELIST.split(' ').includes(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin);
       res.setHeader('Access-Control-Allow-Credentials', 'true');
