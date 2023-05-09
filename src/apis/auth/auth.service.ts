@@ -58,17 +58,15 @@ export class AuthService {
     );
     const header = res.req?.rawHeaders;
     const origin = header ? header[header.indexOf('Origin') + 1] : 'Error';
-    if (process.env.WHITELIST.split(' ').includes(origin)) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-      res.setHeader('Access-Control-Allow-Credentials', 'true');
-      if (origin === 'http://localhost:3000')
-        res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
-      else {
-        res.setHeader(
-          'Set-Cookie',
-          `refreshToken=${refreshToken};path=/; domain=.mobomobo.shop; Secure; SameSite=None; httpOnly`,
-        );
-      }
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    if (origin === 'http://localhost:3000')
+      res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    else {
+      res.setHeader(
+        'Set-Cookie',
+        `refreshToken=${refreshToken};path=/; domain=.mobomobo.shop; Secure; SameSite=None; httpOnly`,
+      );
     }
   }
 
@@ -135,8 +133,6 @@ export class AuthService {
       });
 
     this.setRefreshToken({ user, res });
-    const header = res.req?.rawHeaders;
-    const origin = header ? header[header.indexOf('Origin') + 1] : 'Error';
-    res.redirect(origin);
+    res.redirect(process.env.ORIGIN);
   }
 }
