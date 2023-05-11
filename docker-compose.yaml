@@ -11,11 +11,10 @@ services:
       - 5000:5000
 
   docker-db:
-    restart: always
     image: mysql:latest
     environment:
-      MYSQL_DATABASE: myserver
-      MYSQL_ROOT_PASSWORD: 12121212
+      MYSQL_DATABASE: 'myserver'
+      MYSQL_ROOT_PASSWORD: 'root'
     ports:
       - 3306:3306
 
