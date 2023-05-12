@@ -28,6 +28,6 @@ export class Product {
   @ManyToOne(() => Board, (board) => board.products, {
     onDelete: 'CASCADE',
   })
-  @Field(() => Board, { nullable: true })
+  @Field(() => Board)
   board: Board;
 }
