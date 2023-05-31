@@ -35,7 +35,6 @@ export class Board {
   @Field(() => String)
   description: string;
 
-  @JoinColumn()
   @OneToMany(() => Product, (product) => product.board, {
     onDelete: 'CASCADE',
   })

@@ -68,7 +68,13 @@ export class AuthService {
         `refreshToken=${refreshToken}; path=/; domain=.mobomobo.shop; Secure; SameSite=None; httpOnly`,
       );
     } else {
-      throw new HttpException('refresh CORS 오류', HttpStatus.BAD_REQUEST);
+      res.setHeader('Access-Control-Allow-Origin', process.env.ORIGIN);
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      res.setHeader(
+        'Set-Cookie',
+        `refreshToken=${refreshToken}; path=/; domain=.mobomobo.shop; Secure; SameSite=None; httpOnly`,
+      );
+      // throw new HttpException('refresh CORS 오류', HttpStatus.BAD_REQUEST);
     }
   }
 
